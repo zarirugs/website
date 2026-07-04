@@ -14,10 +14,12 @@ export default function Section({
   return (
     <section
       id={id}
-      className={cn(
-        "py-28 lg:py-40",
-        className
-      )}
+      className={cn("w-full", className)}
+      // Bypassing Tailwind to guarantee massive, editorial padding
+      style={{
+        paddingTop: 'clamp(120px, 15vw, 200px)',
+        paddingBottom: 'clamp(120px, 15vw, 200px)'
+      }}
     >
       {children}
     </section>

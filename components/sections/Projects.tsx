@@ -10,19 +10,27 @@ export default function Projects() {
     <Section id="projects">
       <Container>
         <FadeIn>
-          <div className="max-w-3xl">
-            <Eyebrow className="mb-6">Global Portfolio</Eyebrow>
+          <div className="max-w-xl">
+            <Eyebrow className="mb-8">Global Portfolio</Eyebrow>
             <Heading as="h2" size="xl">
               Featured Projects
             </Heading>
 
-            <Text size="lg" className="mt-8">
+            <Text size="lg" className="mt-10 leading-loose">
               Discover how ZARI rugs transform luxury residences, boutique hotels, and curated interiors across the globe.
             </Text>
           </div>
         </FadeIn>
 
-        <Stagger className="mt-24 grid gap-16 lg:grid-cols-3">
+        {/* Indestructible spacing using inline styles */}
+        <Stagger 
+          className="grid lg:grid-cols-3"
+          style={{
+            marginTop: 'clamp(100px, 12vw, 160px)',
+            rowGap: '100px',
+            columnGap: '50px'
+          }}
+        >
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}

@@ -10,19 +10,27 @@ export default function Collections() {
     <Section id="collections">
       <Container>
         <FadeIn>
-          <div className="max-w-3xl">
-            <Eyebrow className="mb-6">The Archives</Eyebrow>
+          <div className="max-w-xl">
+            <Eyebrow className="mb-8">The Archives</Eyebrow>
             <Heading as="h2" size="xl">
               Signature Collections
             </Heading>
 
-            <Text size="lg" className="mt-8">
+            <Text size="lg" className="mt-10 leading-loose">
               Designed for extraordinary residences, luxury hotels, and iconic interiors around the world. Every collection celebrates the centuries-old artistry of Bhadohi while embracing contemporary design.
             </Text>
           </div>
         </FadeIn>
 
-        <Stagger className="mt-24 grid gap-16 md:grid-cols-2 xl:grid-cols-3">
+        {/* Indestructible spacing using inline styles */}
+        <Stagger 
+          className="grid md:grid-cols-2 xl:grid-cols-3"
+          style={{
+            marginTop: 'clamp(100px, 12vw, 160px)',
+            rowGap: '100px',
+            columnGap: '50px'
+          }}
+        >
           {collections.map((collection) => (
             <CollectionCard key={collection.id} collection={collection} />
           ))}

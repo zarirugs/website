@@ -1,20 +1,7 @@
 import { cn } from "@/lib/utils/cn";
 
-type HeadingTag =
-  | "h1"
-  | "h2"
-  | "h3"
-  | "h4"
-  | "h5"
-  | "h6";
-
-type HeadingSize =
-  | "display"
-  | "hero"
-  | "xl"
-  | "lg"
-  | "md"
-  | "sm";
+type HeadingTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+type HeadingSize = "display" | "hero" | "xl" | "lg" | "md" | "sm";
 
 interface HeadingProps {
   as?: HeadingTag;
@@ -23,24 +10,14 @@ interface HeadingProps {
   className?: string;
 }
 
+// Drastically reduced all sizes for a highly refined, editorial look
 const sizes = {
-  display:
-    "text-[clamp(5rem,11vw,10rem)] leading-[0.9] tracking-[-0.06em]",
-
-  hero:
-    "text-[clamp(4rem,8vw,7rem)] leading-[0.92] tracking-[-0.05em]",
-
-  xl:
-    "text-[clamp(3rem,5vw,5rem)] leading-[0.96] tracking-[-0.04em]",
-
-  lg:
-    "text-[clamp(2.2rem,4vw,3.5rem)] leading-[1]",
-
-  md:
-    "text-4xl leading-tight",
-
-  sm:
-    "text-3xl leading-tight",
+  display: "text-[clamp(3rem,7vw,6rem)] leading-[0.95] tracking-[-0.03em]",
+  hero: "text-[clamp(2.5rem,5vw,4.5rem)] leading-[1] tracking-[-0.02em]",
+  xl: "text-4xl lg:text-5xl leading-[1.1] tracking-[-0.02em]",
+  lg: "text-2xl lg:text-3xl leading-[1.2] tracking-[-0.01em]",
+  md: "text-xl lg:text-2xl leading-snug font-normal",
+  sm: "text-lg leading-snug font-normal",
 };
 
 export default function Heading({
@@ -54,7 +31,7 @@ export default function Heading({
   return (
     <Tag
       className={cn(
-        "display-font font-light text-neutral-950",
+        "display-font text-neutral-900",
         sizes[size],
         className
       )}

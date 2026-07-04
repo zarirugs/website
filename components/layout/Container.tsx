@@ -12,7 +12,8 @@ export default function Container({
   return (
     <div
       className={cn(
-        "container mx-auto w-full px-6 lg:px-10 xl:px-12",
+        // Increased horizontal padding on desktop to push content inward
+        "container mx-auto w-full px-6 lg:px-16 xl:px-32",
         className
       )}
     >

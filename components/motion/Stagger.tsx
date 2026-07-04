@@ -6,6 +6,7 @@ import { ReactNode } from "react";
 interface StaggerProps {
   children: ReactNode;
   className?: string;
+  style?: React.CSSProperties; // Added to allow hardcoded spacing
 }
 
 const container: Variants = {
@@ -35,10 +36,12 @@ const item: Variants = {
 export default function Stagger({
   children,
   className,
+  style,
 }: StaggerProps) {
   return (
     <motion.div
       className={className}
+      style={style}
       variants={container}
       initial="hidden"
       whileInView="show"
