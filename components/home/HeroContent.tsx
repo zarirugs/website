@@ -22,13 +22,14 @@ export default function HeroContent() {
             THE HOUSE OF ZARI
           </Eyebrow>
 
+          {/* Changed size from "display" to "xl" to reduce bulkiness */}
           <Heading
             as="h1"
-            size="display"
+            size="xl"
             className="
               mt-8
               text-white
-              max-w-4xl
+              max-w-2xl
             "
           >
             Rugs Crafted

@@ -32,9 +32,10 @@ export default function Navbar() {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+        // Apply dark text when scrolled, and white text when at the top
         scrolled
-          ? "bg-white/70 backdrop-blur-xl border-b border-black/5"
-          : "bg-transparent"
+          ? "bg-white/80 backdrop-blur-xl border-b border-black/5 text-neutral-900"
+          : "bg-transparent text-white"
       )}
     >
       <Container>
