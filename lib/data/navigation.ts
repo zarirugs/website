@@ -10,14 +10,6 @@ export const navigation: NavigationItem[] = [
     href: "#craftsmanship",
   },
   {
-    title: "Projects",
-    href: "#projects",
-  },
-  {
-    title: "Journal",
-    href: "#journal",
-  },
-  {
     title: "About",
     href: "#about",
   },
