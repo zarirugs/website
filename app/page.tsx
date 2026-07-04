@@ -5,6 +5,7 @@ import {
   Collections,
   Philosophy,
   Projects,
+  Footer,
 } from "@/components/sections";
 
 export default function Home() {
@@ -18,6 +19,8 @@ export default function Home() {
         <Philosophy />
         <Projects />
       </main>
+      
+      <Footer />
     </>
   );
 }
