@@ -31,9 +31,11 @@ export default function Navbar() {
   return (
     <header
       className={cn(
-  "display-font text-4xl tracking-[0.25em] transition-colors duration-300",
-  scrolled ? "text-black" : "text-white"
-)}
+        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+        scrolled
+          ? "bg-white/70 backdrop-blur-xl border-b border-black/5"
+          : "bg-transparent"
+      )}
     >
       <Container>
         <nav className="flex h-24 items-center justify-between">
