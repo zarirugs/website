@@ -15,10 +15,11 @@ export default function Section({
     <section
       id={id}
       className={cn("w-full", className)}
-      // Bypassing Tailwind to guarantee massive, editorial padding
       style={{
-        paddingTop: 'clamp(120px, 15vw, 200px)',
-        paddingBottom: 'clamp(120px, 15vw, 200px)'
+        // Halved symmetrical padding to prevent double-stacking gaps
+        // while perfectly preserving background color boundaries
+        paddingTop: '80px',
+        paddingBottom: '80px'
       }}
     >
       {children}

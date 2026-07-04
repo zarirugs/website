@@ -11,25 +11,20 @@ export default function Projects() {
       <Container>
         <FadeIn>
           <div className="max-w-xl">
-            <Eyebrow className="mb-8">Global Portfolio</Eyebrow>
+            <Eyebrow className="mb-6">Global Portfolio</Eyebrow>
             <Heading as="h2" size="xl">
               Featured Projects
             </Heading>
 
-            <Text size="lg" className="mt-10 leading-loose">
+            <Text size="lg" className="mt-8 leading-loose">
               Discover how ZARI rugs transform luxury residences, boutique hotels, and curated interiors across the globe.
             </Text>
           </div>
         </FadeIn>
 
-        {/* Indestructible spacing using inline styles */}
         <Stagger 
-          className="grid lg:grid-cols-3"
-          style={{
-            marginTop: 'clamp(100px, 12vw, 160px)',
-            rowGap: '100px',
-            columnGap: '50px'
-          }}
+          className="grid gap-12 lg:gap-16 lg:grid-cols-3"
+          style={{ marginTop: '80px' }}
         >
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
