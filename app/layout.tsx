@@ -16,8 +16,9 @@ const body = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "The House of ZARI",
-    template: "%s | The House of ZARI",
+    // Changed from "The House of ZARI" to "ZARI"
+    default: "ZARI",
+    template: "%s | ZARI",
   },
   description:
     "Luxury hand-knotted rugs from Bhadohi. Crafted by generations of master artisans using the world's finest natural fibres.",
