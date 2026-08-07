@@ -1,0 +1,91 @@
+@keyframes fadeUp {
+
+    from {
+  
+      opacity: 0;
+  
+      transform: translateY(24px);
+  
+    }
+  
+    to {
+  
+      opacity: 1;
+  
+      transform: translateY(0);
+  
+    }
+  
+  }
+  
+  @keyframes fade {
+  
+    from {
+  
+      opacity: 0;
+  
+    }
+  
+    to {
+  
+      opacity: 1;
+  
+    }
+  
+  }
+  
+  @keyframes float {
+  
+    0% {
+  
+      transform: translateY(0);
+  
+    }
+  
+    50% {
+  
+      transform: translateY(-8px);
+  
+    }
+  
+    100% {
+  
+      transform: translateY(0);
+  
+    }
+  
+  }
+  
+  .fade-up {
+  
+    animation:
+  
+      fadeUp
+  
+      .9s
+  
+      cubic-bezier(.22,.61,.36,1)
+  
+      forwards;
+  
+  }
+  
+  .fade {
+  
+    animation: fade .8s ease forwards;
+  
+  }
+  
+  .float {
+  
+    animation:
+  
+      float
+  
+      3s
+  
+      ease-in-out
+  
+      infinite;
+  
+  }

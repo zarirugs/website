@@ -1,0 +1,120 @@
+@import "../styles/tokens.css";
+@import "../styles/utilities.css";
+@import "../styles/animations.css";
+@import "tailwindcss";
+
+/* ------------------------------------------------ */
+/* RESET */
+/* ------------------------------------------------ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: var(--color-background);
+
+  color: var(--color-text);
+
+  font-family: var(--font-body);
+
+  text-rendering: optimizeLegibility;
+
+  -webkit-font-smoothing: antialiased;
+
+  overflow-x: hidden;
+}
+
+/* ------------------------------------------------ */
+/* MEDIA */
+/* ------------------------------------------------ */
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ------------------------------------------------ */
+/* LINKS */
+/* ------------------------------------------------ */
+
+a {
+  color: inherit;
+
+  text-decoration: none;
+}
+
+/* ------------------------------------------------ */
+/* BUTTONS */
+/* ------------------------------------------------ */
+
+button {
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  font: inherit;
+}
+
+/* ------------------------------------------------ */
+/* FORM ELEMENTS */
+/* ------------------------------------------------ */
+
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+/* ------------------------------------------------ */
+/* TYPOGRAPHY */
+/* ------------------------------------------------ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+}
+
+.display-font {
+  font-family: var(--font-display);
+}
+
+.body-font {
+  font-family: var(--font-body);
+}
+
+/* ------------------------------------------------ */
+/* SELECTION */
+/* ------------------------------------------------ */
+
+::selection {
+  background: rgba(194, 166, 97, 0.28);
+
+  color: #111;
+}
