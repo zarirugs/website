@@ -4,7 +4,6 @@ import { Navbar } from "@/components/navigation";
 import {
   Collections,
   Philosophy,
-  Projects,
   Footer,
 } from "@/components/sections";
 

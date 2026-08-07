@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev",
-  "build": "next build --webpack",
-  "start": "next start",
-  "lint": "next lint",
-  "build:cloudflare": "npx @opennextjs/cloudflare build",
-  "preview:cloudflare": "npx @opennextjs/cloudflare preview",
-  "deploy:cloudflare": "npx @opennextjs/cloudflare deploy"
-},
+    "dev": "next dev",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "build:cloudflare": "npx @opennextjs/cloudflare build",
+    "preview:cloudflare": "npx @opennextjs/cloudflare preview",
+    "deploy:cloudflare": "npx @opennextjs/cloudflare deploy"
+  },
   "dependencies": {
     "clsx": "^2.1.1",
     "framer-motion": "^12.42.2",

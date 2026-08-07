@@ -2,7 +2,6 @@ import { Container } from "@/components/layout";
 import {
   Heading,
   Text,
-  Eyebrow,
 } from "@/components/typography";
 
 import { Button } from "@/components/buttons";
@@ -18,10 +17,6 @@ export default function HeroContent() {
         "
       >
         <div className="max-w-2xl">
-          <Eyebrow className="text-white/80">
-            THE HOUSE OF ZARI
-          </Eyebrow>
-
           {/* Changed size from "display" to "xl" to reduce bulkiness */}
           <Heading
             as="h1"
