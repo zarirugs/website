@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
-
 import "./globals.css";
+
+export const runtime = "nodejs";
 
 const display = Cormorant_Garamond({
   subsets: ["latin"],
@@ -16,7 +17,6 @@ const body = Inter({
 
 export const metadata: Metadata = {
   title: {
-    // Changed from "The House of ZARI" to "ZARI"
     default: "ZARI",
     template: "%s | ZARI",
   },
