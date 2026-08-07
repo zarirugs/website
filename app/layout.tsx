@@ -17,7 +17,7 @@ const body = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "ZARI",
+    default: "Zari Rugs | India",
     template: "%s | ZARI",
   },
   description:
