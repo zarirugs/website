@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
+import { StoreProvider } from "@/components/store";
 import "./globals.css";
 
 export const runtime = "nodejs";
@@ -34,7 +35,7 @@ export default function RootLayout({
       lang="en"
       className={`${display.variable} ${body.variable}`}
     >
-      <body>{children}</body>
+      <body><StoreProvider>{children}</StoreProvider></body>
     </html>
   );
 }
