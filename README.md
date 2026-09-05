@@ -61,6 +61,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 After adding the D1 database ID and `ADMIN_TOKEN` secret, deploy the site and its backend together:
 
+hello
+
 ```bash
 npm run deploy:cloudflare
 ```
