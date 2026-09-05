@@ -31,7 +31,7 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
         </Text>
 
         <Link
-          href="#"
+          href="#order"
           className="mt-8 inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] transition-all duration-300 group-hover:gap-6 group-hover:text-[#B89B5E] text-neutral-400"
         >
           Explore <span>→</span>

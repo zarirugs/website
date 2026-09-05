@@ -5,6 +5,7 @@ import {
   Collections,
   Philosophy,
   Footer,
+  OrderEnquiry,
 } from "@/components/sections";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
         <Hero />
         <Collections />
         <Philosophy />
+        <OrderEnquiry />
         {/* <Projects /> */}
       </main>
       

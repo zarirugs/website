@@ -13,4 +13,8 @@ export const navigation: NavigationItem[] = [
     title: "About",
     href: "#about",
   },
+  {
+    title: "Order",
+    href: "#order",
+  },
 ];

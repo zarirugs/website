@@ -15,7 +15,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 30);
+      setScrolled(window.scrollY > 4);
     };
 
     onScroll();
@@ -32,9 +32,9 @@ export default function Navbar() {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
-        // Apply dark text when scrolled, and white text when at the top
+        // A solid surface keeps navigation readable over every section.
         scrolled
-          ? "bg-white/80 backdrop-blur-xl border-b border-black/5 text-neutral-900"
+          ? "bg-white border-b border-black/5 text-neutral-900 shadow-sm"
           : "bg-transparent text-white"
       )}
     >

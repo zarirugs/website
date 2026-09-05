@@ -1,4 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project for The House of Zari.
+
+## Orders and inventory backend
+
+The storefront includes an order-request form (`#order`) and a protected operations dashboard at `/admin`.
+
+- Customer requests are recorded as `new`; this deliberately does **not** reduce stock.
+- When an operator changes an order to `confirmed` (or a later fulfilment status), the requested quantity is deducted and a stock movement is recorded.
+- Cancelling a confirmed order restores its stock. The dashboard also flags stock at or below its reorder level.
+
+### One-time Cloudflare setup
+
+The application uses Cloudflare D1 so orders survive deployments. Create the database and place its ID in `wrangler.jsonc` (replacing `REPLACE_WITH_YOUR_D1_DATABASE_ID`):
+
+```bash
+npx wrangler d1 create zari-orders
+npx wrangler d1 execute zari-orders --remote --file=db/migrations/0001_initial_schema.sql
+npx wrangler secret put ADMIN_TOKEN
+```
+
+Use a long, unique value for `ADMIN_TOKEN`. Enter it in `/admin`; it is kept only in that browser tab's session storage and sent to the server as a bearer token. Do not put the token in a `NEXT_PUBLIC_*` variable.
+
+For a local D1 database, run the migration without `--remote` before starting the app:
+
+```bash
+npx wrangler d1 execute zari-orders --local --file=db/migrations/0001_initial_schema.sql
+```
+
+Before opening the order form to the public, configure Cloudflare Turnstile or a comparable rate-limit/bot-control rule for `POST /api/orders`.
 
 ## Getting Started
 
@@ -29,8 +57,10 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deploy on Cloudflare
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+After adding the D1 database ID and `ADMIN_TOKEN` secret, deploy the site and its backend together:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run deploy:cloudflare
+```
