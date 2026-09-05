@@ -28,6 +28,18 @@ npx wrangler d1 execute zari-orders --local --file=db/migrations/0001_initial_sc
 
 Before opening the order form to the public, configure Cloudflare Turnstile or a comparable rate-limit/bot-control rule for `POST /api/orders`.
 
+## Customer accounts and shopping bags
+
+Customers can create an account at `/register`, sign in at `/login`, and save pieces in a persistent shopping bag at `/cart`. Sessions use an HttpOnly cookie; password salts and PBKDF2 hashes are stored in D1, never in the browser.
+
+Apply the customer schema after pulling this feature if it has not already been applied to the target database:
+
+```bash
+npx wrangler d1 execute zari-orders --remote --file=db/migrations/0002_customer_accounts_and_carts.sql
+```
+
+The current cart holds selected pieces and validates available stock. Payment, checkout, product/category management, and the separate admin portal are intentionally the next phase.
+
 ## Getting Started
 
 First, run the development server:

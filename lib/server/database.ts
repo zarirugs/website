@@ -1,5 +1,6 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { D1Database } from "@/lib/server/d1";
+import { stringToBytes, timingSafeEqual } from "@/lib/server/crypto";
 
 type RuntimeEnvironment = {
   ZARI_DB?: D1Database;
@@ -35,5 +36,5 @@ export async function isAdminRequest(request: Request): Promise<boolean> {
   const { env } = await getCloudflareContext({ async: true });
   const expectedToken = (env as RuntimeEnvironment).ADMIN_TOKEN ?? process.env.ADMIN_TOKEN;
 
-  return Boolean(expectedToken && suppliedToken === expectedToken);
+  return Boolean(expectedToken && timingSafeEqual(stringToBytes(suppliedToken), stringToBytes(expectedToken)));
 }
