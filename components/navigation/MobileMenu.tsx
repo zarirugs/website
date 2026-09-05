@@ -25,7 +25,9 @@ export default function MobileMenu() {
             fixed
             inset-0
             z-50
-            bg-[#f8f6f1]
+            bg-white/95
+            text-neutral-900
+            backdrop-blur-xl
             flex
             flex-col
             items-center
@@ -34,8 +36,9 @@ export default function MobileMenu() {
           "
         >
           <button
-            className="absolute right-8 top-8"
+            className="absolute right-8 top-8 text-neutral-900"
             onClick={() => setOpen(false)}
+            aria-label="Close menu"
           >
             <X size={30} />
           </button>
@@ -49,6 +52,8 @@ export default function MobileMenu() {
                 display-font
                 text-3xl
                 tracking-[0.12em]
+                transition-colors
+                hover:text-[#B89B5E]
               "
             >
               {item.title}

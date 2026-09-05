@@ -27,6 +27,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-4 text-sm font-light">
               <li><Link href="#collections" className="hover:text-white transition-colors">Collections</Link></li>
               <li><Link href="#craftsmanship" className="hover:text-white transition-colors">Craftsmanship</Link></li>
+              <li><Link href="#order" className="hover:text-white transition-colors">Order a piece</Link></li>
             </ul>
           </div>
 

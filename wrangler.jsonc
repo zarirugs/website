@@ -11,6 +11,13 @@
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
 	},
+	"d1_databases": [
+		{
+			"binding": "ZARI_DB",
+			"database_name": "zari-orders",
+			"database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+		}
+	],
 	"services": [
 		{
 			// Self-reference service binding, the service name must match the worker name

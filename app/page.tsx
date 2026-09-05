@@ -4,8 +4,8 @@ import { Navbar } from "@/components/navigation";
 import {
   Collections,
   Philosophy,
-  Projects,
   Footer,
+  OrderEnquiry,
 } from "@/components/sections";
 
 export default function Home() {
@@ -18,6 +18,7 @@ export default function Home() {
         <Hero />
         <Collections />
         <Philosophy />
+        <OrderEnquiry />
         {/* <Projects /> */}
       </main>
       
