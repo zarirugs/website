@@ -47,7 +47,7 @@ export default function HeroContent() {
           </Text>
 
           <div className="mt-12">
-            <Button>
+            <Button href="#collections">
               Explore Collection
             </Button>
           </div>
