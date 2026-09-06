@@ -5,11 +5,9 @@ import { useState } from "react";
 import Link from "next/link";
 
 import { navigation } from "@/lib/data/navigation";
-import { useStore } from "@/components/store";
 
 export default function MobileMenu() {
   const [open, setOpen] = useState(false);
-  const { cart, user } = useStore();
 
   return (
     <>
@@ -61,15 +59,6 @@ export default function MobileMenu() {
               {item.title}
             </Link>
           ))}
-
-          <div className="mt-4 flex items-center gap-6 border-t border-neutral-300 pt-6 text-[10px] uppercase tracking-[0.18em]">
-            <Link href={user ? "/account" : "/login"} onClick={() => setOpen(false)} className="hover:text-[#B89B5E]">
-              {user ? "Account" : "Sign in"}
-            </Link>
-            <Link href="/cart" onClick={() => setOpen(false)} className="hover:text-[#B89B5E]">
-              Bag{cart.itemCount > 0 ? ` (${cart.itemCount})` : ""}
-            </Link>
-          </div>
         </div>
       )}
     </>
