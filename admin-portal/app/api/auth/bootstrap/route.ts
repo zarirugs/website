@@ -42,6 +42,12 @@ export async function POST(request: Request) {
     response.headers.set("Cache-Control", "no-store");
     return response;
   } catch (error) {
+    // Keep the browser response generic, but record the underlying runtime error
+    // without logging any submitted owner details or the bootstrap token.
+    console.error(JSON.stringify({
+      event: "admin_owner_bootstrap_failed",
+      message: error instanceof Error ? error.message : "Unknown error",
+    }));
     return databaseErrorResponse(error);
   }
 }
