@@ -1,0 +1,48 @@
+.page {
+  min-height: 100vh;
+  padding: 10.5rem 0 7rem;
+  background: #f8f6f1;
+  color: #171717;
+}
+
+.intro {
+  max-width: 48rem;
+}
+
+.eyebrow {
+  color: #8b7442;
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.heading {
+  margin-top: 1.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 8vw, 6.25rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.03em;
+}
+
+.description {
+  max-width: 40rem;
+  margin-top: 2rem;
+  color: #5c5c5c;
+  font-size: clamp(1rem, 1.7vw, 1.25rem);
+  line-height: 1.65;
+}
+
+.products {
+  margin-top: 4.5rem;
+}
+
+@media (min-width: 48rem) {
+  .page {
+    padding-top: 12rem;
+  }
+
+  .products {
+    margin-top: 5.5rem;
+  }
+}

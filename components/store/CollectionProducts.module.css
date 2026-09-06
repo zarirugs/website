@@ -1,0 +1,109 @@
+.section {
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 26rem));
+  gap: 4rem 2rem;
+  align-items: start;
+}
+
+.card {
+  min-width: 0;
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background-color: #eee9de;
+  background-position: center;
+  background-size: cover;
+}
+
+.details {
+  padding-top: 1.5rem;
+}
+
+.price {
+  color: #8b7442;
+  font-size: 0.625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.name {
+  margin-top: 0.75rem;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+}
+
+.description {
+  margin-top: 0.875rem;
+  color: #6b6b6b;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.purchase {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.stock {
+  color: #8a8a8a;
+  font-size: 0.75rem;
+}
+
+.addButton {
+  min-height: 2.75rem;
+  padding: 0.75rem 1.125rem;
+  border: 1px solid #171717;
+  background: #171717;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.addButton:hover:not(:disabled) {
+  background: #8b7442;
+  border-color: #8b7442;
+}
+
+.addButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.message,
+.empty {
+  color: #6b6b6b;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.message {
+  margin-top: 2rem;
+}
+
+.empty {
+  padding: 2rem 0;
+  border-top: 1px solid rgba(23, 23, 23, 0.15);
+}
+
+@media (min-width: 48rem) {
+  .details {
+    padding-top: 1.75rem;
+  }
+}
