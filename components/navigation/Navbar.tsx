@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { ShoppingBag, UserRound } from "lucide-react";
 
 import { cn } from "@/lib/utils/cn";
@@ -12,9 +13,19 @@ import NavLink from "./NavLink";
 import MobileMenu from "./MobileMenu";
 import { useStore } from "@/components/store";
 
-export default function Navbar() {
+type NavbarProps = {
+  surface?: "overlay" | "solid";
+};
+
+export default function Navbar({ surface = "overlay" }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
   const { cart, ready, user } = useStore();
+  const isSolid = surface === "solid";
+
+  function destination(href: string) {
+    return href.startsWith("#") && pathname !== "/" ? `/${href}` : href;
+  }
 
   useEffect(() => {
     const onScroll = () => {
@@ -36,7 +47,7 @@ export default function Navbar() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         // A solid surface keeps navigation readable over every section.
-        scrolled
+        isSolid || scrolled
           ? "bg-white border-b border-black/5 text-neutral-900 shadow-sm"
           : "bg-transparent text-white"
       )}
@@ -59,7 +70,7 @@ export default function Navbar() {
             {navigation.map((item) => (
               <NavLink
                 key={item.title}
-                href={item.href}
+                href={destination(item.href)}
               >
                 {item.title}
               </NavLink>

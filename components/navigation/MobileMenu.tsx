@@ -3,13 +3,19 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { navigation } from "@/lib/data/navigation";
 import { useStore } from "@/components/store";
 
 export default function MobileMenu() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
   const { cart, user } = useStore();
+
+  function destination(href: string) {
+    return href.startsWith("#") && pathname !== "/" ? `/${href}` : href;
+  }
 
   return (
     <>
@@ -48,7 +54,7 @@ export default function MobileMenu() {
           {navigation.map((item) => (
             <Link
               key={item.title}
-              href={item.href}
+              href={destination(item.href)}
               onClick={() => setOpen(false)}
               className="
                 display-font
