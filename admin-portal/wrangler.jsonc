@@ -1,0 +1,29 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "zari-admin",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-09-06",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "ZARI_DB",
+      "database_name": "zari-orders",
+      "database_id": "a7b61e2e-09b1-4f8a-b771-8db62f284f9f",
+      "migrations_dir": "../db/migrations"
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "admin.zarirugs.com",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}

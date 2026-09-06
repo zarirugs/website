@@ -1,0 +1,86 @@
+name: Validate and deploy admin portal
+
+on:
+  pull_request:
+    branches: [admin]
+  push:
+    branches: [admin]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zari-admin-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate admin portal
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+        working-directory: admin-portal
+
+      - name: Type-check
+        run: npm run typecheck
+        working-directory: admin-portal
+
+      - name: Build for Cloudflare
+        run: npm run build:cloudflare
+        working-directory: admin-portal
+
+  deploy:
+    name: Deploy admin portal
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/admin'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for Cloudflare
+        run: npm run build:cloudflare
+        working-directory: admin-portal
+
+      - name: Apply D1 migrations
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: admin-portal
+          command: d1 migrations apply zari-orders --remote
+
+      - name: Deploy with Wrangler
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: admin-portal
+          command: deploy

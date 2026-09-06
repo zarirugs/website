@@ -14,6 +14,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "admin-portal/.next/**",
+    "admin-portal/.open-next/**",
+    "admin-portal/.wrangler/**",
+    "admin-portal/worker-configuration.d.ts",
   ]),
 ]);
 

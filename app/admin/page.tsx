@@ -1,4 +1,4 @@
-import AdminDashboard from "@/components/admin/AdminDashboard";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "ZARI Operations",
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function AdminPage() {
-  return <AdminDashboard />;
+  redirect(process.env.NODE_ENV === "development" ? "http://localhost:3001/login" : "https://admin.zarirugs.com/login");
 }
