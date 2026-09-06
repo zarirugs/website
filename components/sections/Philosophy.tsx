@@ -3,10 +3,11 @@ import Section from "@/components/layout/Section";
 import { FadeIn, Stagger } from "@/components/motion";
 import { Heading, Text, Eyebrow } from "@/components/typography";
 import { philosophy } from "@/lib/data/philosophy";
+import styles from "./Philosophy.module.css";
 
 export default function Philosophy() {
   return (
-    <Section id="craftsmanship" className="bg-[#f8f6f1]">
+    <Section id="craftsmanship" className={styles.section}>
       <Container>
         <FadeIn>
           <div className="max-w-xl">
@@ -21,9 +22,9 @@ export default function Philosophy() {
           </div>
         </FadeIn>
 
-        <Stagger 
+        <Stagger
           className="grid gap-12 lg:gap-16 md:grid-cols-3"
-          style={{ marginTop: '80px' }}
+          style={{ marginTop: "80px" }}
         >
           {philosophy.values.map((value) => (
             <div key={value.title} className="border-t border-neutral-300/60 pt-8">
