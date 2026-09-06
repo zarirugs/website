@@ -10,7 +10,9 @@ import {
 
 const sessionCookieName = "zari_admin_session";
 const sessionLifetimeSeconds = 60 * 60 * 8;
-const passwordIterations = 210_000;
+// Workers Free allows 10 ms CPU per request. Keep PBKDF2 below that ceiling
+// while still deriving a salted SHA-256 password hash for the owner portal.
+const passwordIterations = 30_000;
 
 export type AuthenticatedAdmin = { id: string; email: string; fullName: string; role: "owner" | "manager" };
 
