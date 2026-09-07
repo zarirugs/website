@@ -2,7 +2,11 @@ import type { D1Database } from "@/lib/server/d1";
 import { base64ToBytes, bytesToBase64, bytesToBase64Url, sha256, stringToBytes, timingSafeEqual } from "@/lib/server/crypto";
 
 const sessionLifetimeSeconds = 60 * 60 * 24 * 7;
-const passwordIterations = 210_000;
+// Workers Free permits 10 ms CPU per request. This keeps PBKDF2 within that
+// budget while retaining a unique random salt and SHA-256 derived hash.
+const passwordIterations = 30_000;
+const legacyPasswordIterations = 210_000;
+const passwordHashPrefix = "pbkdf2-30k$";
 const sessionCookieName = "zari_session";
 
 export type AuthenticatedCustomer = {
@@ -31,7 +35,7 @@ function cookieValue(request: Request, name: string) {
     .find((part) => part.startsWith(encodedName))?.slice(encodedName.length);
 }
 
-async function passwordHash(password: string, salt: Uint8Array) {
+async function passwordHash(password: string, salt: Uint8Array, iterations = passwordIterations) {
   const normalizedSalt = new Uint8Array(salt);
   const key = await crypto.subtle.importKey(
     "raw",
@@ -41,7 +45,7 @@ async function passwordHash(password: string, salt: Uint8Array) {
     ["deriveBits"],
   );
   const derived = await crypto.subtle.deriveBits(
-    { name: "PBKDF2", hash: "SHA-256", salt: normalizedSalt, iterations: passwordIterations },
+    { name: "PBKDF2", hash: "SHA-256", salt: normalizedSalt, iterations },
     key,
     256,
   );
@@ -51,12 +55,15 @@ async function passwordHash(password: string, salt: Uint8Array) {
 export async function createPasswordRecord(password: string) {
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const hash = await passwordHash(password, salt);
-  return { passwordHash: bytesToBase64(hash), passwordSalt: bytesToBase64(salt) };
+  return { passwordHash: `${passwordHashPrefix}${bytesToBase64(hash)}`, passwordSalt: bytesToBase64(salt) };
 }
 
 export async function passwordMatches(password: string, storedHash: string, storedSalt: string) {
-  const computed = await passwordHash(password, base64ToBytes(storedSalt));
-  return timingSafeEqual(computed, base64ToBytes(storedHash));
+  const isCurrentHash = storedHash.startsWith(passwordHashPrefix);
+  const encodedHash = isCurrentHash ? storedHash.slice(passwordHashPrefix.length) : storedHash;
+  const iterations = isCurrentHash ? passwordIterations : legacyPasswordIterations;
+  const computed = await passwordHash(password, base64ToBytes(storedSalt), iterations);
+  return timingSafeEqual(computed, base64ToBytes(encodedHash));
 }
 
 export function customerFromRow(row: Pick<CustomerRow, "id" | "email" | "full_name">): AuthenticatedCustomer {
