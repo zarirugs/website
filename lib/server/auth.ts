@@ -2,7 +2,9 @@ import type { D1Database } from "@/lib/server/d1";
 import { base64ToBytes, bytesToBase64, bytesToBase64Url, sha256, stringToBytes, timingSafeEqual } from "@/lib/server/crypto";
 
 const sessionLifetimeSeconds = 60 * 60 * 24 * 7;
-const passwordIterations = 210_000;
+// Workers Free permits 10 ms CPU per request. This keeps PBKDF2 within that
+// budget while retaining a unique random salt and SHA-256 derived hash.
+const passwordIterations = 30_000;
 const sessionCookieName = "zari_session";
 
 export type AuthenticatedCustomer = {
