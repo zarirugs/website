@@ -4,5 +4,5 @@ import { AccountPage } from "@/components/store";
 export const metadata = { title: "Account" };
 
 export default function Account() {
-  return <><Navbar /><AccountPage /></>;
+  return <><Navbar surface="solid" /><AccountPage /></>;
 }

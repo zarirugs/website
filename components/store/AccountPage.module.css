@@ -1,0 +1,153 @@
+.page {
+  min-height: 100vh;
+  padding: 10.5rem 0 7rem;
+  background: #f8f6f1;
+  color: #171717;
+}
+
+.content {
+  max-width: 58rem;
+}
+
+.intro {
+  max-width: 40rem;
+}
+
+.eyebrow,
+.cardEyebrow {
+  color: #8b7442;
+  font-size: 0.6875rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.title,
+.cardTitle {
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
+.title {
+  margin-top: 1rem;
+  font-size: clamp(3.5rem, 7vw, 5.75rem);
+  line-height: 0.95;
+  letter-spacing: 0.04em;
+}
+
+.description {
+  max-width: 32rem;
+  margin-top: 1.75rem;
+  color: #616161;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.card {
+  margin-top: 4rem;
+  padding: clamp(2rem, 5vw, 4rem);
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(23, 23, 23, 0.08);
+}
+
+.profile {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.cardTitle {
+  margin-top: 0.875rem;
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+}
+
+.cardCopy,
+.email {
+  margin-top: 1rem;
+  color: #616161;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.monogram {
+  display: grid;
+  flex: 0 0 auto;
+  width: 3.75rem;
+  height: 3.75rem;
+  place-items: center;
+  border: 1px solid #c9b27d;
+  border-radius: 50%;
+  color: #8b7442;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875rem;
+  margin-top: 3rem;
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 1.25rem;
+  border: 1px solid transparent;
+  font: inherit;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.primaryAction {
+  background: #171717;
+  color: #fff;
+}
+
+.primaryAction:hover {
+  background: #8b7442;
+}
+
+.secondaryAction {
+  border-color: #cfcfcf;
+  background: transparent;
+  color: #3d3d3d;
+  cursor: pointer;
+}
+
+.secondaryAction:hover {
+  border-color: #8b7442;
+  color: #8b7442;
+}
+
+.primaryAction:focus-visible,
+.secondaryAction:focus-visible {
+  outline: 1px solid #8b7442;
+  outline-offset: 0.25rem;
+}
+
+.loading {
+  margin-top: 3rem;
+  color: #737373;
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 31rem) {
+  .profile {
+    flex-direction: column-reverse;
+  }
+}
+
+@media (min-width: 48rem) {
+  .page {
+    padding-top: 12rem;
+  }
+}
