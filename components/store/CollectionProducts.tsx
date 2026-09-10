@@ -1,7 +1,8 @@
 "use client";
 
+import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useStore } from "./StoreProvider";
 import styles from "./CollectionProducts.module.css";
@@ -29,7 +30,26 @@ export default function CollectionProducts({ products }: { products: PublicCatal
   const router = useRouter();
   const { ready, user, updateCart } = useStore();
   const [busySku, setBusySku] = useState("");
+  const [savedSkus, setSavedSkus] = useState<Set<string>>(new Set());
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if (!user) {
+        setSavedSkus(new Set());
+        return;
+      }
+      void fetch("/api/account/wishlist", { cache: "no-store" })
+        .then(async (response) => {
+          if (!response.ok) return [];
+          const result = await response.json() as { wishlist?: { sku: string }[] };
+          return result.wishlist ?? [];
+        })
+        .then((wishlist) => setSavedSkus(new Set(wishlist.map((item) => item.sku))))
+        .catch(() => setSavedSkus(new Set()));
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [user]);
 
   async function addProduct(product: PublicCatalogProduct) {
     if (!user) {
@@ -45,6 +65,37 @@ export default function CollectionProducts({ products }: { products: PublicCatal
       setMessage(`${product.name} was added to your bag.`);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unable to add this piece to your bag.");
+    } finally {
+      setBusySku("");
+    }
+  }
+
+  async function toggleSaved(product: PublicCatalogProduct) {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    const isSaved = savedSkus.has(product.sku);
+    setBusySku(`saved-${product.sku}`);
+    setMessage("");
+    try {
+      const response = await fetch("/api/account/wishlist", {
+        method: isSaved ? "DELETE" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sku: product.sku }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(typeof result.error === "string" ? result.error : "Unable to update saved pieces.");
+      setSavedSkus((current) => {
+        const next = new Set(current);
+        if (isSaved) next.delete(product.sku);
+        else next.add(product.sku);
+        return next;
+      });
+      setMessage(isSaved ? `${product.name} was removed from your saved pieces.` : `${product.name} was saved to your private collection.`);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Unable to update saved pieces.");
     } finally {
       setBusySku("");
     }
@@ -66,6 +117,16 @@ export default function CollectionProducts({ products }: { products: PublicCatal
               style={product.imageUrl ? { backgroundImage: `url(${product.imageUrl})` } : undefined}
             />
             <div className={styles.details}>
+              <button
+                disabled={!ready || busySku === `saved-${product.sku}`}
+                onClick={() => void toggleSaved(product)}
+                className={styles.saveButton}
+                aria-label={`${savedSkus.has(product.sku) ? "Remove" : "Save"} ${product.name}`}
+                aria-pressed={savedSkus.has(product.sku)}
+              >
+                <Heart size={16} fill={savedSkus.has(product.sku) ? "currentColor" : "none"} />
+                {busySku === `saved-${product.sku}` ? "Saving…" : savedSkus.has(product.sku) ? "Saved" : "Save"}
+              </button>
               <p className={styles.price}>{price(product.pricePaise)}</p>
               <h2 className={styles.name}>{product.name}</h2>
               {product.description && <p className={styles.description}>{product.description}</p>}

@@ -22,7 +22,32 @@
 }
 
 .details {
+  position: relative;
   padding-top: 1.5rem;
+}
+
+.saveButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  border: 0;
+  background: transparent;
+  color: #78633a;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.saveButton:hover:not(:disabled) {
+  color: #171717;
+}
+
+.saveButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .price {

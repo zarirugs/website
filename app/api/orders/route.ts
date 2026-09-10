@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { orderStatuses, type OrderStatus, type PublicOrderItem } from "@/lib/inventory/types";
+import { getAuthenticatedCustomer } from "@/lib/server/auth";
 import { getDatabase, isAdminRequest } from "@/lib/server/database";
 import type { D1Result } from "@/lib/server/d1";
 import { databaseErrorResponse, errorResponse, optionalText, requiredText } from "@/lib/server/http";
@@ -57,18 +58,21 @@ export async function POST(request: Request) {
     const honeypot = optionalText(body.website, 200);
     if (honeypot) return NextResponse.json({ received: true }, { status: 202 });
 
-    const customerName = requiredText(body.customerName, "name", 120);
-    const customerEmail = requiredText(body.customerEmail, "email", 254)?.toLowerCase();
+    const submittedName = requiredText(body.customerName, "name", 120);
+    const submittedEmail = requiredText(body.customerEmail, "email", 254)?.toLowerCase();
     const customerPhone = optionalText(body.customerPhone, 40);
     const deliveryAddress = optionalText(body.deliveryAddress, 500);
     const notes = optionalText(body.notes, 1500);
     const items = normalizeItems(body.items);
 
-    if (!customerName || !customerEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail) || !items) {
+    if (!submittedName || !submittedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(submittedEmail) || !items) {
       return errorResponse("Please complete the required order details.");
     }
 
     const database = await getDatabase();
+    const customer = await getAuthenticatedCustomer(request, database);
+    const customerName = customer?.fullName ?? submittedName;
+    const customerEmail = customer?.email ?? submittedEmail;
     const inventoryResults = await database.batch<InventoryLookup>(
       items.map(({ sku }) => database.prepare(
         "SELECT sku, name, stock, is_active FROM inventory_items WHERE sku = ?",
@@ -88,9 +92,9 @@ export async function POST(request: Request) {
     const orderNumber = `ZARI-${Date.now().toString(36).toUpperCase()}-${crypto.randomUUID().slice(0, 6).toUpperCase()}`;
     const statements = [
       database.prepare(
-        `INSERT INTO orders (order_number, customer_name, customer_email, customer_phone, delivery_address, notes)
-         VALUES (?, ?, ?, ?, ?, ?)`,
-      ).bind(orderNumber, customerName, customerEmail, customerPhone, deliveryAddress, notes),
+        `INSERT INTO orders (order_number, customer_id, customer_name, customer_email, customer_phone, delivery_address, notes)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      ).bind(orderNumber, customer?.id ?? null, customerName, customerEmail, customerPhone, deliveryAddress, notes),
       ...items.map((item, index) => database.prepare(
         `INSERT INTO order_items (order_id, sku, item_name, quantity)
          VALUES ((SELECT id FROM orders WHERE order_number = ?), ?, ?, ?)`,

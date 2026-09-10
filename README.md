@@ -40,6 +40,18 @@ npx wrangler d1 execute zari-orders --remote --file=db/migrations/0002_customer_
 
 The current cart holds selected pieces and validates available stock. Payment, checkout, product/category management, and the separate admin portal are intentionally the next phase.
 
+## Customer account dashboard
+
+The account page now keeps a signed-in customer’s order history, saved pieces, delivery addresses, profile name, and concierge contact options together. Orders created while the customer is signed in are linked to that customer automatically; existing requests are linked by their matching account email when the migration is applied.
+
+Apply the dashboard migration before deploying this release:
+
+```bash
+npx wrangler d1 migrations apply zari-orders --remote
+```
+
+The dashboard intentionally does not offer payment, order cancellation, email changes, or password resets yet. Those flows require a verified-email and payment-provider implementation so they can be handled safely.
+
 ## Getting Started
 
 First, run the development server:
