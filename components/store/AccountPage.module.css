@@ -140,6 +140,448 @@
   font-size: 0.9375rem;
 }
 
+.dashboard {
+  margin-top: 1.5rem;
+}
+
+.accountNav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid rgba(23, 23, 23, 0.1);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.accountNavLink {
+  display: flex;
+  min-height: 5.25rem;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.125rem;
+  border-right: 1px solid rgba(23, 23, 23, 0.1);
+  border-bottom: 1px solid rgba(23, 23, 23, 0.1);
+  color: #414141;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.accountNavLink:nth-child(2n) {
+  border-right: 0;
+}
+
+.accountNavLink:nth-child(n + 3) {
+  border-bottom: 0;
+}
+
+.accountNavLink:hover {
+  background: #171717;
+  color: #fff;
+}
+
+.accountNavLink strong {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.alertSuccess,
+.alertError {
+  margin-top: 1.5rem;
+  padding: 1rem 1.125rem;
+  border-left: 2px solid #8b7442;
+  background: #fff;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.alertSuccess {
+  color: #55633d;
+}
+
+.alertError {
+  border-left-color: #ad3e36;
+  color: #9c332c;
+}
+
+.accountSection {
+  margin-top: 4.5rem;
+  scroll-margin-top: 8rem;
+}
+
+.sectionHeading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(23, 23, 23, 0.15);
+}
+
+.sectionEyebrow {
+  color: #8b7442;
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.sectionTitle {
+  margin-top: 0.75rem;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+.textAction,
+.subtleAction {
+  border: 0;
+  background: transparent;
+  color: #806c40;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.textAction span {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  line-height: 0;
+}
+
+.textAction:hover,
+.subtleAction:hover {
+  color: #171717;
+}
+
+.sectionLoading {
+  margin-top: 1.75rem;
+  color: #737373;
+  font-size: 0.875rem;
+}
+
+.orderList {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.orderCard,
+.addressCard,
+.savedCard,
+.profileForm,
+.conciergeCard,
+.addressForm {
+  border: 1px solid rgba(23, 23, 23, 0.1);
+  background: #fff;
+}
+
+.orderCard {
+  padding: 1.5rem;
+}
+
+.orderMeta,
+.addressMeta,
+.savedActions,
+.addressActions,
+.formFooter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.orderNumber {
+  color: #8b7442;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+}
+
+.orderDate,
+.orderAddress {
+  margin-top: 0.45rem;
+  color: #777;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.orderStatus,
+.addressMeta span {
+  padding: 0.45rem 0.65rem;
+  background: #f0ede5;
+  color: #6e5b31;
+  font-size: 0.5625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.orderItems {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1.25rem;
+  color: #383838;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.emptyState {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(23, 23, 23, 0.1);
+  color: #806c40;
+}
+
+.emptyState h3,
+.profileForm h3,
+.conciergeCard h3,
+.savedDetails h3 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.035em;
+}
+
+.emptyState p,
+.profileForm p,
+.conciergeCard p,
+.savedDetails > p {
+  margin-top: 0.625rem;
+  color: #707070;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+}
+
+.savedGrid,
+.addressGrid,
+.settingsGrid {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.savedCard {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 8rem) minmax(0, 1fr);
+}
+
+.savedImage {
+  min-height: 100%;
+  background: #ede8de center / cover no-repeat;
+}
+
+.savedDetails {
+  padding: 1.35rem;
+}
+
+.savedActions {
+  justify-content: flex-start;
+  margin-top: 1.25rem;
+}
+
+.iconAction {
+  display: grid;
+  width: 3rem;
+  min-height: 3rem;
+  place-items: center;
+  border: 1px solid #d5d1c8;
+  background: #fff;
+  color: #5d5d5d;
+  cursor: pointer;
+}
+
+.iconAction:hover {
+  border-color: #9d3d36;
+  color: #9d3d36;
+}
+
+.iconAction:disabled,
+.primaryAction:disabled,
+.secondaryAction:disabled,
+.subtleAction:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.addressGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+
+.addressCard {
+  padding: 1.35rem;
+}
+
+.addressCard address {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 1.25rem;
+  color: #565656;
+  font-size: 0.8125rem;
+  font-style: normal;
+  line-height: 1.45;
+}
+
+.addressActions {
+  justify-content: flex-start;
+  margin-top: 1.5rem;
+}
+
+.addressForm {
+  margin-top: 1.5rem;
+  padding: clamp(1.35rem, 3vw, 2.25rem);
+}
+
+.formHeader {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.formHeader > p:last-child {
+  color: #8a8a8a;
+  font-size: 0.75rem;
+}
+
+.formGrid {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.formGrid label,
+.profileForm label {
+  display: grid;
+  gap: 0.55rem;
+  color: #686868;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.formGrid input,
+.profileForm input {
+  min-width: 0;
+  border: 0;
+  border-bottom: 1px solid #cfcac0;
+  background: transparent;
+  color: #242424;
+  font: inherit;
+  font-size: 0.875rem;
+  letter-spacing: normal;
+  outline: none;
+  padding: 0.65rem 0;
+  text-transform: none;
+}
+
+.formGrid input:focus,
+.profileForm input:focus {
+  border-color: #8b7442;
+}
+
+.formFooter {
+  margin-top: 1.75rem;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  color: #676767;
+  font-size: 0.75rem;
+}
+
+.checkbox input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #171717;
+}
+
+.settingsGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+}
+
+.profileForm,
+.conciergeCard {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.profileForm svg {
+  color: #8b7442;
+}
+
+.profileForm .primaryAction,
+.conciergeCard .primaryAction {
+  justify-self: start;
+  margin-top: 0.75rem;
+}
+
+.conciergeCard {
+  background: #171717;
+  color: #fff;
+}
+
+.conciergeCard .cardEyebrow {
+  color: #c7ad76;
+}
+
+.conciergeCard p {
+  color: #c6c6c6;
+}
+
+.conciergeCard .primaryAction {
+  background: #c7ad76;
+  color: #171717;
+}
+
+.conciergeCard .primaryAction:hover {
+  background: #fff;
+}
+
+.conciergeCard .subtleAction {
+  justify-self: start;
+  margin-top: 0.25rem;
+  color: #d8d8d8;
+}
+
+@media (min-width: 36rem) {
+  .formGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .formWide {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 48rem) {
+  .accountNav {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .accountNavLink,
+  .accountNavLink:nth-child(2n) {
+    border-right: 1px solid rgba(23, 23, 23, 0.1);
+    border-bottom: 0;
+  }
+
+  .accountNavLink:last-child {
+    border-right: 0;
+  }
+}
+
 @media (max-width: 31rem) {
   .profile {
     flex-direction: column-reverse;
