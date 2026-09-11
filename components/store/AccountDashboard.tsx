@@ -402,7 +402,6 @@ export default function AccountDashboard({ user, cart, refresh, updateCart }: Da
             <h3>Contact the concierge</h3>
             <p>For changes to an order, account access, bespoke requirements, or delivery guidance, our atelier will help personally.</p>
             <a href={`mailto:${site.email}?subject=${encodeURIComponent("ZARI account enquiry")}`} className={styles.primaryAction}>Email concierge</a>
-            <a href={`tel:${site.phone.replace(/\s/g, "")}`} className={styles.subtleAction}>{site.phone}</a>
           </aside>
         </div>
       </section>

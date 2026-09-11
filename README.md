@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project for The House of Zari.
+This is a [Next.js](https://nextjs.org) project for ZARI.
 
 ## Orders and inventory backend
 
