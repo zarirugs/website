@@ -13,7 +13,7 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
 
   return (
     <article className="group cursor-pointer">
-      <div className="relative w-full aspect-[2/3] overflow-hidden rounded-sm bg-[#f4f1eb]">
+      <div className="relative w-full aspect-[2/3] overflow-hidden rounded-sm bg-[#f4f4f3]">
         {externalImage ? (
           <div
             role="img"

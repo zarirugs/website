@@ -110,7 +110,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f4f1eb] px-5 py-8 text-neutral-900 md:px-10 md:py-12">
+    <main className="min-h-screen bg-white px-5 py-8 text-neutral-900 md:px-10 md:py-12">
       <div className="mx-auto max-w-7xl">
         <header className="flex flex-col justify-between gap-6 border-b border-neutral-300 pb-8 md:flex-row md:items-end">
           <div>
