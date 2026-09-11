@@ -11,7 +11,11 @@ export default function Footer() {
 
           {/* Brand Column */}
           <div style={{ width: '100%', maxWidth: '350px' }}>
-            <Link href="/" className="display-font text-3xl tracking-widest text-white">
+            <Link
+              href="/"
+              style={{ fontFamily: "var(--font-wordmark, var(--font-display))" }}
+              className="text-3xl tracking-[0.18em] text-white"
+            >
               {site.shortName}
             </Link>
             <p className="mt-8 text-sm leading-loose font-light">
@@ -38,7 +42,6 @@ export default function Footer() {
             </h4>
             <ul className="flex flex-col gap-4 text-sm font-light">
               <li><a href={`mailto:${site.email}`} className="hover:text-white transition-colors">{site.email}</a></li>
-              <li>{site.phone}</li>
               <li className="leading-loose mt-1">
                 {site.address.city}, {site.address.state}<br/>
                 {site.address.country}
