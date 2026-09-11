@@ -2,26 +2,45 @@
   scroll-margin-top: 6rem;
 }
 
+.header {
+  display: grid;
+  align-items: end;
+  gap: 2rem;
+}
+
 .intro {
-  max-width: 36rem;
+  max-width: 43rem;
 }
 
 .eyebrow {
   display: inline-block;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.title {
+  font-size: clamp(3.1rem, 4.25vw, 4.8rem);
+  letter-spacing: -0.035em;
+  line-height: 0.98;
 }
 
 .copy {
-  margin-top: 2rem;
+  max-width: 30rem;
+  color: #67635d;
+  line-height: 1.72;
 }
 
 .grid {
   display: grid;
-  gap: 3rem;
-  margin-top: 5rem;
+  gap: 3.25rem 2rem;
+  margin-top: 3.5rem;
 }
 
 @media (min-width: 48rem) {
+  .header {
+    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+    gap: 4rem;
+  }
+
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -30,6 +49,6 @@
 @media (min-width: 80rem) {
   .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 4rem;
+    gap: 3rem;
   }
 }
