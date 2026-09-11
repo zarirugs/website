@@ -27,14 +27,18 @@ export default function Collections() {
     <Section id="collections" className={styles.section}>
       <Container>
         <FadeIn>
-          <div className={styles.intro}>
-            <Eyebrow className={styles.eyebrow}>The Archives</Eyebrow>
-            <Heading as="h2" size="xl">
-              Signature Collections
-            </Heading>
+          <div className={styles.header}>
+            <div className={styles.intro}>
+              <Eyebrow className={styles.eyebrow}>The archives</Eyebrow>
+              <Heading as="h2" size="xl" className={styles.title}>
+                Signature Collections
+              </Heading>
+            </div>
 
             <Text size="lg" className={styles.copy}>
-              Designed for extraordinary residences, luxury hotels, and iconic interiors around the world. Every collection celebrates the centuries-old artistry of Bhadohi while embracing contemporary design.
+              Designed for extraordinary residences, luxury hotels, and iconic
+              interiors. Each collection celebrates the artistry of Bhadohi in a
+              quietly contemporary language.
             </Text>
           </div>
         </FadeIn>
