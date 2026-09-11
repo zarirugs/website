@@ -28,7 +28,8 @@
 }
 
 .brand {
-  font-size: 1.875rem;
+  font-family: var(--font-wordmark, var(--font-display));
+  font-size: 2rem;
   letter-spacing: 0.25em;
 }
 
@@ -46,9 +47,9 @@
 
 .title {
   margin-top: 1.5rem;
-  font-size: clamp(2.25rem, 5vw, 3rem);
-  line-height: 1.05;
-  letter-spacing: 0.07em;
+  font-size: var(--fs-heading-lg);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
 }
 
 .introCopy {
@@ -79,9 +80,9 @@
 
 .formTitle {
   margin-top: 0.75rem;
-  font-size: 2rem;
+  font-size: var(--fs-heading-md);
   line-height: 1.15;
-  letter-spacing: 0.07em;
+  letter-spacing: -0.015em;
 }
 
 .form {

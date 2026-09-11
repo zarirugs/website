@@ -34,7 +34,7 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
       </div>
 
       <div className="mt-6 border-t border-black/10 pt-5 lg:mt-7">
-        <Heading as="h3" size="md" className="text-[1.65rem] leading-none transition-colors duration-300 group-hover:text-[#9d8655] lg:text-[2rem]">
+        <Heading as="h3" size="md" className="leading-none transition-colors duration-300 group-hover:text-[#9d8655]">
           {collection.title}
         </Heading>
 
