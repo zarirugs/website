@@ -4,5 +4,5 @@ import { CartPage } from "@/components/store";
 export const metadata = { title: "Shopping bag" };
 
 export default function Cart() {
-  return <><Navbar /><CartPage /></>;
+  return <><Navbar surface="solid" /><CartPage /></>;
 }
