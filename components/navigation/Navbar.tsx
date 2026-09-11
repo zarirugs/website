@@ -53,20 +53,21 @@ export default function Navbar({ surface = "overlay" }: NavbarProps) {
       )}
     >
       <Container>
-        <nav className="flex h-24 items-center justify-between">
+        <nav className="flex h-20 items-center justify-between md:h-24">
 
           <Link
             href="/"
             className="
               display-font
-              text-4xl
-              tracking-[0.25em]
+              text-[2rem]
+              tracking-[0.22em]
+              md:text-[2.25rem]
             "
           >
             ZARI
           </Link>
 
-          <div className="hidden lg:flex items-center gap-12">
+          <div className="hidden items-center gap-10 lg:flex xl:gap-12">
             {navigation.map((item) => (
               <NavLink
                 key={item.title}

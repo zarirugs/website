@@ -19,7 +19,7 @@ export default function HeroContent() {
         <div className="max-w-2xl text-white">
           <Heading
             as="h1"
-            size="xl"
+            size="hero"
             className="
               mt-8
               text-white

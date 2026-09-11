@@ -10,14 +10,13 @@ interface HeadingProps {
   className?: string;
 }
 
-// Drastically reduced all sizes for a highly refined, editorial look
 const sizes = {
-  display: "text-[clamp(3rem,7vw,6rem)] leading-[0.95] tracking-[-0.03em]",
-  hero: "text-[clamp(2.5rem,5vw,4.5rem)] leading-[1] tracking-[-0.02em]",
-  xl: "text-4xl lg:text-5xl leading-[1.1] tracking-[-0.02em]",
-  lg: "text-2xl lg:text-3xl leading-[1.2] tracking-[-0.01em]",
-  md: "text-xl lg:text-2xl leading-snug font-normal",
-  sm: "text-lg leading-snug font-normal",
+  display: "text-[clamp(3.25rem,5.75vw,5.75rem)] leading-[0.94] tracking-[-0.035em]",
+  hero: "text-[clamp(2.75rem,4.5vw,4.75rem)] leading-[0.97] tracking-[-0.03em]",
+  xl: "text-[clamp(2.5rem,3.5vw,4.25rem)] leading-[1] tracking-[-0.025em]",
+  lg: "text-[clamp(2rem,2.5vw,2.75rem)] leading-[1.08] tracking-[-0.02em]",
+  md: "text-[clamp(1.5rem,1.75vw,2rem)] leading-[1.14] tracking-[-0.015em] font-normal",
+  sm: "text-[1.25rem] leading-[1.2] tracking-[-0.01em] font-normal",
 };
 
 export default function Heading({

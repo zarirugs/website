@@ -12,7 +12,7 @@ export default function Label({
   return (
     <span
       className={cn(
-        "text-sm uppercase tracking-[0.24em] text-neutral-500",
+        "text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-500",
         className
       )}
     >

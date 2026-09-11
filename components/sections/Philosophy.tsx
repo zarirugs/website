@@ -23,8 +23,7 @@ export default function Philosophy() {
         </FadeIn>
 
         <Stagger
-          className="grid gap-12 lg:gap-16 md:grid-cols-3"
-          style={{ marginTop: "80px" }}
+          className="mt-16 grid gap-10 md:mt-20 md:grid-cols-3 lg:gap-14"
         >
           {philosophy.values.map((value) => (
             <div key={value.title} className="border-t border-neutral-300/60 pt-8">
