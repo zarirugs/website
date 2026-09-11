@@ -18,9 +18,9 @@
 }
 
 .title {
-  font-size: clamp(3.1rem, 4.25vw, 4.8rem);
-  letter-spacing: -0.035em;
-  line-height: 0.98;
+  font-size: clamp(2.5rem, 3.5vw, 4.25rem);
+  letter-spacing: -0.025em;
+  line-height: 1;
 }
 
 .copy {

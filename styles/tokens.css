@@ -19,6 +19,8 @@
     /* ------------------------------------------------ */
   
     --container-width: 1440px;
+    --page-gutter: clamp(1.25rem, 3vw, 4rem);
+    --section-space: clamp(4.5rem, 8vw, 8rem);
   
     /* ------------------------------------------------ */
     /* Radius */
@@ -63,11 +65,11 @@
     /* Typography */
     /* ------------------------------------------------ */
   
-    --fs-eyebrow: .72rem;
+    --fs-eyebrow: .625rem;
   
     --fs-body: 1rem;
   
-    --fs-large: 1.15rem;
+    --fs-large: 1.125rem;
   
     --fs-h3: 2rem;
   

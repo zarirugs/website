@@ -1,22 +1,22 @@
 .page {
   min-height: 100vh;
-  padding: 10.5rem 0 7rem;
+  padding: clamp(8rem, 10vw, 10.5rem) 0 var(--section-space);
   background: #fff;
   color: #171717;
 }
 
 .content {
-  max-width: 58rem;
+  max-width: 72rem;
 }
 
 .intro {
-  max-width: 40rem;
+  max-width: 36rem;
 }
 
 .eyebrow,
 .cardEyebrow {
   color: #8b7442;
-  font-size: 0.6875rem;
+  font-size: var(--fs-eyebrow);
   letter-spacing: 0.25em;
   text-transform: uppercase;
 }
@@ -28,23 +28,23 @@
 }
 
 .title {
-  margin-top: 1rem;
-  font-size: clamp(3.5rem, 7vw, 5.75rem);
+  margin-top: 1.5rem;
+  font-size: clamp(3.25rem, 5.75vw, 5.75rem);
   line-height: 0.95;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.025em;
 }
 
 .description {
   max-width: 32rem;
-  margin-top: 1.75rem;
+  margin-top: 1.5rem;
   color: #616161;
-  font-size: 1rem;
+  font-size: var(--fs-large);
   line-height: 1.7;
 }
 
 .card {
-  margin-top: 4rem;
-  padding: clamp(2rem, 5vw, 4rem);
+  margin-top: clamp(3rem, 6vw, 5rem);
+  padding: clamp(2rem, 4vw, 3.5rem);
   border: 1px solid rgba(23, 23, 23, 0.08);
   background: #fff;
   box-shadow: 0 24px 70px rgba(23, 23, 23, 0.08);
@@ -59,9 +59,9 @@
 
 .cardTitle {
   margin-top: 0.875rem;
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
-  line-height: 1.05;
-  letter-spacing: 0.04em;
+  font-size: clamp(2.25rem, 3.5vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
 .cardCopy,
@@ -89,7 +89,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.875rem;
-  margin-top: 3rem;
+  margin-top: 2.5rem;
 }
 
 .primaryAction,
@@ -585,11 +585,5 @@
 @media (max-width: 31rem) {
   .profile {
     flex-direction: column-reverse;
-  }
-}
-
-@media (min-width: 48rem) {
-  .page {
-    padding-top: 12rem;
   }
 }
