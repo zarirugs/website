@@ -20,11 +20,12 @@ export default function MobileMenu() {
   return (
     <>
       <button
-        className="lg:hidden"
+        className="inline-flex h-10 w-10 items-center justify-start"
         onClick={() => setOpen(!open)}
         aria-label="Menu"
+        aria-expanded={open}
       >
-        {open ? <X size={28} /> : <Menu size={28} />}
+        <Menu size={22} strokeWidth={1.5} />
       </button>
 
       {open && (
@@ -44,7 +45,7 @@ export default function MobileMenu() {
           "
         >
           <button
-            className="absolute right-8 top-8 text-neutral-900"
+            className="absolute right-[var(--page-gutter)] top-7 text-neutral-900 md:top-9"
             onClick={() => setOpen(false)}
             aria-label="Close menu"
           >
