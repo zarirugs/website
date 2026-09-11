@@ -11,12 +11,12 @@ interface HeadingProps {
 }
 
 const sizes = {
-  display: "text-[clamp(3.25rem,5.75vw,5.75rem)] leading-[0.94] tracking-[-0.035em]",
-  hero: "text-[clamp(2.75rem,4.5vw,4.75rem)] leading-[0.97] tracking-[-0.03em]",
-  xl: "text-[clamp(2.5rem,3.5vw,4.25rem)] leading-[1] tracking-[-0.025em]",
-  lg: "text-[clamp(2rem,2.5vw,2.75rem)] leading-[1.08] tracking-[-0.02em]",
-  md: "text-[clamp(1.5rem,1.75vw,2rem)] leading-[1.14] tracking-[-0.015em] font-normal",
-  sm: "text-[1.25rem] leading-[1.2] tracking-[-0.01em] font-normal",
+  display: { fontSize: "var(--fs-heading-display)", className: "leading-[0.96] tracking-[-0.03em]" },
+  hero: { fontSize: "var(--fs-hero)", className: "leading-[0.98] tracking-[-0.025em]" },
+  xl: { fontSize: "var(--fs-heading-xl)", className: "leading-[1] tracking-[-0.025em]" },
+  lg: { fontSize: "var(--fs-heading-lg)", className: "leading-[1.08] tracking-[-0.02em]" },
+  md: { fontSize: "var(--fs-heading-md)", className: "leading-[1.14] tracking-[-0.015em] font-normal" },
+  sm: { fontSize: "var(--fs-heading-sm)", className: "leading-[1.2] tracking-[-0.01em] font-normal" },
 };
 
 export default function Heading({
@@ -31,9 +31,10 @@ export default function Heading({
     <Tag
       className={cn(
         "display-font text-neutral-900",
-        sizes[size],
+        sizes[size].className,
         className
       )}
+      style={{ fontSize: sizes[size].fontSize }}
     >
       {children}
     </Tag>
