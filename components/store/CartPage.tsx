@@ -24,10 +24,10 @@ export default function CartPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f8f6f1] px-6 pb-20 pt-36 text-neutral-900 lg:px-16 xl:px-32">
+    <main className="min-h-screen bg-[#f8f6f1] px-6 pb-20 pt-40 text-neutral-900 sm:pt-44 lg:px-16 xl:px-32">
       <div className="mx-auto max-w-5xl">
         <p className="text-[10px] uppercase tracking-[0.25em] text-[#8b7442]">Your selection</p>
-        <h1 className="display-font mt-3 text-4xl tracking-[0.08em]">Shopping bag</h1>
+        <h1 className="display-font mt-4 text-4xl leading-none tracking-[0.02em] sm:text-5xl">Shopping bag</h1>
 
         {!ready ? <p className="mt-10 text-sm text-neutral-500">Loading your cart…</p> : !user ? (
           <section className="mt-10 max-w-xl bg-white p-8 shadow-sm">
@@ -36,9 +36,17 @@ export default function CartPage() {
             <Link href="/login" className="mt-7 inline-flex bg-neutral-950 px-6 py-4 text-[10px] uppercase tracking-[0.18em] text-white">Sign in</Link>
           </section>
         ) : cart.items.length === 0 ? (
-          <section className="mt-10 bg-white p-8 shadow-sm">
-            <p className="text-sm text-neutral-600">Your bag is currently empty.</p>
-            <Link href="/#collections" className="mt-6 inline-flex text-[10px] uppercase tracking-[0.18em] text-[#8b7442]">Explore collections →</Link>
+          <section className="mt-12 grid min-h-72 place-items-center border border-black/5 bg-white px-8 py-12 text-center shadow-[0_16px_50px_rgba(42,34,21,0.05)] sm:min-h-80">
+            <div className="max-w-sm">
+              <p className="text-[10px] uppercase tracking-[0.25em] text-[#8b7442]">A quiet beginning</p>
+              <h2 className="display-font mt-5 text-3xl leading-tight">Your selection awaits</h2>
+              <p className="mt-4 text-sm leading-relaxed text-neutral-600">
+                Explore rugs shaped by material, memory, and the rooms they will call home.
+              </p>
+              <Link href="/#collections" className="mt-8 inline-flex items-center gap-3 border-b border-neutral-900 pb-3 text-[10px] uppercase tracking-[0.22em] text-neutral-900 transition-colors hover:border-[#8b7442] hover:text-[#8b7442]">
+                Explore collections <span aria-hidden="true">→</span>
+              </Link>
+            </div>
           </section>
         ) : (
           <>
