@@ -54,7 +54,7 @@ function normalizeItems(value: unknown): PublicOrderItem[] | null {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     const honeypot = optionalText(body.website, 200);
     if (honeypot) return NextResponse.json({ received: true }, { status: 202 });
 

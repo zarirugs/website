@@ -51,7 +51,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sku, quantity }),
     });
-    const result = await response.json().catch(() => ({}));
+    const result = await response.json().catch(() => ({})) as Partial<Cart> & { error?: string };
     if (!response.ok) throw new Error(result.error ?? "Unable to update your cart.");
     const nextCart = result as Cart;
     setCart(nextCart);

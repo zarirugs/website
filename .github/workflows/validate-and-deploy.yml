@@ -63,6 +63,13 @@ jobs:
       - name: Build for Cloudflare
         run: npm run build:cloudflare
 
+      - name: Apply D1 migrations
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: d1 migrations apply zari-orders --remote
+
       - name: Deploy with Wrangler
         uses: cloudflare/wrangler-action@v4
         with:

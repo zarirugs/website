@@ -24,7 +24,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const id = Number(rawId);
     if (!Number.isInteger(id) || id < 1) return errorResponse("Invalid order.");
 
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     const nextStatus = body.status as OrderStatus;
     if (!orderStatuses.includes(nextStatus)) return errorResponse("Invalid order status.");
 

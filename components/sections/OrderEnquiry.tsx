@@ -36,7 +36,11 @@ export default function OrderEnquiry() {
       }),
     });
 
-    const result = await response.json().catch(() => ({}));
+    const result = await response.json().catch(() => ({})) as {
+      error?: string;
+      message?: string;
+      orderNumber?: string;
+    };
     setIsSubmitting(false);
 
     if (!response.ok) {

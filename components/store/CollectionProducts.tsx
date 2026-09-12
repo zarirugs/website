@@ -85,7 +85,7 @@ export default function CollectionProducts({ products }: { products: PublicCatal
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sku: product.sku }),
       });
-      const result = await response.json().catch(() => ({}));
+      const result = await response.json().catch(() => ({})) as { error?: unknown };
       if (!response.ok) throw new Error(typeof result.error === "string" ? result.error : "Unable to update saved pieces.");
       setSavedSkus((current) => {
         const next = new Set(current);

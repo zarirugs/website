@@ -29,7 +29,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
         password: fields.get("password"),
       }),
     });
-    const result = await response.json().catch(() => ({}));
+    const result = await response.json().catch(() => ({})) as { error?: string };
     setSubmitting(false);
 
     if (!response.ok) {
