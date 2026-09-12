@@ -8,9 +8,11 @@ import { displayOrderStage, orderStages, type OrderStage } from "@/lib/data/orde
 import styles from "./operations.module.css";
 
 type Metrics = { openOrders: number; awaitingPayment: number; lowStock: number; visibleProducts: number };
-type Category = { id: string; name: string; slug: string; description: string | null; imageUrl: string | null; sortOrder: number; isActive: boolean; productCount: number };
-type Product = { sku: string; name: string; stock: number; reorderLevel: number; isActive: boolean; categoryId: string | null; categoryName: string | null; description: string | null; imageUrl: string | null; pricePaise: number | null; isVisible: boolean; sortOrder: number };
+type Category = { id: string; name: string; slug: string; description: string | null; imageUrl: string | null; mediaAssetId: string | null; sortOrder: number; isActive: boolean; productCount: number };
+type Product = { sku: string; name: string; stock: number; reorderLevel: number; isActive: boolean; categoryId: string | null; categoryName: string | null; description: string | null; imageUrl: string | null; mediaAssetId: string | null; pricePaise: number | null; isVisible: boolean; sortOrder: number };
 type Order = { id: number; orderNumber: string; customerName: string; customerEmail: string; customerPhone: string | null; deliveryAddress: string | null; notes: string | null; stage: OrderStage; createdAt: string; items: { sku: string; name: string; quantity: number }[] };
+type MediaAsset = { id: string; name: string; altText: string | null; sourceType: "upload" | "url" | "color"; imageUrl: string | null; backgroundColor: string | null; previewUrl: string | null };
+type MediaSlot = { slot_key: string; label: string; description: string; media_asset_id: string | null };
 
 function currency(value: number | null) {
   return value === null ? "On request" : new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value / 100);
@@ -34,15 +36,23 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [media, setMedia] = useState<MediaAsset[]>([]);
+  const [mediaSlots, setMediaSlots] = useState<MediaSlot[]>([]);
+  const [mediaName, setMediaName] = useState("");
+  const [mediaAltText, setMediaAltText] = useState("");
+  const [mediaSourceType, setMediaSourceType] = useState<MediaAsset["sourceType"]>("upload");
+  const [mediaUrl, setMediaUrl] = useState("");
+  const [mediaColor, setMediaColor] = useState("#A88957");
+  const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
-  const [categoryImageUrl, setCategoryImageUrl] = useState("");
+  const [categoryMediaAssetId, setCategoryMediaAssetId] = useState("");
   const [categorySortOrder, setCategorySortOrder] = useState("0");
   const [productSku, setProductSku] = useState("");
   const [productName, setProductName] = useState("");
   const [productCategoryId, setProductCategoryId] = useState("");
   const [productDescription, setProductDescription] = useState("");
-  const [productImageUrl, setProductImageUrl] = useState("");
+  const [productMediaAssetId, setProductMediaAssetId] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [productStock, setProductStock] = useState("0");
   const [productReorder, setProductReorder] = useState("0");
@@ -53,17 +63,20 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
   const load = useCallback(async () => {
     try {
       setLoading(true);
-      const [dashboard, categoryResult, productResult, orderResult] = await Promise.all([
+      const [dashboard, categoryResult, productResult, orderResult, mediaResult] = await Promise.all([
         json<{ admin: AuthenticatedAdmin; metrics: Metrics }>("/api/dashboard"),
         json<{ categories: Category[] }>("/api/categories"),
         json<{ products: Product[] }>("/api/products"),
         json<{ orders: Order[] }>("/api/orders"),
+        json<{ media: MediaAsset[]; slots: MediaSlot[] }>("/api/media"),
       ]);
       setAdmin(dashboard.admin);
       setMetrics(dashboard.metrics);
       setCategories(categoryResult.categories);
       setProducts(productResult.products);
       setOrders(orderResult.orders);
+      setMedia(mediaResult.media);
+      setMediaSlots(mediaResult.slots);
       setProductCategoryId((current) => current || categoryResult.categories.find((category) => category.isActive)?.id || "");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unable to load operations data.");
@@ -75,17 +88,20 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
   useEffect(() => {
     async function loadInitialDashboard() {
       try {
-        const [dashboard, categoryResult, productResult, orderResult] = await Promise.all([
+        const [dashboard, categoryResult, productResult, orderResult, mediaResult] = await Promise.all([
           json<{ admin: AuthenticatedAdmin; metrics: Metrics }>("/api/dashboard"),
           json<{ categories: Category[] }>("/api/categories"),
           json<{ products: Product[] }>("/api/products"),
           json<{ orders: Order[] }>("/api/orders"),
+          json<{ media: MediaAsset[]; slots: MediaSlot[] }>("/api/media"),
         ]);
         setAdmin(dashboard.admin);
         setMetrics(dashboard.metrics);
         setCategories(categoryResult.categories);
         setProducts(productResult.products);
         setOrders(orderResult.orders);
+        setMedia(mediaResult.media);
+        setMediaSlots(mediaResult.slots);
         setProductCategoryId(categoryResult.categories.find((category) => category.isActive)?.id || "");
       } catch (error) {
         setMessage(error instanceof Error ? error.message : "Unable to load operations data.");
@@ -116,9 +132,9 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
     event.preventDefault();
     void run(async () => {
       await json("/api/categories", { method: "POST", body: JSON.stringify({
-        name: categoryName, description: categoryDescription, imageUrl: categoryImageUrl, sortOrder: Number(categorySortOrder),
+        name: categoryName, description: categoryDescription, mediaAssetId: categoryMediaAssetId || undefined, sortOrder: Number(categorySortOrder),
       }) });
-      setCategoryName(""); setCategoryDescription(""); setCategoryImageUrl(""); setCategorySortOrder("0");
+      setCategoryName(""); setCategoryDescription(""); setCategoryMediaAssetId(""); setCategorySortOrder("0");
     }, "Category created and ready for products.");
   }
 
@@ -127,10 +143,10 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
     void run(async () => {
       await json("/api/products", { method: "POST", body: JSON.stringify({
         sku: productSku, name: productName, categoryId: productCategoryId, description: productDescription,
-        imageUrl: productImageUrl, pricePaise: productPrice === "" ? null : Math.round(Number(productPrice) * 100),
+        mediaAssetId: productMediaAssetId || undefined, pricePaise: productPrice === "" ? null : Math.round(Number(productPrice) * 100),
         stock: Number(productStock), reorderLevel: Number(productReorder), sortOrder: 0,
       }) });
-      setProductSku(""); setProductName(""); setProductDescription(""); setProductImageUrl(""); setProductPrice(""); setProductStock("0"); setProductReorder("0");
+      setProductSku(""); setProductName(""); setProductDescription(""); setProductMediaAssetId(""); setProductPrice(""); setProductStock("0"); setProductReorder("0");
     }, "Product added to the catalog and inventory.");
   }
 
@@ -144,6 +160,28 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
 
   function toggleCategory(category: Category) {
     void run(() => json(`/api/categories/${category.id}`, { method: "PATCH", body: JSON.stringify({ isActive: !category.isActive }) }), `${category.name} is now ${category.isActive ? "hidden" : "active"}.`);
+  }
+
+  function createMedia(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void run(async () => {
+      const form = new FormData();
+      form.set("name", mediaName);
+      form.set("altText", mediaAltText);
+      form.set("sourceType", mediaSourceType);
+      if (mediaSourceType === "upload" && mediaFile) form.set("file", mediaFile);
+      if (mediaSourceType === "url") form.set("imageUrl", mediaUrl);
+      if (mediaSourceType === "color") form.set("backgroundColor", mediaColor);
+      const response = await fetch("/api/media", { method: "POST", body: form });
+      const result = await response.json().catch(() => ({})) as { error?: string };
+      if (!response.ok) throw new Error(result.error ?? "The media item could not be saved.");
+      setMediaName(""); setMediaAltText(""); setMediaUrl(""); setMediaColor("#A88957"); setMediaFile(null);
+    }, "Media added to the library.");
+  }
+
+  function assignMediaSlot(slot: MediaSlot, mediaAssetId: string) {
+    if (!mediaAssetId) return;
+    void run(() => json(`/api/media/slots/${encodeURIComponent(slot.slot_key)}`, { method: "PATCH", body: JSON.stringify({ mediaAssetId }) }), `${slot.label} updated on the storefront.`);
   }
 
   async function signOut() {
@@ -169,6 +207,33 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
         </section>
 
         <section className={styles.section}>
+          <div className={styles.sectionTitle}><div><p className={styles.eyebrow}>Visual library</p><h2>Storefront media</h2></div><p>Create a named image, external image link, or colour treatment once, then assign it anywhere on the public website.</p></div>
+          <div className={styles.mediaLayout}>
+            <div>
+              <div className={styles.slotGrid}>{mediaSlots.map((slot) => <article className={styles.slot} key={slot.slot_key}>
+                <div><h3>{slot.label}</h3><p>{slot.description}</p></div>
+                <label>Assigned media<select value={slot.media_asset_id ?? ""} onChange={(event) => assignMediaSlot(slot, event.target.value)} disabled={saving}><option value="" disabled>Select media</option>{media.map((asset) => <option key={asset.id} value={asset.id}>{asset.name}</option>)}</select></label>
+              </article>)}</div>
+              <div className={styles.mediaGrid}>{media.map((asset) => <article className={styles.mediaCard} key={asset.id}>
+                <MediaPreview asset={asset} />
+                <div><p className={styles.mediaType}>{asset.sourceType}</p><h3>{asset.name}</h3><p>{asset.altText || "No alt text yet."}</p></div>
+              </article>)}</div>
+              {media.length === 0 && <Empty text="Add your first visual to the media library." />}
+            </div>
+            <form className={styles.formCard} onSubmit={createMedia}>
+              <p className={styles.eyebrow}>Add to library</p>
+              <label>Name<input value={mediaName} onChange={(event) => setMediaName(event.target.value)} placeholder="e.g. Autumn collection hero" required /></label>
+              <label>Image description (alt text)<input value={mediaAltText} onChange={(event) => setMediaAltText(event.target.value)} placeholder="Describe the image for visitors" /></label>
+              <label>Source<select value={mediaSourceType} onChange={(event) => setMediaSourceType(event.target.value as MediaAsset["sourceType"])}><option value="upload">Upload image</option><option value="url">Image link</option><option value="color">Colour only</option></select></label>
+              {mediaSourceType === "upload" && <label>Image file<input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" onChange={(event) => setMediaFile(event.target.files?.[0] ?? null)} required /></label>}
+              {mediaSourceType === "url" && <label>Image URL<input value={mediaUrl} onChange={(event) => setMediaUrl(event.target.value)} type="url" placeholder="https://…" required /></label>}
+              {mediaSourceType === "color" && <label>Colour code<input value={mediaColor} onChange={(event) => setMediaColor(event.target.value)} pattern="#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?" placeholder="#A88957" required /></label>}
+              <button className={styles.primaryButton} disabled={saving}>{mediaSourceType === "upload" ? "Upload image" : "Save media"}</button>
+            </form>
+          </div>
+        </section>
+
+        <section className={styles.section}>
           <div className={styles.sectionTitle}><div><p className={styles.eyebrow}>Order desk</p><h2>Customer orders</h2></div><p>Moving an order to paid reserves its inventory. Cancelling a paid order returns it.</p></div>
           <div className={styles.orders}>
             {orders.length === 0 ? <Empty text="No website orders yet." /> : orders.map((order) => <article key={order.id} className={styles.order}>
@@ -186,7 +251,7 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
               <button className={styles.textButton} disabled={saving} onClick={() => toggleCategory(category)}>{category.isActive ? "Hide" : "Activate"}</button>
             </article>)}
             {categories.length === 0 && <Empty text="Create your first category." />}</div>
-            <form className={styles.formCard} onSubmit={createCategory}><p className={styles.eyebrow}>New category</p><label>Name<input value={categoryName} onChange={(event) => setCategoryName(event.target.value)} required /></label><label>Short description<textarea value={categoryDescription} onChange={(event) => setCategoryDescription(event.target.value)} rows={3} /></label><label>Image URL<input value={categoryImageUrl} onChange={(event) => setCategoryImageUrl(event.target.value)} type="url" placeholder="https://…" required /></label><label>Display order<input value={categorySortOrder} onChange={(event) => setCategorySortOrder(event.target.value)} type="number" min="0" required /></label><button className={styles.primaryButton} disabled={saving}>Create category</button></form>
+            <form className={styles.formCard} onSubmit={createCategory}><p className={styles.eyebrow}>New category</p><label>Name<input value={categoryName} onChange={(event) => setCategoryName(event.target.value)} required /></label><label>Short description<textarea value={categoryDescription} onChange={(event) => setCategoryDescription(event.target.value)} rows={3} /></label><label>Collection visual<select value={categoryMediaAssetId} onChange={(event) => setCategoryMediaAssetId(event.target.value)}><option value="">Choose from library</option>{media.map((asset) => <option key={asset.id} value={asset.id}>{asset.name}</option>)}</select></label><label>Display order<input value={categorySortOrder} onChange={(event) => setCategorySortOrder(event.target.value)} type="number" min="0" required /></label><button className={styles.primaryButton} disabled={saving}>Create category</button></form>
           </div>
         </section>
 
@@ -194,7 +259,7 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
           <div className={styles.sectionTitle}><div><p className={styles.eyebrow}>Stock room</p><h2>Products & inventory</h2></div><p>{lowStock.length ? `${lowStock.length} active products need attention.` : "All active stock lines are above their reorder level."}</p></div>
           <div className={styles.productLayout}>
             <div className={styles.tableWrap}><table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Reorder</th><th /></tr></thead><tbody>{products.map((product) => <ProductRow key={`${product.sku}-${product.stock}`} product={product} saving={saving} onSave={updateStock} />)}</tbody></table>{products.length === 0 && <Empty text="No products created yet." />}</div>
-            <form className={styles.formCard} onSubmit={createProduct}><p className={styles.eyebrow}>New product</p><label>SKU<input value={productSku} onChange={(event) => setProductSku(event.target.value.toUpperCase())} placeholder="ZAR-NEW-001" required /></label><label>Product name<input value={productName} onChange={(event) => setProductName(event.target.value)} required /></label><label>Category<select value={productCategoryId} onChange={(event) => setProductCategoryId(event.target.value)} required><option value="" disabled>Select category</option>{categories.filter((category) => category.isActive).map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select></label><label>Description<textarea value={productDescription} onChange={(event) => setProductDescription(event.target.value)} rows={3} /></label><label>Image URL<input value={productImageUrl} onChange={(event) => setProductImageUrl(event.target.value)} type="url" placeholder="https://…" required /></label><label>Price (₹)<input value={productPrice} onChange={(event) => setProductPrice(event.target.value)} type="number" min="0" step="1" /></label><div className={styles.twoFields}><label>Opening stock<input value={productStock} onChange={(event) => setProductStock(event.target.value)} type="number" min="0" required /></label><label>Reorder at<input value={productReorder} onChange={(event) => setProductReorder(event.target.value)} type="number" min="0" required /></label></div><button className={styles.primaryButton} disabled={saving || !categories.some((category) => category.isActive)}>Add product</button></form>
+            <form className={styles.formCard} onSubmit={createProduct}><p className={styles.eyebrow}>New product</p><label>SKU<input value={productSku} onChange={(event) => setProductSku(event.target.value.toUpperCase())} placeholder="ZAR-NEW-001" required /></label><label>Product name<input value={productName} onChange={(event) => setProductName(event.target.value)} required /></label><label>Category<select value={productCategoryId} onChange={(event) => setProductCategoryId(event.target.value)} required><option value="" disabled>Select category</option>{categories.filter((category) => category.isActive).map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select></label><label>Description<textarea value={productDescription} onChange={(event) => setProductDescription(event.target.value)} rows={3} /></label><label>Product visual<select value={productMediaAssetId} onChange={(event) => setProductMediaAssetId(event.target.value)}><option value="">Choose from library</option>{media.map((asset) => <option key={asset.id} value={asset.id}>{asset.name}</option>)}</select></label><label>Price (₹)<input value={productPrice} onChange={(event) => setProductPrice(event.target.value)} type="number" min="0" step="1" /></label><div className={styles.twoFields}><label>Opening stock<input value={productStock} onChange={(event) => setProductStock(event.target.value)} type="number" min="0" required /></label><label>Reorder at<input value={productReorder} onChange={(event) => setProductReorder(event.target.value)} type="number" min="0" required /></label></div><button className={styles.primaryButton} disabled={saving || !categories.some((category) => category.isActive)}>Add product</button></form>
           </div>
         </section>
       </>}
@@ -208,6 +273,10 @@ function Metric({ label, value, dark, gold }: { label: string; value: number; da
 
 function Empty({ text }: { text: string }) {
   return <p className={styles.empty}>{text}</p>;
+}
+
+function MediaPreview({ asset }: { asset: MediaAsset }) {
+  return <div className={styles.mediaPreview} style={{ backgroundColor: asset.backgroundColor ?? "#e7e4dc", backgroundImage: asset.previewUrl ? `url(${asset.previewUrl})` : undefined }} aria-label={asset.altText ?? asset.name} role="img" />;
 }
 
 function ProductRow({ product, saving, onSave }: { product: Product; saving: boolean; onSave: (product: Product, stock: number) => void }) {
