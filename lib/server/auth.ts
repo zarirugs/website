@@ -2,11 +2,13 @@ import type { D1Database } from "@/lib/server/d1";
 import { base64ToBytes, bytesToBase64, bytesToBase64Url, sha256, stringToBytes, timingSafeEqual } from "@/lib/server/crypto";
 
 const sessionLifetimeSeconds = 60 * 60 * 24 * 7;
-// Workers Free permits 10 ms CPU per request. This keeps PBKDF2 within that
-// budget while retaining a unique random salt and SHA-256 derived hash.
-const passwordIterations = 30_000;
+// Workers Free permits 10 ms CPU per request. Keep new password records well
+// below that limit while retaining a unique random salt and SHA-256 hash.
+const passwordIterations = 10_000;
+const previousPasswordIterations = 30_000;
 const legacyPasswordIterations = 210_000;
-const passwordHashPrefix = "pbkdf2-30k$";
+const passwordHashPrefix = "pbkdf2-10k$";
+const previousPasswordHashPrefix = "pbkdf2-30k$";
 const sessionCookieName = "zari_session";
 
 export type AuthenticatedCustomer = {
@@ -60,8 +62,17 @@ export async function createPasswordRecord(password: string) {
 
 export async function passwordMatches(password: string, storedHash: string, storedSalt: string) {
   const isCurrentHash = storedHash.startsWith(passwordHashPrefix);
-  const encodedHash = isCurrentHash ? storedHash.slice(passwordHashPrefix.length) : storedHash;
-  const iterations = isCurrentHash ? passwordIterations : legacyPasswordIterations;
+  const isPreviousHash = storedHash.startsWith(previousPasswordHashPrefix);
+  const encodedHash = isCurrentHash
+    ? storedHash.slice(passwordHashPrefix.length)
+    : isPreviousHash
+      ? storedHash.slice(previousPasswordHashPrefix.length)
+      : storedHash;
+  const iterations = isCurrentHash
+    ? passwordIterations
+    : isPreviousHash
+      ? previousPasswordIterations
+      : legacyPasswordIterations;
   const computed = await passwordHash(password, base64ToBytes(storedSalt), iterations);
   return timingSafeEqual(computed, base64ToBytes(encodedHash));
 }

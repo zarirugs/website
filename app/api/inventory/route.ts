@@ -42,14 +42,15 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     if (!(await isAdminRequest(request))) return errorResponse("Unauthorised.", 401);
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     const sku = typeof body.sku === "string" ? body.sku.trim().toUpperCase() : "";
     const name = requiredText(body.name, "name", 140);
     const collection = requiredText(body.collection, "collection", 80);
-    const stock = body.stock;
-    const reorderLevel = body.reorderLevel;
+    const stock = typeof body.stock === "number" ? body.stock : null;
+    const reorderLevel = typeof body.reorderLevel === "number" ? body.reorderLevel : null;
 
-    if (!skuPattern.test(sku) || !name || !collection || !Number.isInteger(stock) || stock < 0 || stock > 100000 ||
+    if (!skuPattern.test(sku) || !name || !collection || stock === null || reorderLevel === null ||
+      !Number.isInteger(stock) || stock < 0 || stock > 100000 ||
       !Number.isInteger(reorderLevel) || reorderLevel < 0 || reorderLevel > 100000) {
       return errorResponse("Enter a SKU, product name, collection, stock count, and reorder level.");
     }
