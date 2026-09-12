@@ -10,7 +10,6 @@ interface CollectionCardProps {
 export default function CollectionCard({ collection }: CollectionCardProps) {
   const externalImage = /^https?:\/\//.test(collection.image);
   const destination = collection.slug ? `/collections/${collection.slug}` : "#order";
-  const index = String(collection.id).padStart(2, "0");
 
   return (
     <article className="group cursor-pointer">
@@ -29,8 +28,9 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
           sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 90vw"
           className={`${collection.imageFit === "cover" ? "object-cover" : "object-contain"} transition-transform duration-[1.2s] ease-out group-hover:scale-[1.015]`}
         />}
+        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/65 via-black/25 to-transparent" />
         <div className="absolute inset-0 bg-black/0 transition-colors duration-700 group-hover:bg-black/10" />
-        <p className="absolute left-5 top-5 text-[10px] uppercase tracking-[0.28em] text-white/85">{index}</p>
+        <p className="absolute left-5 top-5 text-[10px] uppercase tracking-[0.28em] text-white">{collection.title}</p>
       </div>
 
       <div className="mt-6 border-t border-black/10 pt-5 lg:mt-7">

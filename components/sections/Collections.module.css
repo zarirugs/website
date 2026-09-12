@@ -17,12 +17,8 @@
   margin-bottom: 1.25rem;
 }
 
-.title {
-  max-width: 12ch;
-}
-
 .copy {
-  max-width: 30rem;
+  max-width: 26rem;
   color: #67635d;
   line-height: 1.72;
 }
@@ -34,9 +30,13 @@
 }
 
 @media (min-width: 48rem) {
+  .title {
+    white-space: nowrap;
+  }
+
   .header {
-    grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
-    gap: 4rem;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 26rem);
+    gap: clamp(3rem, 6vw, 6rem);
   }
 
   .grid {

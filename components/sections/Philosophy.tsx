@@ -10,13 +10,15 @@ export default function Philosophy() {
     <Section id="craftsmanship" className={styles.section}>
       <Container>
         <FadeIn>
-          <div className="max-w-xl">
-            <Eyebrow className="mb-6">Our Ethos</Eyebrow>
-            <Heading as="h2" size="xl">
-              {philosophy.title}
-            </Heading>
+          <div className={styles.header}>
+            <div className={styles.intro}>
+              <Eyebrow className="mb-6">Our Ethos</Eyebrow>
+              <Heading as="h2" size="wide" className={styles.title}>
+                {philosophy.title}
+              </Heading>
+            </div>
 
-            <Text size="lg" className="mt-10 text-neutral-500 leading-loose">
+            <Text size="md" className={styles.copy}>
               {philosophy.description}
             </Text>
           </div>

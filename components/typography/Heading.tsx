@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils/cn";
 
 type HeadingTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-type HeadingSize = "display" | "hero" | "xl" | "lg" | "md" | "sm";
+type HeadingSize = "display" | "hero" | "xl" | "lg" | "wide" | "md" | "sm";
 
 interface HeadingProps {
   as?: HeadingTag;
@@ -15,6 +15,7 @@ const sizes = {
   hero: { fontSize: "var(--fs-hero)", className: "leading-[0.98] tracking-[-0.025em]" },
   xl: { fontSize: "var(--fs-heading-xl)", className: "leading-[1] tracking-[-0.025em]" },
   lg: { fontSize: "var(--fs-heading-lg)", className: "leading-[1.08] tracking-[-0.02em]" },
+  wide: { fontSize: "var(--fs-heading-wide)", className: "leading-[1.08] tracking-[-0.02em]" },
   md: { fontSize: "var(--fs-heading-md)", className: "leading-[1.14] tracking-[-0.015em] font-normal" },
   sm: { fontSize: "var(--fs-heading-sm)", className: "leading-[1.2] tracking-[-0.01em] font-normal" },
 };

@@ -35,7 +35,7 @@ export default function Collections() {
               </Heading>
             </div>
 
-            <Text size="lg" className={styles.copy}>
+            <Text size="md" className={styles.copy}>
               Designed for extraordinary residences, luxury hotels, and iconic
               interiors. Each collection celebrates the artistry of Bhadohi in a
               quietly contemporary language.
