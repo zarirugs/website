@@ -8,26 +8,27 @@ interface CollectionCardProps {
 }
 
 export default function CollectionCard({ collection }: CollectionCardProps) {
+  const hasImage = Boolean(collection.image);
   const externalImage = /^https?:\/\//.test(collection.image);
   const destination = collection.slug ? `/collections/${collection.slug}` : "#order";
 
   return (
     <article className="group cursor-pointer">
-      <div className="relative w-full aspect-[5/6] overflow-hidden rounded-sm bg-[#f4f1eb]">
-        {externalImage ? (
+      <div className="relative w-full aspect-[5/6] overflow-hidden rounded-sm bg-[#f4f1eb]" style={collection.backgroundColor ? { backgroundColor: collection.backgroundColor } : undefined}>
+        {hasImage && externalImage ? (
           <div
             role="img"
             aria-label={collection.title}
             className={`${collection.imageFit === "contain" ? "bg-contain" : "bg-cover"} h-full w-full bg-center transition-transform duration-[1.2s] ease-out group-hover:scale-[1.015]`}
             style={{ backgroundImage: `url(${collection.image})` }}
           />
-        ) : <Image
+        ) : hasImage ? <Image
           src={collection.image}
           alt={collection.title}
           fill
           sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 90vw"
           className={`${collection.imageFit === "cover" ? "object-cover" : "object-contain"} transition-transform duration-[1.2s] ease-out group-hover:scale-[1.015]`}
-        />}
+        /> : null}
         <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/65 via-black/25 to-transparent" />
         <div className="absolute inset-0 bg-black/0 transition-colors duration-700 group-hover:bg-black/10" />
         <p className="absolute left-5 top-5 text-[10px] uppercase tracking-[0.28em] text-white">{collection.title}</p>

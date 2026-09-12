@@ -3,6 +3,7 @@ export interface Collection {
     title: string;
     subtitle: string;
     image: string;
+    backgroundColor?: string | null;
     slug?: string;
     imageFit?: "contain" | "cover";
   }

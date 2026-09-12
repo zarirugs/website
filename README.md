@@ -52,6 +52,18 @@ npx wrangler d1 migrations apply zari-orders --remote
 
 The dashboard intentionally does not offer payment, order cancellation, email changes, or password resets yet. Those flows require a verified-email and payment-provider implementation so they can be handled safely.
 
+## Storefront media managed in the admin portal
+
+The standalone admin portal has a named media library for the Homepage hero, Atelier image, collection cards, and product imagery. Administrators can upload an image, save an external image link, or create a colour-only treatment, then assign that item to the appropriate placement.
+
+Create the R2 bucket once before deploying this feature; both Workers use it as `ZARI_MEDIA`:
+
+```bash
+npx wrangler r2 bucket create zari-media --location apac
+```
+
+Then deploy the latest storefront and admin portal. Their deployment workflows apply migration `0005_site_media_library.sql` automatically.
+
 ## Getting Started
 
 First, run the development server:

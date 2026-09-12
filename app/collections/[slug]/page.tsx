@@ -7,6 +7,7 @@ import CollectionProducts, { type PublicCatalogProduct } from "@/components/stor
 import { collections } from "@/lib/data/collections";
 import { orderCatalog } from "@/lib/data/order-catalog";
 import { getDatabase } from "@/lib/server/database";
+import { publicMediaUrl } from "@/lib/server/media";
 import styles from "./page.module.css";
 
 type Category = { id: string; name: string; description: string | null };
@@ -15,6 +16,10 @@ type ProductRow = {
   name: string;
   description: string | null;
   image_url: string | null;
+  media_id: string | null;
+  source_type: "upload" | "url" | "color" | null;
+  media_image_url: string | null;
+  background_color: string | null;
   price_paise: number | null;
   stock: number;
 };
@@ -48,8 +53,11 @@ export default async function CollectionPage({ params }: { params: Promise<{ slu
     if (category) {
       const productResult = await database.prepare(
         `SELECT inventory_items.sku, inventory_items.name, product_catalog.description, product_catalog.image_url,
+          media_assets.id AS media_id, media_assets.source_type, media_assets.image_url AS media_image_url,
+          media_assets.background_color,
           product_catalog.price_paise, inventory_items.stock
          FROM product_catalog JOIN inventory_items ON inventory_items.sku = product_catalog.sku
+         LEFT JOIN media_assets ON media_assets.id = product_catalog.media_asset_id
          WHERE product_catalog.category_id = ? AND product_catalog.is_visible = 1 AND inventory_items.is_active = 1
          ORDER BY product_catalog.sort_order ASC, inventory_items.name ASC`,
       ).bind(category.id).all<ProductRow>();
@@ -62,7 +70,10 @@ export default async function CollectionPage({ params }: { params: Promise<{ slu
         sku: product.sku,
         name: product.name,
         description: product.description,
-        imageUrl: product.image_url ?? fallbackCollection.image,
+        imageUrl: product.media_id && product.source_type
+          ? publicMediaUrl({ id: product.media_id, source_type: product.source_type, image_url: product.media_image_url })
+          : product.image_url ?? fallbackCollection.image,
+        backgroundColor: product.media_id ? product.background_color : null,
         pricePaise: product.price_paise,
         stock: product.stock,
       }));
