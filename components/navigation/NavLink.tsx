@@ -17,9 +17,9 @@ export default function NavLink({
       href={href}
       className={cn(
         "group relative",
-        "text-[13px]",
+        "text-[11px]",
         "uppercase",
-        "tracking-[0.24em]",
+        "tracking-[0.22em]",
         "transition-opacity duration-300",
         // Removed hardcoded dark text so it inherits the dynamic color from Navbar
         "opacity-80 hover:opacity-100"

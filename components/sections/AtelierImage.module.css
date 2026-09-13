@@ -1,0 +1,14 @@
+.section {
+  position: relative;
+  height: 100svh;
+  min-height: 36rem;
+  overflow: hidden;
+  background: #111;
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+}

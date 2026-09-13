@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils/cn";
 
 type HeadingTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-type HeadingSize = "display" | "hero" | "xl" | "lg" | "md" | "sm";
+type HeadingSize = "display" | "hero" | "xl" | "lg" | "wide" | "md" | "sm";
 
 interface HeadingProps {
   as?: HeadingTag;
@@ -10,14 +10,14 @@ interface HeadingProps {
   className?: string;
 }
 
-// Drastically reduced all sizes for a highly refined, editorial look
 const sizes = {
-  display: "text-[clamp(3rem,7vw,6rem)] leading-[0.95] tracking-[-0.03em]",
-  hero: "text-[clamp(2.5rem,5vw,4.5rem)] leading-[1] tracking-[-0.02em]",
-  xl: "text-4xl lg:text-5xl leading-[1.1] tracking-[-0.02em]",
-  lg: "text-2xl lg:text-3xl leading-[1.2] tracking-[-0.01em]",
-  md: "text-xl lg:text-2xl leading-snug font-normal",
-  sm: "text-lg leading-snug font-normal",
+  display: { fontSize: "var(--fs-heading-display)", className: "leading-[0.96] tracking-[-0.03em]" },
+  hero: { fontSize: "var(--fs-hero)", className: "leading-[0.98] tracking-[-0.025em]" },
+  xl: { fontSize: "var(--fs-heading-xl)", className: "leading-[1] tracking-[-0.025em]" },
+  lg: { fontSize: "var(--fs-heading-lg)", className: "leading-[1.08] tracking-[-0.02em]" },
+  wide: { fontSize: "var(--fs-heading-wide)", className: "leading-[1.08] tracking-[-0.02em]" },
+  md: { fontSize: "var(--fs-heading-md)", className: "leading-[1.14] tracking-[-0.015em] font-normal" },
+  sm: { fontSize: "var(--fs-heading-sm)", className: "leading-[1.2] tracking-[-0.01em] font-normal" },
 };
 
 export default function Heading({
@@ -32,9 +32,10 @@ export default function Heading({
     <Tag
       className={cn(
         "display-font text-neutral-900",
-        sizes[size],
+        sizes[size].className,
         className
       )}
+      style={{ fontSize: sizes[size].fontSize }}
     >
       {children}
     </Tag>

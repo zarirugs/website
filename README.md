@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project for The House of Zari.
+This is a [Next.js](https://nextjs.org) project for ZARI.
 
 ## Orders and inventory backend
 
@@ -27,6 +27,42 @@ npx wrangler d1 execute zari-orders --local --file=db/migrations/0001_initial_sc
 ```
 
 Before opening the order form to the public, configure Cloudflare Turnstile or a comparable rate-limit/bot-control rule for `POST /api/orders`.
+
+## Customer accounts and shopping bags
+
+Customers can create an account at `/register`, sign in at `/login`, and save pieces in a persistent shopping bag at `/cart`. Sessions use an HttpOnly cookie; password salts and PBKDF2 hashes are stored in D1, never in the browser.
+
+Apply the customer schema after pulling this feature if it has not already been applied to the target database:
+
+```bash
+npx wrangler d1 execute zari-orders --remote --file=db/migrations/0002_customer_accounts_and_carts.sql
+```
+
+The current cart holds selected pieces and validates available stock. Payment, checkout, product/category management, and the separate admin portal are intentionally the next phase.
+
+## Customer account dashboard
+
+The account page now keeps a signed-in customer’s order history, saved pieces, delivery addresses, profile name, and concierge contact options together. Orders created while the customer is signed in are linked to that customer automatically; existing requests are linked by their matching account email when the migration is applied.
+
+Apply the dashboard migration before deploying this release:
+
+```bash
+npx wrangler d1 migrations apply zari-orders --remote
+```
+
+The dashboard intentionally does not offer payment, order cancellation, email changes, or password resets yet. Those flows require a verified-email and payment-provider implementation so they can be handled safely.
+
+## Storefront media managed in the admin portal
+
+The standalone admin portal has a named media library for the Homepage hero, Atelier image, collection cards, and product imagery. Administrators can upload an image, save an external image link, or create a colour-only treatment, then assign that item to the appropriate placement.
+
+Create the R2 bucket once before deploying this feature; both Workers use it as `ZARI_MEDIA`:
+
+```bash
+npx wrangler r2 bucket create zari-media --location apac
+```
+
+Then deploy the latest storefront and admin portal. Their deployment workflows apply migration `0005_site_media_library.sql` automatically.
 
 ## Getting Started
 

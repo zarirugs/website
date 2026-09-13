@@ -3,6 +3,7 @@ import { Navbar } from "@/components/navigation";
 
 import {
   Collections,
+  AtelierImage,
   Philosophy,
   Footer,
   OrderEnquiry,
@@ -17,6 +18,7 @@ export default function Home() {
       <main>
         <Hero />
         <Collections />
+        <AtelierImage />
         <Philosophy />
         <OrderEnquiry />
         {/* <Projects /> */}
