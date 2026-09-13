@@ -11,6 +11,7 @@ export type R2ObjectBody = {
 export interface R2Bucket {
   get(key: string): Promise<R2ObjectBody | null>;
   put(key: string, value: ArrayBuffer, options?: { httpMetadata?: { contentType?: string; cacheControl?: string } }): Promise<unknown>;
+  delete(key: string): Promise<void>;
 }
 
 type RuntimeEnvironment = { ZARI_MEDIA?: R2Bucket };
