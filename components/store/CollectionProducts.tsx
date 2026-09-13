@@ -12,6 +12,7 @@ export type PublicCatalogProduct = {
   name: string;
   description: string | null;
   imageUrl: string | null;
+  backgroundColor?: string | null;
   pricePaise: number | null;
   stock: number;
 };
@@ -114,7 +115,7 @@ export default function CollectionProducts({ products }: { products: PublicCatal
               role="img"
               aria-label={product.name}
               className={styles.image}
-              style={product.imageUrl ? { backgroundImage: `url(${product.imageUrl})` } : undefined}
+              style={{ backgroundColor: product.backgroundColor ?? undefined, backgroundImage: product.imageUrl ? `url(${product.imageUrl})` : undefined }}
             />
             <div className={styles.details}>
               <button

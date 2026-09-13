@@ -19,6 +19,12 @@
       "migrations_dir": "db/migrations"
 		}
 	],
+	"r2_buckets": [
+		{
+			"binding": "ZARI_MEDIA",
+			"bucket_name": "zari-media"
+		}
+	],
 	"services": [
 		{
 			// Self-reference service binding, the service name must match the worker name

@@ -1,17 +1,27 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
 
 import styles from "./AtelierImage.module.css";
 
+type SiteMediaResponse = { media?: { atelier?: { imageUrl?: string | null; backgroundColor?: string | null } } };
+
 export default function AtelierImage() {
+  const [media, setMedia] = useState({ imageUrl: "/images/atelier-weaving.jpg", backgroundColor: "#111" });
+
+  useEffect(() => {
+    void fetch("/api/site-media", { cache: "no-store" })
+      .then(async (response): Promise<SiteMediaResponse> => response.ok ? response.json() as Promise<SiteMediaResponse> : { media: {} })
+      .then((result) => {
+        const atelier = result.media?.atelier;
+        if (atelier) setMedia({ imageUrl: atelier.imageUrl ?? "", backgroundColor: atelier.backgroundColor ?? "#111" });
+      })
+      .catch(() => undefined);
+  }, []);
+
   return (
     <section className={styles.section} aria-label="The ZARI atelier">
-      <Image
-        src="/images/atelier-weaving.jpg"
-        alt="Artisans weaving by hand at a loom"
-        fill
-        sizes="100vw"
-        className={styles.image}
-      />
+      <div className={styles.image} style={{ backgroundColor: media.backgroundColor, backgroundImage: media.imageUrl ? `url(${media.imageUrl})` : undefined }} />
     </section>
   );
 }
