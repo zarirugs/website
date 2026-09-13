@@ -173,8 +173,15 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
     void run(() => json(`/api/products/${encodeURIComponent(product.sku)}`, { method: "PATCH", body: JSON.stringify({ stock }) }), `Inventory saved for ${product.sku}.`);
   }
 
-  function updateProductDetails(product: Product, details: Pick<Product, "tags" | "dimensions" | "material" | "weave" | "colour" | "pileHeight" | "origin" | "pricePaise">) {
+  function updateProductDetails(product: Product, details: Pick<Product, "tags" | "dimensions" | "material" | "weave" | "colour" | "pileHeight" | "origin" | "pricePaise" | "mediaAssetId">) {
     void run(() => json(`/api/products/${encodeURIComponent(product.sku)}`, { method: "PATCH", body: JSON.stringify(details) }), `${product.name} details updated.`);
+  }
+
+  function updateCategoryVisual(category: Category, mediaAssetId: string) {
+    void run(
+      () => json(`/api/categories/${encodeURIComponent(category.id)}`, { method: "PATCH", body: JSON.stringify({ mediaAssetId: mediaAssetId || null }) }),
+      `${category.name} collection image updated.`,
+    );
   }
 
   function toggleCategory(category: Category) {
@@ -253,9 +260,10 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
                   <div className={styles.categoryActions}><button className={styles.textButton} disabled={saving} onClick={() => toggleCategory(selectedCategory)}>{selectedCategory.isActive ? "Hide" : "Activate"}</button><button className={styles.dangerButton} disabled={saving} onClick={() => deleteCategory(selectedCategory)}>Remove</button></div>
                 </div>
                 <CategoryVisual category={selectedCategory} asset={media.find((item) => item.id === selectedCategory.mediaAssetId)} large />
+                <label className={styles.visualSelector}>Collection image<select value={selectedCategory.mediaAssetId ?? ""} onChange={(event) => updateCategoryVisual(selectedCategory, event.target.value)} disabled={saving}><option value="">Use original image</option>{media.map((asset) => <option key={asset.id} value={asset.id}>{asset.name}</option>)}</select></label>
                 <p className={styles.categoryDescription}>{selectedCategory.description || "Add a short description to introduce this collection."}</p>
                 <div className={styles.detailHeading}><div><p className={styles.eyebrow}>Collection inventory</p><h4>{selectedProducts.length} {selectedProducts.length === 1 ? "product" : "products"}</h4></div><span>{selectedProducts.reduce((total, product) => total + product.stock, 0)} in stock</span></div>
-                <div className={styles.inventoryCards}>{selectedProducts.length ? selectedProducts.map((product) => <ProductInventoryCard key={product.sku} product={product} asset={media.find((item) => item.id === product.mediaAssetId)} saving={saving} onSave={updateProductDetails} />) : <Empty text="This category has no products yet. Add the first piece below." />}</div>
+                <div className={styles.inventoryCards}>{selectedProducts.length ? selectedProducts.map((product) => <ProductInventoryCard key={product.sku} product={product} asset={media.find((item) => item.id === product.mediaAssetId)} media={media} saving={saving} onSave={updateProductDetails} />) : <Empty text="This category has no products yet. Add the first piece below." />}</div>
               </> : <Empty text="Select or create a category to manage its inventory." />}
             </aside>
           </div>
@@ -328,7 +336,7 @@ function CategoryVisual({ category, asset, large = false }: { category: Category
   return <div className={large ? styles.categoryDetailVisual : styles.categoryVisual} style={{ backgroundColor: asset?.backgroundColor ?? "#d8d0c1", backgroundImage: imageUrl ? `url(${imageUrl})` : undefined }} role="img" aria-label={asset?.altText ?? category.name} />;
 }
 
-function ProductInventoryCard({ product, asset, saving, onSave }: { product: Product; asset?: MediaAsset; saving: boolean; onSave: (product: Product, details: Pick<Product, "tags" | "dimensions" | "material" | "weave" | "colour" | "pileHeight" | "origin" | "pricePaise">) => void }) {
+function ProductInventoryCard({ product, asset, media, saving, onSave }: { product: Product; asset?: MediaAsset; media: MediaAsset[]; saving: boolean; onSave: (product: Product, details: Pick<Product, "tags" | "dimensions" | "material" | "weave" | "colour" | "pileHeight" | "origin" | "pricePaise" | "mediaAssetId">) => void }) {
   const [editing, setEditing] = useState(false);
   const [tags, setTags] = useState(product.tags.join(", "));
   const [dimensions, setDimensions] = useState(product.dimensions ?? "");
@@ -338,16 +346,17 @@ function ProductInventoryCard({ product, asset, saving, onSave }: { product: Pro
   const [pileHeight, setPileHeight] = useState(product.pileHeight ?? "");
   const [origin, setOrigin] = useState(product.origin ?? "");
   const [price, setPrice] = useState(product.pricePaise === null ? "" : String(product.pricePaise / 100));
+  const [mediaAssetId, setMediaAssetId] = useState(product.mediaAssetId ?? "");
   const imageUrl = asset?.previewUrl ?? product.imageUrl;
   const specs = [["Size", product.dimensions], ["Material", product.material], ["Weave", product.weave], ["Colour", product.colour], ["Pile", product.pileHeight], ["Origin", product.origin]].filter(([, value]) => Boolean(value));
   function saveDetails(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onSave(product, { tags: tags.split(",").map((tag) => tag.trim()).filter(Boolean), dimensions, material, weave, colour, pileHeight, origin, pricePaise: price === "" ? null : Math.round(Number(price) * 100) });
+    onSave(product, { tags: tags.split(",").map((tag) => tag.trim()).filter(Boolean), dimensions, material, weave, colour, pileHeight, origin, mediaAssetId: mediaAssetId || null, pricePaise: price === "" ? null : Math.round(Number(price) * 100) });
     setEditing(false);
   }
   return <article className={`${styles.inventoryCard}${product.isActive && product.stock <= product.reorderLevel ? ` ${styles.inventoryLowStock}` : ""}`}>
     <div className={styles.productVisual} style={{ backgroundColor: asset?.backgroundColor ?? "#e7e4dc", backgroundImage: imageUrl ? `url(${imageUrl})` : undefined }} role="img" aria-label={asset?.altText ?? product.name} />
-    <div className={styles.inventoryCardBody}><div className={styles.productCardHeading}><div><p>{product.sku}</p><h5>{product.name}</h5></div><strong>{currency(product.pricePaise)}</strong></div><p className={styles.inventoryStock}>{product.stock} in stock <span>· reorder at {product.reorderLevel}</span></p>{product.tags.length > 0 && <div className={styles.tagList}>{product.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>}{specs.length > 0 && <dl className={styles.specList}>{specs.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>}<button className={styles.textButton} onClick={() => setEditing((value) => !value)} disabled={saving}>{editing ? "Close editor" : "Edit rug details"}</button>{editing && <form className={styles.productDetailsForm} onSubmit={saveDetails}><label>Tags<input value={tags} onChange={(event) => setTags(event.target.value)} placeholder="wool, hand-knotted" /></label><div><label>Size<input value={dimensions} onChange={(event) => setDimensions(event.target.value)} /></label><label>Material<input value={material} onChange={(event) => setMaterial(event.target.value)} /></label></div><div><label>Weave<input value={weave} onChange={(event) => setWeave(event.target.value)} /></label><label>Colour<input value={colour} onChange={(event) => setColour(event.target.value)} /></label></div><div><label>Pile height<input value={pileHeight} onChange={(event) => setPileHeight(event.target.value)} /></label><label>Origin<input value={origin} onChange={(event) => setOrigin(event.target.value)} /></label></div><label>Price (₹)<input value={price} onChange={(event) => setPrice(event.target.value)} type="number" min="0" step="1" /></label><button className={styles.primaryButton} disabled={saving}>Save rug details</button></form>}</div>
+    <div className={styles.inventoryCardBody}><div className={styles.productCardHeading}><div><p>{product.sku}</p><h5>{product.name}</h5></div><strong>{currency(product.pricePaise)}</strong></div><p className={styles.inventoryStock}>{product.stock} in stock <span>· reorder at {product.reorderLevel}</span></p>{product.tags.length > 0 && <div className={styles.tagList}>{product.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>}{specs.length > 0 && <dl className={styles.specList}>{specs.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>}<button className={styles.textButton} onClick={() => setEditing((value) => !value)} disabled={saving}>{editing ? "Close editor" : "Edit rug details"}</button>{editing && <form className={styles.productDetailsForm} onSubmit={saveDetails}><label>Product image<select value={mediaAssetId} onChange={(event) => setMediaAssetId(event.target.value)}><option value="">Use original image</option>{media.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label><label>Tags<input value={tags} onChange={(event) => setTags(event.target.value)} placeholder="wool, hand-knotted" /></label><div><label>Size<input value={dimensions} onChange={(event) => setDimensions(event.target.value)} /></label><label>Material<input value={material} onChange={(event) => setMaterial(event.target.value)} /></label></div><div><label>Weave<input value={weave} onChange={(event) => setWeave(event.target.value)} /></label><label>Colour<input value={colour} onChange={(event) => setColour(event.target.value)} /></label></div><div><label>Pile height<input value={pileHeight} onChange={(event) => setPileHeight(event.target.value)} /></label><label>Origin<input value={origin} onChange={(event) => setOrigin(event.target.value)} /></label></div><label>Price (₹)<input value={price} onChange={(event) => setPrice(event.target.value)} type="number" min="0" step="1" /></label><button className={styles.primaryButton} disabled={saving}>Save rug details</button></form>}</div>
   </article>;
 }
 
