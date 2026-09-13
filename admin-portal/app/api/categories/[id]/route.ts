@@ -61,3 +61,25 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return databaseErrorResponse(error);
   }
 }
+
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const context = await authenticatedAdminContext(request);
+    if (!context) return errorResponse("Unauthorised.", 401);
+    const { id } = await params;
+    const category = await context.database.prepare(
+      "SELECT id, name FROM categories WHERE id = ?",
+    ).bind(id).first<{ id: string; name: string }>();
+    if (!category) return errorResponse("Category not found.", 404);
+    const count = await context.database.prepare(
+      "SELECT COUNT(*) AS total FROM product_catalog WHERE category_id = ?",
+    ).bind(id).first<{ total: number }>();
+    if ((count?.total ?? 0) > 0) {
+      return errorResponse(`Move or remove the ${count?.total} product(s) in ${category.name} before deleting this category.`, 409);
+    }
+    await context.database.prepare("DELETE FROM categories WHERE id = ?").bind(id).run();
+    return NextResponse.json({ deleted: true, id }, { headers: { "Cache-Control": "no-store" } });
+  } catch (error) {
+    return databaseErrorResponse(error);
+  }
+}
