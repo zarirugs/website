@@ -31,7 +31,7 @@ export async function GET() {
       title: category.name,
       slug: category.slug,
       subtitle: category.description ?? "Hand-knotted pieces from the ZARI atelier.",
-      image: category.media_id && category.source_type ? publicMediaUrl({ id: category.media_id, source_type: category.source_type, image_url: category.image_url }) ?? "" : category.fallback_image_url ?? "/images/collection-1.jpg",
+      image: category.media_id && category.source_type ? publicMediaUrl({ id: category.media_id, source_type: category.source_type, image_url: category.image_url }) ?? "" : category.fallback_image_url ?? "/api/media/media-default-heritage",
       backgroundColor: category.media_id ? category.background_color : null,
       imageFit: "cover" as const,
     })) }, { headers: { "Cache-Control": "no-store" } });

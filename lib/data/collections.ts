@@ -15,7 +15,7 @@ export interface Collection {
       slug: "heritage",
       subtitle:
         "Timeless Persian-inspired hand-knotted masterpieces.",
-      image: "/images/collection-1.jpg",
+      image: "/api/media/media-default-heritage",
     },
     {
       id: 2,
@@ -23,7 +23,7 @@ export interface Collection {
       slug: "contemporary",
       subtitle:
         "Modern minimalism woven by master artisans.",
-      image: "/images/collection-2.png",
+      image: "/api/media/media-default-contemporary",
     },
     {
       id: 3,
@@ -31,7 +31,7 @@ export interface Collection {
       slug: "bespoke",
       subtitle:
         "Custom rugs created exclusively for luxury interiors.",
-      image: "/images/collection-3.jpg",
+      image: "/api/media/media-default-bespoke",
       imageFit: "cover",
     },
   ];
