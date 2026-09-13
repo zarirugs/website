@@ -44,6 +44,11 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
   const [mediaUrl, setMediaUrl] = useState("");
   const [mediaColor, setMediaColor] = useState("#A88957");
   const [mediaFile, setMediaFile] = useState<File | null>(null);
+  const [editingMedia, setEditingMedia] = useState<MediaAsset | null>(null);
+  const [editingMediaName, setEditingMediaName] = useState("");
+  const [editingMediaAltText, setEditingMediaAltText] = useState("");
+  const [editingMediaUrl, setEditingMediaUrl] = useState("");
+  const [editingMediaColor, setEditingMediaColor] = useState("#A88957");
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
   const [categoryMediaAssetId, setCategoryMediaAssetId] = useState("");
@@ -215,6 +220,31 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
     }, "Media added to the library.");
   }
 
+  function beginMediaEdit(asset: MediaAsset) {
+    setEditingMedia(asset);
+    setEditingMediaName(asset.name);
+    setEditingMediaAltText(asset.altText ?? "");
+    setEditingMediaUrl(asset.imageUrl ?? "");
+    setEditingMediaColor(asset.backgroundColor ?? "#A88957");
+  }
+
+  function updateMedia(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!editingMedia) return;
+    void run(async () => {
+      const update: Record<string, string> = { name: editingMediaName, altText: editingMediaAltText };
+      if (editingMedia.sourceType === "url") update.imageUrl = editingMediaUrl;
+      if (editingMedia.sourceType === "color") update.backgroundColor = editingMediaColor;
+      await json(`/api/media/${encodeURIComponent(editingMedia.id)}`, { method: "PATCH", body: JSON.stringify(update) });
+      setEditingMedia(null);
+    }, "Media details updated.");
+  }
+
+  function deleteMedia(asset: MediaAsset) {
+    if (!window.confirm(`Remove ${asset.name} from the library? Images currently used on the storefront cannot be removed.`)) return;
+    void run(() => json(`/api/media/${encodeURIComponent(asset.id)}`, { method: "DELETE" }), `${asset.name} removed from the library.`);
+  }
+
   function assignMediaSlot(slot: MediaSlot, mediaAssetId: string) {
     if (!mediaAssetId) return;
     void run(() => json(`/api/media/slots/${encodeURIComponent(slot.slot_key)}`, { method: "PATCH", body: JSON.stringify({ mediaAssetId }) }), `${slot.label} updated on the storefront.`);
@@ -280,11 +310,19 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
               </article>)}</div>
               <div className={styles.mediaGrid}>{media.map((asset) => <article className={styles.mediaCard} key={asset.id}>
                 <MediaPreview asset={asset} />
-                <div><p className={styles.mediaType}>{asset.sourceType}</p><h3>{asset.name}</h3><p>{asset.altText || "No alt text yet."}</p></div>
+                <div><p className={styles.mediaType}>{asset.sourceType}</p><h3>{asset.name}</h3><p>{asset.altText || "No alt text yet."}</p><div className={styles.mediaActions}><button className={styles.textButton} type="button" onClick={() => beginMediaEdit(asset)} disabled={saving}>Edit</button><button className={styles.dangerButton} type="button" onClick={() => deleteMedia(asset)} disabled={saving}>Remove</button></div></div>
               </article>)}</div>
               {media.length === 0 && <Empty text="Add your first visual to the media library." />}
             </div>
-            <form className={styles.formCard} onSubmit={createMedia}>
+            {editingMedia ? <form className={styles.formCard} onSubmit={updateMedia}>
+              <p className={styles.eyebrow}>Edit media</p>
+              <label>Name<input value={editingMediaName} onChange={(event) => setEditingMediaName(event.target.value)} required /></label>
+              <label>Image description (alt text)<input value={editingMediaAltText} onChange={(event) => setEditingMediaAltText(event.target.value)} placeholder="Describe the image for visitors" /></label>
+              {editingMedia.sourceType === "url" && <label>Image URL<input value={editingMediaUrl} onChange={(event) => setEditingMediaUrl(event.target.value)} type="url" placeholder="https://…" required /></label>}
+              {editingMedia.sourceType === "color" && <label>Colour code<input value={editingMediaColor} onChange={(event) => setEditingMediaColor(event.target.value)} pattern="#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?" placeholder="#A88957" required /></label>}
+              {editingMedia.sourceType === "upload" && <p className={styles.formHint}>To replace an uploaded image, add the replacement to the library and assign it where needed.</p>}
+              <button className={styles.primaryButton} disabled={saving}>Save media details</button><button className={styles.textButton} type="button" onClick={() => setEditingMedia(null)} disabled={saving}>Cancel</button>
+            </form> : <form className={styles.formCard} onSubmit={createMedia}>
               <p className={styles.eyebrow}>Add to library</p>
               <label>Name<input value={mediaName} onChange={(event) => setMediaName(event.target.value)} placeholder="e.g. Autumn collection hero" required /></label>
               <label>Image description (alt text)<input value={mediaAltText} onChange={(event) => setMediaAltText(event.target.value)} placeholder="Describe the image for visitors" /></label>
@@ -293,7 +331,7 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
               {mediaSourceType === "url" && <label>Image URL<input value={mediaUrl} onChange={(event) => setMediaUrl(event.target.value)} type="url" placeholder="https://…" required /></label>}
               {mediaSourceType === "color" && <label>Colour code<input value={mediaColor} onChange={(event) => setMediaColor(event.target.value)} pattern="#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?" placeholder="#A88957" required /></label>}
               <button className={styles.primaryButton} disabled={saving}>{mediaSourceType === "upload" ? "Upload image" : "Save media"}</button>
-            </form>
+            </form>}
           </div>
         </section>
 
