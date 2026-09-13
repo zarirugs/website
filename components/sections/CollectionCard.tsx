@@ -10,6 +10,7 @@ interface CollectionCardProps {
 export default function CollectionCard({ collection }: CollectionCardProps) {
   const hasImage = Boolean(collection.image);
   const externalImage = /^https?:\/\//.test(collection.image);
+  const mediaApiImage = collection.image.startsWith("/api/media/");
   const destination = collection.slug ? `/collections/${collection.slug}` : "#order";
 
   return (
@@ -26,6 +27,7 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
           src={collection.image}
           alt={collection.title}
           fill
+          unoptimized={mediaApiImage}
           sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 90vw"
           className={`${collection.imageFit === "cover" ? "object-cover" : "object-contain"} transition-transform duration-[1.2s] ease-out group-hover:scale-[1.015]`}
         /> : null}
