@@ -9,6 +9,7 @@ type CategoryRow = {
   slug: string;
   description: string | null;
   image_url: string | null;
+  media_asset_id: string | null;
   sort_order: number;
   is_active: number;
   product_count: number;
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
     const context = await authenticatedAdminContext(request);
     if (!context) return errorResponse("Unauthorised.", 401);
     const result = await context.database.prepare(
-      `SELECT categories.id, categories.name, categories.slug, categories.description, categories.image_url,
+      `SELECT categories.id, categories.name, categories.slug, categories.description, categories.image_url, categories.media_asset_id,
         categories.sort_order, categories.is_active, COUNT(product_catalog.sku) AS product_count
        FROM categories LEFT JOIN product_catalog ON product_catalog.category_id = categories.id
        GROUP BY categories.id ORDER BY categories.sort_order ASC, categories.name ASC`,
@@ -34,6 +35,7 @@ export async function GET(request: Request) {
       slug: category.slug,
       description: category.description,
       imageUrl: category.image_url,
+      mediaAssetId: category.media_asset_id,
       sortOrder: category.sort_order,
       isActive: category.is_active === 1,
       productCount: category.product_count,
@@ -53,17 +55,19 @@ export async function POST(request: Request) {
     const name = requiredText(values.name, 80);
     const slug = optionalText(values.slug, 80) ? slugify(String(values.slug)) : name ? slugify(name) : "";
     const description = optionalText(values.description, 500);
-    const imageUrl = validImageUrl(values.imageUrl);
+    const imageUrl = values.imageUrl === undefined ? null : validImageUrl(values.imageUrl);
+    const mediaAssetId = optionalText(values.mediaAssetId, 100);
     const sortOrder = values.sortOrder === undefined ? 0 : values.sortOrder;
-    if (!name || !slug || imageUrl === null || typeof sortOrder !== "number" || !Number.isInteger(sortOrder) || sortOrder < 0 || sortOrder > 10_000) {
-      return errorResponse("Enter a name, valid image URL, and valid display order.");
+    if (!name || !slug || (values.imageUrl !== undefined && imageUrl === null) || typeof sortOrder !== "number" || !Number.isInteger(sortOrder) || sortOrder < 0 || sortOrder > 10_000) {
+      return errorResponse("Enter a name and valid display order.");
     }
+    if (mediaAssetId && !await context.database.prepare("SELECT id FROM media_assets WHERE id = ?").bind(mediaAssetId).first()) return errorResponse("Choose media from the library.");
 
-    const category = { id: crypto.randomUUID(), name, slug, description, imageUrl, sortOrder };
+    const category = { id: crypto.randomUUID(), name, slug, description, imageUrl, mediaAssetId, sortOrder };
     await context.database.prepare(
-      `INSERT INTO categories (id, name, slug, description, image_url, sort_order)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-    ).bind(category.id, category.name, category.slug, category.description, category.imageUrl, category.sortOrder).run();
+      `INSERT INTO categories (id, name, slug, description, image_url, media_asset_id, sort_order)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    ).bind(category.id, category.name, category.slug, category.description, category.imageUrl, category.mediaAssetId, category.sortOrder).run();
     return NextResponse.json({ category }, { status: 201, headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     if (error instanceof Error && /unique|constraint/i.test(error.message)) return errorResponse("That category name or URL slug already exists.", 409);

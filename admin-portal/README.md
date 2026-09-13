@@ -3,6 +3,18 @@
 This is a standalone Next.js/OpenNext Cloudflare Worker for `admin.zarirugs.com`.
 It has its own admin-only session cookie and shares the `zari-orders` D1 database with the customer storefront.
 
+## Storefront media library
+
+The dashboard includes a **Storefront media** library. Each item has a name and optional image description, and can be created from an uploaded file, an external image link, or a hex colour. Assign items to the Homepage hero and Atelier craftsmanship placements, then select them when creating a collection or product.
+
+Uploaded files are stored in the shared Cloudflare R2 bucket. Create it once before the first deploy:
+
+```sh
+npx wrangler r2 bucket create zari-media --location apac
+```
+
+Both the storefront and this portal declare the same `ZARI_MEDIA` bucket binding. The deployment workflow applies `0005_site_media_library.sql` automatically.
+
 ## Local preview
 
 From this directory:

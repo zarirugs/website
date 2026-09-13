@@ -11,6 +11,7 @@ type CurrentCategory = {
   id: string;
   description: string | null;
   image_url: string | null;
+  media_asset_id: string | null;
   sort_order: number;
 };
 
@@ -26,6 +27,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const slug = values.slug === undefined ? undefined : slugify(String(values.slug));
     const descriptionInput = values.description === undefined ? undefined : optionalText(values.description, 500);
     const imageInput = values.imageUrl === undefined ? undefined : validImageUrl(values.imageUrl);
+    const mediaAssetId = values.mediaAssetId === undefined ? undefined : optionalText(values.mediaAssetId, 100);
     const sortOrder = values.sortOrder;
     const isActive = values.isActive;
     if ((values.name !== undefined && !name) || (values.slug !== undefined && !slug) || imageInput === null ||
@@ -33,18 +35,20 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       (isActive !== undefined && typeof isActive !== "boolean")) return errorResponse("Invalid category update.");
 
     const existing = await context.database.prepare(
-      "SELECT id, description, image_url, sort_order FROM categories WHERE id = ?",
+      "SELECT id, description, image_url, media_asset_id, sort_order FROM categories WHERE id = ?",
     ).bind(id).first<CurrentCategory>();
     if (!existing) return errorResponse("Category not found.", 404);
     const description = descriptionInput === undefined ? existing.description : descriptionInput;
     const imageUrl = imageInput === undefined ? existing.image_url : imageInput;
+    if (mediaAssetId && !await context.database.prepare("SELECT id FROM media_assets WHERE id = ?").bind(mediaAssetId).first()) return errorResponse("Choose media from the library.");
+    const nextMediaAssetId = mediaAssetId === undefined ? existing.media_asset_id : mediaAssetId;
     const nextSortOrder = sortOrder === undefined ? existing.sort_order : sortOrder;
     await context.database.batch([
       context.database.prepare(
         `UPDATE categories SET name = COALESCE(?, name), slug = COALESCE(?, slug),
-          description = ?, image_url = ?, sort_order = ?,
+          description = ?, image_url = ?, media_asset_id = ?, sort_order = ?,
           is_active = COALESCE(?, is_active), updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-      ).bind(name ?? null, slug ?? null, description, imageUrl, nextSortOrder,
+      ).bind(name ?? null, slug ?? null, description, imageUrl, nextMediaAssetId, nextSortOrder,
         isActive === undefined ? null : Number(isActive), id),
       ...(name ? [context.database.prepare(
         `UPDATE inventory_items SET collection = ?, updated_at = CURRENT_TIMESTAMP
