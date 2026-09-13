@@ -7,7 +7,7 @@ import styles from "./AtelierImage.module.css";
 type SiteMediaResponse = { media?: { atelier?: { imageUrl?: string | null; backgroundColor?: string | null } } };
 
 export default function AtelierImage() {
-  const [media, setMedia] = useState({ imageUrl: "/images/atelier-weaving.jpg", backgroundColor: "#111" });
+  const [media, setMedia] = useState({ imageUrl: "/api/media/media-default-atelier", backgroundColor: "#111" });
 
   useEffect(() => {
     void fetch("/api/site-media", { cache: "no-store" })

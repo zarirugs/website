@@ -63,6 +63,17 @@ jobs:
       - name: Build for Cloudflare
         run: npm run build:cloudflare
 
+      - name: Upload built-in media to R2
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler r2 object put zari-media/site/defaults/hero.webp --file public/images/hero.webp
+          npx wrangler r2 object put zari-media/site/defaults/atelier-weaving.jpg --file public/images/atelier-weaving.jpg
+          npx wrangler r2 object put zari-media/site/defaults/collection-1.jpg --file public/images/collection-1.jpg
+          npx wrangler r2 object put zari-media/site/defaults/collection-2.png --file public/images/collection-2.png
+          npx wrangler r2 object put zari-media/site/defaults/collection-3.jpg --file public/images/collection-3.jpg
+
       - name: Apply D1 migrations
         uses: cloudflare/wrangler-action@v4
         with:

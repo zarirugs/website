@@ -6,7 +6,7 @@ type HeroMedia = { imageUrl?: string | null; backgroundColor?: string | null };
 type SiteMediaResponse = { media?: { hero?: HeroMedia } };
 
 export default function HeroBackground() {
-  const [media, setMedia] = useState<HeroMedia>({ imageUrl: "/images/hero.webp" });
+  const [media, setMedia] = useState<HeroMedia>({ imageUrl: "/api/media/media-default-hero" });
 
   useEffect(() => {
     void fetch("/api/site-media", { cache: "no-store" })
