@@ -24,7 +24,11 @@ export async function getMediaBucket() {
 
 export function publicMediaPath(id: string, sourceType: MediaSourceType, imageUrl: string | null) {
   if (sourceType === "upload") return `/api/media/${encodeURIComponent(id)}`;
-  return sourceType === "url" ? imageUrl : null;
+  if (sourceType !== "url" || !imageUrl) return null;
+  // The curated launch images already live in the public storefront's asset bundle.
+  // Resolve their relative URLs to that site so they can also be previewed by the
+  // separate admin Worker, whose own asset bundle does not contain these files.
+  return imageUrl.startsWith("/") ? `https://zarirugs.com${imageUrl}` : imageUrl;
 }
 
 export function validColor(value: unknown) {
