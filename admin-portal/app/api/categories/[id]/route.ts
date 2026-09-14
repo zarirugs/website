@@ -40,7 +40,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     if (!existing) return errorResponse("Category not found.", 404);
     const description = descriptionInput === undefined ? existing.description : descriptionInput;
     const imageUrl = imageInput === undefined ? existing.image_url : imageInput;
-    if (mediaAssetId && !await context.database.prepare("SELECT id FROM media_assets WHERE id = ?").bind(mediaAssetId).first()) return errorResponse("Choose media from the library.");
+    if (mediaAssetId && !await context.database.prepare("SELECT id FROM media_assets WHERE id = ? AND category_id = ?").bind(mediaAssetId, id).first()) return errorResponse("Choose an image from this category.");
     const nextMediaAssetId = mediaAssetId === undefined ? existing.media_asset_id : mediaAssetId;
     const nextSortOrder = sortOrder === undefined ? existing.sort_order : sortOrder;
     await context.database.batch([

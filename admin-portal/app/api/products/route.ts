@@ -122,7 +122,7 @@ export async function POST(request: Request) {
     const category = await context.database.prepare("SELECT id, name FROM categories WHERE id = ? AND is_active = 1")
       .bind(categoryId).first<CategoryRow>();
     if (!category) return errorResponse("Choose an active category.");
-    if (mediaAssetId && !await context.database.prepare("SELECT id FROM media_assets WHERE id = ?").bind(mediaAssetId).first()) return errorResponse("Choose media from the library.");
+    if (mediaAssetId && !await context.database.prepare("SELECT id FROM media_assets WHERE id = ? AND category_id = ?").bind(mediaAssetId, category.id).first()) return errorResponse("Choose an image from this category.");
 
     await context.database.batch([
       context.database.prepare(

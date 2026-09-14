@@ -29,11 +29,17 @@ export async function GET(request: Request) {
   try {
     const context = await authenticatedAdminContext(request);
     if (!context) return errorResponse("Unauthorised.", 401);
-    const [assets, slots] = await context.database.batch([
-      context.database.prepare("SELECT id, name, alt_text, source_type, image_url, background_color, created_at, updated_at FROM media_assets ORDER BY updated_at DESC, name ASC"),
-      context.database.prepare("SELECT slot_key, label, description, media_asset_id FROM site_media_slots ORDER BY slot_key ASC"),
-    ]);
-    return NextResponse.json({ media: assets.results.map((asset) => mediaResponse(asset as MediaRow)), slots: slots.results as SlotRow[] }, { headers: { "Cache-Control": "no-store" } });
+    const categoryId = optionalText(new URL(request.url).searchParams.get("categoryId"), 100);
+    if (categoryId && !await context.database.prepare("SELECT id FROM categories WHERE id = ?").bind(categoryId).first()) {
+      return errorResponse("Category not found.", 404);
+    }
+    const assets = categoryId
+      ? await context.database.prepare("SELECT id, name, alt_text, source_type, image_url, background_color, created_at, updated_at FROM media_assets WHERE category_id = ? ORDER BY updated_at DESC, name ASC").bind(categoryId).all<MediaRow>()
+      : await context.database.prepare("SELECT id, name, alt_text, source_type, image_url, background_color, created_at, updated_at FROM media_assets WHERE category_id IS NULL ORDER BY updated_at DESC, name ASC").all<MediaRow>();
+    const slots = categoryId
+      ? []
+      : (await context.database.prepare("SELECT slot_key, label, description, media_asset_id FROM site_media_slots ORDER BY slot_key ASC").all<SlotRow>()).results;
+    return NextResponse.json({ media: assets.results.map(mediaResponse), slots }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     return databaseErrorResponse(error);
   }
@@ -46,9 +52,13 @@ export async function POST(request: Request) {
     const form = await request.formData();
     const name = requiredText(form.get("name"), 120);
     const altText = optionalText(form.get("altText"), 250);
+    const categoryId = optionalText(form.get("categoryId"), 100);
     const sourceType = form.get("sourceType");
     if (!name || (sourceType !== "upload" && sourceType !== "url" && sourceType !== "color")) {
       return errorResponse("Enter a name and choose an image source.");
+    }
+    if (categoryId && !await context.database.prepare("SELECT id FROM categories WHERE id = ?").bind(categoryId).first()) {
+      return errorResponse("Category not found.", 404);
     }
 
     const id = crypto.randomUUID();
@@ -76,9 +86,9 @@ export async function POST(request: Request) {
     }
 
     await context.database.prepare(
-      `INSERT INTO media_assets (id, name, alt_text, source_type, image_url, object_key, background_color)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    ).bind(id, name, altText, sourceType, imageUrl, objectKey, backgroundColor).run();
+      `INSERT INTO media_assets (id, name, alt_text, source_type, image_url, object_key, background_color, category_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    ).bind(id, name, altText, sourceType, imageUrl, objectKey, backgroundColor, categoryId).run();
     return NextResponse.json({ created: true, id }, { status: 201, headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     return databaseErrorResponse(error);
