@@ -1,8 +1,0 @@
-node_modules/
-.next/
-.open-next/
-.wrangler/
-worker-configuration.d.ts
-next-env.d.ts
-.env*
-.dev.vars*
