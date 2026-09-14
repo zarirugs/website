@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { authenticatedAdminContext } from "@/lib/server/guard";
 import { databaseErrorResponse, errorResponse, optionalText, requiredText, validImageUrl } from "@/lib/server/http";
+import { publicMediaPath, type MediaSourceType } from "@/lib/server/media";
 
 type CategoryRow = {
   id: string;
@@ -10,6 +11,10 @@ type CategoryRow = {
   description: string | null;
   image_url: string | null;
   media_asset_id: string | null;
+  cover_source_type: MediaSourceType | null;
+  cover_image_url: string | null;
+  cover_background_color: string | null;
+  cover_alt_text: string | null;
   sort_order: number;
   is_active: number;
   product_count: number;
@@ -25,8 +30,12 @@ export async function GET(request: Request) {
     if (!context) return errorResponse("Unauthorised.", 401);
     const result = await context.database.prepare(
       `SELECT categories.id, categories.name, categories.slug, categories.description, categories.image_url, categories.media_asset_id,
+        cover_media.source_type AS cover_source_type, cover_media.image_url AS cover_image_url,
+        cover_media.background_color AS cover_background_color, cover_media.alt_text AS cover_alt_text,
         categories.sort_order, categories.is_active, COUNT(product_catalog.sku) AS product_count
-       FROM categories LEFT JOIN product_catalog ON product_catalog.category_id = categories.id
+       FROM categories
+       LEFT JOIN product_catalog ON product_catalog.category_id = categories.id
+       LEFT JOIN media_assets AS cover_media ON cover_media.id = categories.media_asset_id
        GROUP BY categories.id ORDER BY categories.sort_order ASC, categories.name ASC`,
     ).all<CategoryRow>();
     return NextResponse.json({ categories: result.results.map((category) => ({
@@ -36,6 +45,11 @@ export async function GET(request: Request) {
       description: category.description,
       imageUrl: category.image_url,
       mediaAssetId: category.media_asset_id,
+      coverPreviewUrl: category.cover_source_type && category.media_asset_id
+        ? publicMediaPath(category.media_asset_id, category.cover_source_type, category.cover_image_url)
+        : category.image_url,
+      coverBackgroundColor: category.cover_background_color,
+      coverAltText: category.cover_alt_text,
       sortOrder: category.sort_order,
       isActive: category.is_active === 1,
       productCount: category.product_count,
