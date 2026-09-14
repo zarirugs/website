@@ -9,7 +9,7 @@ import { displayOrderStage, orderStages, type OrderStage } from "@/lib/data/orde
 import styles from "./operations.module.css";
 
 type Metrics = { openOrders: number; awaitingPayment: number; lowStock: number; visibleProducts: number };
-type Category = { id: string; name: string; slug: string; description: string | null; imageUrl: string | null; mediaAssetId: string | null; sortOrder: number; isActive: boolean; productCount: number };
+type Category = { id: string; name: string; slug: string; description: string | null; imageUrl: string | null; mediaAssetId: string | null; coverPreviewUrl: string | null; coverBackgroundColor: string | null; coverAltText: string | null; sortOrder: number; isActive: boolean; productCount: number };
 type Order = { id: number; orderNumber: string; customerName: string; customerEmail: string; customerPhone: string | null; deliveryAddress: string | null; notes: string | null; stage: OrderStage; createdAt: string; items: { sku: string; name: string; quantity: number }[] };
 type MediaAsset = { id: string; name: string; altText: string | null; sourceType: "upload" | "url" | "color"; imageUrl: string | null; backgroundColor: string | null; previewUrl: string | null };
 type MediaSlot = { slot_key: string; label: string; description: string; media_asset_id: string | null };
@@ -190,7 +190,7 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
           <div className={styles.sectionTitle}><div><p className={styles.eyebrow}>Catalog</p><h2>Categories</h2></div><p>Open a category to manage its storefront cover, products, and inventory on a dedicated page.</p></div>
           <div className={styles.categoryGrid}>
             {categories.map((category) => <Link href={`/dashboard/categories/${encodeURIComponent(category.id)}`} key={category.id} className={styles.categoryCard}>
-              <CategoryVisual category={category} asset={media.find((item) => item.id === category.mediaAssetId)} />
+              <CategoryVisual category={category} />
               <span className={styles.categoryCardBody}><span className={styles.categoryCardMeta}>{category.isActive ? "Active" : "Hidden"} · {category.productCount} {category.productCount === 1 ? "piece" : "pieces"}</span><strong>{category.name}</strong><span>{category.description || "No collection description yet."}</span><span className={styles.openCategory}>Manage category →</span></span>
             </Link>)}
             {categories.length === 0 && <Empty text="Create your first category." />}
@@ -266,7 +266,7 @@ function MediaPreview({ asset }: { asset: MediaAsset }) {
   return <div className={styles.mediaPreview} style={{ backgroundColor: asset.backgroundColor ?? "#e7e4dc", backgroundImage: asset.previewUrl ? `url(${asset.previewUrl})` : undefined }} aria-label={asset.altText ?? asset.name} role="img" />;
 }
 
-function CategoryVisual({ category, asset }: { category: Category; asset?: MediaAsset }) {
-  const imageUrl = asset?.previewUrl ?? category.imageUrl;
-  return <div className={styles.categoryVisual} style={{ backgroundColor: asset?.backgroundColor ?? "#d8d0c1", backgroundImage: imageUrl ? `url(${imageUrl})` : undefined }} role="img" aria-label={asset?.altText ?? category.name} />;
+function CategoryVisual({ category }: { category: Category }) {
+  const imageUrl = category.coverPreviewUrl ?? category.imageUrl;
+  return <div className={styles.categoryVisual} style={{ backgroundColor: category.coverBackgroundColor ?? "#d8d0c1", backgroundImage: imageUrl ? `url(${imageUrl})` : undefined }} role="img" aria-label={category.coverAltText ?? category.name} />;
 }
