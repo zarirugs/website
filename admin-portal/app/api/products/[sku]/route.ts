@@ -58,7 +58,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ sk
       categoryId = category.id;
       categoryName = category.name;
     }
-    if (mediaAssetId && !await context.database.prepare("SELECT id FROM media_assets WHERE id = ?").bind(mediaAssetId).first()) return errorResponse("Choose media from the library.");
+    if (mediaAssetId && !await context.database.prepare("SELECT id FROM media_assets WHERE id = ? AND category_id = ?").bind(mediaAssetId, categoryId).first()) return errorResponse("Choose an image from this category.");
 
     const nextStock = stock ?? current.stock;
     await context.database.batch([

@@ -31,7 +31,11 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
-  const [coverMediaAssetId, setCoverMediaAssetId] = useState("");
+  const [coverPickerOpen, setCoverPickerOpen] = useState(false);
+  const [coverUploadOpen, setCoverUploadOpen] = useState(false);
+  const [coverImageName, setCoverImageName] = useState("");
+  const [coverAltText, setCoverAltText] = useState("");
+  const [coverFile, setCoverFile] = useState<File | null>(null);
   const [productSku, setProductSku] = useState("");
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
@@ -54,7 +58,7 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
     const [categoryResult, productResult, mediaResult] = await Promise.all([
       json<{ categories: Category[] }>("/api/categories"),
       json<{ products: Product[] }>("/api/products"),
-      json<{ media: MediaAsset[] }>("/api/media"),
+      json<{ media: MediaAsset[] }>(`/api/media?categoryId=${encodeURIComponent(categoryId)}`),
     ]);
     const nextCategory = categoryResult.categories.find((item) => item.id === categoryId) ?? null;
     setCategory(nextCategory);
@@ -74,7 +78,6 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
         setName(nextCategory.name);
         setDescription(nextCategory.description ?? "");
         setSortOrder(String(nextCategory.sortOrder));
-        setCoverMediaAssetId(nextCategory.mediaAssetId ?? "");
       } catch (error) {
         setMessage(error instanceof Error ? error.message : "Unable to load this category.");
       } finally {
@@ -103,9 +106,40 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
     event.preventDefault();
     if (!category) return;
     void run(
-      () => json(`/api/categories/${encodeURIComponent(category.id)}`, { method: "PATCH", body: JSON.stringify({ name, description, sortOrder: Number(sortOrder), mediaAssetId: coverMediaAssetId || null }) }),
+      () => json(`/api/categories/${encodeURIComponent(category.id)}`, { method: "PATCH", body: JSON.stringify({ name, description, sortOrder: Number(sortOrder) }) }),
       "Category settings saved.",
     );
+  }
+
+  function chooseCover(mediaAssetId: string | null) {
+    if (!category) return;
+    setCoverPickerOpen(false);
+    void run(
+      () => json(`/api/categories/${encodeURIComponent(category.id)}`, { method: "PATCH", body: JSON.stringify({ mediaAssetId }) }),
+      mediaAssetId ? "Category cover updated." : "Original category cover restored.",
+    );
+  }
+
+  function uploadCover(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!category || !coverFile) return;
+    void run(async () => {
+      const form = new FormData();
+      form.set("name", coverImageName);
+      form.set("altText", coverAltText);
+      form.set("sourceType", "upload");
+      form.set("categoryId", category.id);
+      form.set("file", coverFile);
+      const response = await fetch("/api/media", { method: "POST", body: form });
+      const result = await response.json().catch(() => ({})) as { id?: string; error?: string };
+      if (!response.ok || !result.id) throw new Error(result.error ?? "The image could not be uploaded.");
+      await json(`/api/categories/${encodeURIComponent(category.id)}`, { method: "PATCH", body: JSON.stringify({ mediaAssetId: result.id }) });
+      setCoverImageName("");
+      setCoverAltText("");
+      setCoverFile(null);
+      setCoverUploadOpen(false);
+      setCoverPickerOpen(false);
+    }, "Category cover uploaded and selected.");
   }
 
   function toggleCategory() {
@@ -194,11 +228,26 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
           <div className={styles.formHeading}><div><p className={styles.eyebrow}>Storefront category</p><h2>Category settings</h2></div><span className={category.isActive ? styles.active : styles.hidden}>{category.isActive ? "Visible" : "Hidden"}</span></div>
           <label>Category name<input value={name} onChange={(event) => setName(event.target.value)} required /></label>
           <label>Description<textarea value={description} onChange={(event) => setDescription(event.target.value)} rows={3} /></label>
-          <label>Storefront category cover<select value={coverMediaAssetId} onChange={(event) => setCoverMediaAssetId(event.target.value)}><option value="">Use original cover</option>{media.map((asset) => <option key={asset.id} value={asset.id}>{asset.name}</option>)}</select></label>
+          <div className={styles.coverControl}><span>Storefront category cover</span><div><strong>{coverAsset?.name ?? "Original category cover"}</strong><button className={styles.textButton} type="button" disabled={saving} onClick={() => setCoverPickerOpen((open) => !open)}>{coverPickerOpen ? "Close image library" : "Change cover"}</button></div></div>
           <label>Display order<input value={sortOrder} onChange={(event) => setSortOrder(event.target.value)} type="number" min="0" required /></label>
           <div className={styles.actions}><button className={styles.primaryButton} disabled={saving}>Save category</button><button className={styles.textButton} type="button" disabled={saving} onClick={toggleCategory}>{category.isActive ? "Hide from storefront" : "Show on storefront"}</button><button className={styles.dangerButton} type="button" disabled={saving} onClick={deleteCategory}>Remove category</button></div>
         </form>
       </section>
+
+      {coverPickerOpen && <section className={styles.coverPicker} aria-label={`${category.name} image library`}>
+        <div className={styles.pickerHeading}><div><p className={styles.eyebrow}>{category.name} image library</p><h2>Choose a cover</h2><p>Only images uploaded to {category.name} appear here. They are not available in other categories.</p></div><button className={styles.primaryButton} type="button" disabled={saving} onClick={() => setCoverUploadOpen((open) => !open)}>{coverUploadOpen ? "Close upload" : "Add image"}</button></div>
+        {coverUploadOpen && <form className={styles.coverUploadForm} onSubmit={uploadCover}>
+          <label>Image name<input value={coverImageName} onChange={(event) => setCoverImageName(event.target.value)} placeholder={`${category.name} cover`} required /></label>
+          <label>Image description (alt text)<input value={coverAltText} onChange={(event) => setCoverAltText(event.target.value)} placeholder="Describe the image for visitors" /></label>
+          <label>Image file<input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" onChange={(event) => setCoverFile(event.target.files?.[0] ?? null)} required /></label>
+          <button className={styles.primaryButton} disabled={saving}>Upload and use cover</button>
+        </form>}
+        <div className={styles.coverChoices}>
+          <button className={`${styles.coverChoice}${!category.mediaAssetId ? ` ${styles.selectedCover}` : ""}`} type="button" disabled={saving} onClick={() => chooseCover(null)}><div className={styles.originalCover}>Original cover</div><span>Use original image</span></button>
+          {media.map((asset) => <button className={`${styles.coverChoice}${asset.id === category.mediaAssetId ? ` ${styles.selectedCover}` : ""}`} type="button" key={asset.id} disabled={saving} onClick={() => chooseCover(asset.id)}><div className={styles.choicePreview} style={{ backgroundColor: asset.backgroundColor ?? "#d8d0c1", backgroundImage: asset.previewUrl ? `url(${asset.previewUrl})` : undefined }} role="img" aria-label={asset.altText ?? asset.name} /><span>{asset.name}</span><small>{asset.id === category.mediaAssetId ? "Current cover" : "Use as cover"}</small></button>)}
+        </div>
+        {media.length === 0 && <p className={styles.empty}>No images have been added to {category.name} yet. Use “Add image” to upload the first one.</p>}
+      </section>}
 
       <section className={styles.productSection}>
         <div className={styles.sectionTitle}><div><p className={styles.eyebrow}>Category inventory</p><h2>{products.length} {products.length === 1 ? "product" : "products"}</h2></div><p>{totalStock} in stock across this category.</p></div>
