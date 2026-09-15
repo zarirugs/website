@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { type CSSProperties, useCallback, useEffect, useRef, useState } from "react";
 
 import Container from "@/components/layout/Container";
@@ -28,16 +27,14 @@ function ShopCard({ collection }: { collection: Collection }) {
         aria-label={`Shop ${collection.title}`}
         className={styles.cardLink}
       >
-        <div
-          className={styles.image}
-          role="img"
-          aria-label={collection.title}
-          style={imageStyle}
-          data-fit={collection.imageFit ?? "contain"}
-        />
-        <div className={styles.details}>
+        <div className={styles.visual}>
+          <div
+            className={styles.image}
+            aria-hidden="true"
+            style={imageStyle}
+            data-fit={collection.imageFit ?? "contain"}
+          />
           <h3 className={styles.name}>{collection.title}</h3>
-          <span className={styles.view}>View collection <span aria-hidden="true">→</span></span>
         </div>
       </Link>
     </article>
@@ -141,15 +138,6 @@ export default function Shop({ headingAs: Heading = "h2", headingLink = false }:
       <Container>
         <FadeIn>
           <header className={styles.header}>
-            <button
-              type="button"
-              className={styles.control}
-              aria-label="Show previous shop pieces"
-              disabled={!canMovePrevious}
-              onClick={() => move("previous")}
-            >
-              <ArrowLeft size={18} strokeWidth={1.25} />
-            </button>
             {headingLink ? (
               <Link href="/shop" className={styles.titleLink} aria-label="Open shop">
                 <Heading className={styles.title}>Shop</Heading>
@@ -157,32 +145,43 @@ export default function Shop({ headingAs: Heading = "h2", headingLink = false }:
             ) : (
               <Heading className={styles.title}>Shop</Heading>
             )}
+          </header>
+        </FadeIn>
+        <FadeIn>
+          <div className={styles.carousel}>
             <button
               type="button"
-              className={styles.control}
+              className={`${styles.control} ${styles.previousControl}`}
+              aria-label="Show previous shop pieces"
+              disabled={!canMovePrevious}
+              onClick={() => move("previous")}
+            >
+              <span aria-hidden="true">&lt;</span>
+            </button>
+            <div
+              className={styles.viewport}
+              ref={viewportRef}
+              onScroll={updateNavigation}
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+              onFocusCapture={() => setIsPaused(true)}
+              onBlurCapture={() => setIsPaused(false)}
+            >
+              <div className={styles.track} data-shop-track style={{ "--card-width": `${cardWidth}px` } as CSSProperties}>
+                {catalog.map((collection) => (
+                  <ShopCard key={collection.id} collection={collection} />
+                ))}
+              </div>
+            </div>
+            <button
+              type="button"
+              className={`${styles.control} ${styles.nextControl}`}
               aria-label="Show next shop pieces"
               disabled={!canMoveNext}
               onClick={() => move("next")}
             >
-              <ArrowRight size={18} strokeWidth={1.25} />
+              <span aria-hidden="true">&gt;</span>
             </button>
-          </header>
-        </FadeIn>
-        <FadeIn>
-          <div
-            className={styles.viewport}
-            ref={viewportRef}
-            onScroll={updateNavigation}
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-            onFocusCapture={() => setIsPaused(true)}
-            onBlurCapture={() => setIsPaused(false)}
-          >
-            <div className={styles.track} data-shop-track style={{ "--card-width": `${cardWidth}px` } as CSSProperties}>
-              {catalog.map((collection) => (
-                <ShopCard key={collection.id} collection={collection} />
-              ))}
-            </div>
           </div>
         </FadeIn>
       </Container>
