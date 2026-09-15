@@ -19,54 +19,31 @@
 }
 
 .viewport {
+  --card-gap: 0.875rem;
+  --card-width: calc((100% - var(--card-gap)) / 2);
   position: relative;
   width: 100%;
   overflow: hidden;
 }
 
-.viewport::before,
-.viewport::after {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  z-index: 1;
-  width: clamp(1.25rem, 5vw, 5rem);
-  content: "";
-  pointer-events: none;
-}
-
-.viewport::before {
-  left: 0;
-  background: linear-gradient(90deg, #fff, transparent);
-}
-
-.viewport::after {
-  right: 0;
-  background: linear-gradient(270deg, #fff, transparent);
-}
-
 .track {
   display: flex;
-  width: max-content;
-  animation: drift 42s linear infinite;
+  gap: var(--card-gap);
+  width: 100%;
+  transition: transform 650ms cubic-bezier(0.22, 0.61, 0.36, 1);
   will-change: transform;
 }
 
-.viewport:hover .track,
-.viewport:focus-within .track {
-  animation-play-state: paused;
+.isSliding {
+  transform: translateX(calc(-1 * (var(--card-width) + var(--card-gap))));
 }
 
-.group {
-  display: flex;
-  flex: none;
-  gap: 0.75rem;
-  padding-right: 0.75rem;
+.isResetting {
+  transition: none;
 }
 
 .card {
-  flex: 0 0 calc((100vw - 2.75rem) / 2);
-  max-width: 13rem;
+  flex: 0 0 var(--card-width);
 }
 
 .cardLink {
@@ -101,7 +78,6 @@
   padding: 0.875rem 0 0.125rem;
 }
 
-.category,
 .view {
   color: #817d75;
   font-size: 0.5625rem;
@@ -133,21 +109,15 @@
   gap: 0.6rem;
 }
 
-@keyframes drift {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
 @media (min-width: 48rem) {
-  .group {
-    gap: 1rem;
-    padding-right: 1rem;
+  .viewport {
+    --card-gap: 1.5rem;
+    --card-width: calc((100% - 3rem) / 3);
+    overflow: visible;
   }
 
   .card {
-    flex-basis: clamp(10.5rem, 18vw, 16rem);
-    max-width: none;
+    min-width: 0;
   }
 
   .details {
@@ -161,6 +131,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .track {
-    animation: none;
+    transition: none;
   }
 }
