@@ -12,6 +12,7 @@ import styles from "./Shop.module.css";
 
 type ShopProps = {
   headingAs?: "h1" | "h2";
+  headingLink?: boolean;
 };
 
 function ShopCard({ collection }: { collection: Collection }) {
@@ -43,7 +44,7 @@ function ShopCard({ collection }: { collection: Collection }) {
   );
 }
 
-export default function Shop({ headingAs: Heading = "h2" }: ShopProps) {
+export default function Shop({ headingAs: Heading = "h2", headingLink = false }: ShopProps) {
   const [catalog, setCatalog] = useState<Collection[]>(collections);
   const [canMovePrevious, setCanMovePrevious] = useState(false);
   const [canMoveNext, setCanMoveNext] = useState(false);
@@ -149,7 +150,13 @@ export default function Shop({ headingAs: Heading = "h2" }: ShopProps) {
             >
               <ArrowLeft size={18} strokeWidth={1.25} />
             </button>
-            <Heading className={styles.title}>Shop</Heading>
+            {headingLink ? (
+              <Link href="/shop" className={styles.titleLink} aria-label="Open shop">
+                <Heading className={styles.title}>Shop</Heading>
+              </Link>
+            ) : (
+              <Heading className={styles.title}>Shop</Heading>
+            )}
             <button
               type="button"
               className={styles.control}

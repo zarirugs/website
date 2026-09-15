@@ -20,6 +20,22 @@
   text-transform: uppercase;
 }
 
+.titleLink {
+  display: inline-flex;
+  justify-self: center;
+  padding: 0.75rem;
+  transition: color 180ms ease;
+}
+
+.titleLink:hover .title {
+  color: #6e5a31;
+}
+
+.titleLink:focus-visible {
+  outline: 1px solid #9d8655;
+  outline-offset: 0.125rem;
+}
+
 .control {
   display: inline-grid;
   width: 2.75rem;
