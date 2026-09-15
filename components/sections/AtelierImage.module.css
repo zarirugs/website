@@ -1,0 +1,21 @@
+.section {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: #111;
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+}
+
+@media (min-width: 48rem) {
+  .section {
+    aspect-ratio: auto;
+    height: 100svh;
+    min-height: 36rem;
+  }
+}

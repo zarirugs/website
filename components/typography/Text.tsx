@@ -11,8 +11,8 @@ interface TextProps {
 const sizes = {
   sm: "text-sm leading-6",
   md: "text-base leading-7",
-  lg: "text-lg leading-9",
-  xl: "text-xl leading-10",
+  lg: "text-[1.125rem] leading-8",
+  xl: "text-xl leading-9",
 };
 
 export default function Text({

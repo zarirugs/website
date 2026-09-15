@@ -9,15 +9,15 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ sk
   try {
     if (!(await isAdminRequest(request))) return errorResponse("Unauthorised.", 401);
     const { sku } = await params;
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     const database = await getDatabase();
     const current = await database.prepare(
       "SELECT sku, stock FROM inventory_items WHERE sku = ?",
     ).bind(sku).first<CurrentItem>();
     if (!current) return errorResponse("Inventory item not found.", 404);
 
-    const stock = body.stock;
-    const reorderLevel = body.reorderLevel;
+    const stock = typeof body.stock === "number" ? body.stock : undefined;
+    const reorderLevel = typeof body.reorderLevel === "number" ? body.reorderLevel : undefined;
     const name = body.name === undefined ? undefined : requiredText(body.name, "name", 140);
     const collection = body.collection === undefined ? undefined : requiredText(body.collection, "collection", 80);
     const isActive = body.isActive;

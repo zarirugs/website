@@ -1,33 +1,50 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 import Container from "@/components/layout/Container";
 import Section from "@/components/layout/Section";
 import { FadeIn, Stagger } from "@/components/motion";
 import { Heading, Text, Eyebrow } from "@/components/typography";
 import CollectionCard from "./CollectionCard";
-import { collections } from "@/lib/data/collections";
+import { collections, type Collection } from "@/lib/data/collections";
+import styles from "./Collections.module.css";
 
 export default function Collections() {
+  const [catalog, setCatalog] = useState<Collection[]>(collections);
+
+  useEffect(() => {
+    async function loadCatalog() {
+      const response = await fetch("/api/catalog", { cache: "no-store" });
+      if (!response.ok) return;
+      const result = await response.json().catch(() => ({ collections: [] })) as { collections?: Collection[] };
+      if (result.collections?.length) setCatalog(result.collections);
+    }
+    void loadCatalog();
+  }, []);
+
   return (
-    <Section id="collections">
+    <Section id="collections" className={styles.section}>
       <Container>
         <FadeIn>
-          <div className="max-w-xl">
-            <Eyebrow className="mb-6">The Archives</Eyebrow>
-            <Heading as="h2" size="xl">
-              Signature Collections
-            </Heading>
+          <div className={styles.header}>
+            <div className={styles.intro}>
+              <Eyebrow className={styles.eyebrow}>The archives</Eyebrow>
+              <Heading as="h2" size="xl" className={styles.title}>
+                Signature Collections
+              </Heading>
+            </div>
 
-            <Text size="lg" className="mt-8 leading-loose">
-              Designed for extraordinary residences, luxury hotels, and iconic interiors around the world. Every collection celebrates the centuries-old artistry of Bhadohi while embracing contemporary design.
+            <Text size="md" className={styles.copy}>
+              Designed for extraordinary residences, luxury hotels, and iconic
+              interiors. Each collection celebrates the artistry of Bhadohi in a
+              quietly contemporary language.
             </Text>
           </div>
         </FadeIn>
 
-        {/* Hardcoded 80px margin to bypass Tailwind */}
-        <Stagger 
-          className="grid gap-12 lg:gap-16 md:grid-cols-2 xl:grid-cols-3"
-          style={{ marginTop: '80px' }}
-        >
-          {collections.map((collection) => (
+        <Stagger className={styles.grid}>
+          {catalog.map((collection) => (
             <CollectionCard key={collection.id} collection={collection} />
           ))}
         </Stagger>

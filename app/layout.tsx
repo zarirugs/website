@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Cormorant_Garamond, Inter, Prata } from "next/font/google";
+import { StoreProvider } from "@/components/store";
 import "./globals.css";
 
 export const runtime = "nodejs";
@@ -15,9 +16,15 @@ const body = Inter({
   variable: "--font-body",
 });
 
+const wordmark = Prata({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-wordmark",
+});
+
 export const metadata: Metadata = {
   title: {
-    default: "ZARI",
+    default: "Zari Rugs | India",
     template: "%s | ZARI",
   },
   description:
@@ -32,9 +39,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable}`}
+      className={`${display.variable} ${body.variable} ${wordmark.variable}`}
     >
-      <body>{children}</body>
+      <body><StoreProvider>{children}</StoreProvider></body>
     </html>
   );
 }

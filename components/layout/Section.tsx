@@ -14,13 +14,7 @@ export default function Section({
   return (
     <section
       id={id}
-      className={cn("w-full", className)}
-      style={{
-        // Halved symmetrical padding to prevent double-stacking gaps
-        // while perfectly preserving background color boundaries
-        paddingTop: '80px',
-        paddingBottom: '80px'
-      }}
+      className={cn("w-full py-[var(--section-space)]", className)}
     >
       {children}
     </section>

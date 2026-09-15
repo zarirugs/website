@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# The standalone admin portal is versioned and deployed from the `admin` branch.
+/admin-portal/
+
 # production
 /build
 /.open-next/
