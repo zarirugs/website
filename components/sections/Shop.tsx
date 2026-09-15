@@ -9,17 +9,16 @@ import { FadeIn } from "@/components/motion";
 import { collections, type Collection } from "@/lib/data/collections";
 import styles from "./Shop.module.css";
 
-function ShopCard({ collection, duplicate = false }: { collection: Collection; duplicate?: boolean }) {
+function ShopCard({ collection }: { collection: Collection }) {
   const destination = collection.slug ? `/collections/${collection.slug}` : "#order";
   const imageStyle = collection.image
     ? { backgroundImage: `url(${collection.image})`, backgroundColor: collection.backgroundColor ?? undefined }
     : { backgroundColor: collection.backgroundColor ?? "#f4f1eb" };
 
   return (
-    <article className={styles.card} aria-hidden={duplicate || undefined}>
+    <article className={styles.card}>
       <Link
         href={destination}
-        tabIndex={duplicate ? -1 : undefined}
         aria-label={`Shop ${collection.title}`}
         className={styles.cardLink}
       >
@@ -31,9 +30,8 @@ function ShopCard({ collection, duplicate = false }: { collection: Collection; d
           data-fit={collection.imageFit ?? "contain"}
         />
         <div className={styles.details}>
-          <p className={styles.category}>The Zari atelier</p>
           <h3 className={styles.name}>{collection.title}</h3>
-          <span className={styles.view}>View piece <span aria-hidden="true">→</span></span>
+          <span className={styles.view}>View collection <span aria-hidden="true">→</span></span>
         </div>
       </Link>
     </article>
@@ -42,6 +40,11 @@ function ShopCard({ collection, duplicate = false }: { collection: Collection; d
 
 export default function Shop() {
   const [catalog, setCatalog] = useState<Collection[]>(collections);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isSliding, setIsSliding] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
+  const [canAutoAdvance, setCanAutoAdvance] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     async function loadCatalog() {
@@ -55,6 +58,53 @@ export default function Shop() {
     void loadCatalog();
   }, []);
 
+  useEffect(() => {
+    const mobileQuery = window.matchMedia("(max-width: 47.99rem)");
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setCanAutoAdvance(mobileQuery.matches && !motionQuery.matches);
+
+    updatePreference();
+    mobileQuery.addEventListener("change", updatePreference);
+    motionQuery.addEventListener("change", updatePreference);
+
+    return () => {
+      mobileQuery.removeEventListener("change", updatePreference);
+      motionQuery.removeEventListener("change", updatePreference);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!canAutoAdvance || isPaused || catalog.length < 3) return;
+
+    let timer: number;
+    let resetFrame: number;
+    const advance = () => {
+      timer = window.setTimeout(() => {
+        setIsSliding(true);
+        timer = window.setTimeout(() => {
+          setActiveIndex((current) => (current + 1) % catalog.length);
+          setIsSliding(false);
+          setIsResetting(true);
+          resetFrame = window.requestAnimationFrame(() => {
+            setIsResetting(false);
+            advance();
+          });
+        }, 650);
+      }, 4000);
+    };
+
+    advance();
+    return () => {
+      window.clearTimeout(timer);
+      window.cancelAnimationFrame(resetFrame);
+    };
+  }, [canAutoAdvance, catalog.length, isPaused]);
+
+  const visibleCatalog = [
+    ...catalog.slice(activeIndex),
+    ...catalog.slice(0, activeIndex),
+  ];
+
   return (
     <Section id="shop" className={styles.section}>
       <Container>
@@ -63,25 +113,22 @@ export default function Shop() {
             <h2 className={styles.title}>Shop</h2>
           </header>
         </FadeIn>
-      </Container>
-
-      <FadeIn>
-        <div className={styles.viewport}>
-          <div className={styles.track}>
-            {[false, true].map((duplicate) => (
-              <div className={styles.group} key={String(duplicate)}>
-                {catalog.map((collection) => (
-                  <ShopCard
-                    key={`${duplicate ? "duplicate" : "primary"}-${collection.id}`}
-                    collection={collection}
-                    duplicate={duplicate}
-                  />
-                ))}
-              </div>
-            ))}
+        <FadeIn>
+          <div
+            className={styles.viewport}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onFocusCapture={() => setIsPaused(true)}
+            onBlurCapture={() => setIsPaused(false)}
+          >
+            <div className={`${styles.track} ${isSliding ? styles.isSliding : ""} ${isResetting ? styles.isResetting : ""}`}>
+              {visibleCatalog.map((collection) => (
+                <ShopCard key={collection.id} collection={collection} />
+              ))}
+            </div>
           </div>
-        </div>
-      </FadeIn>
+        </FadeIn>
+      </Container>
     </Section>
   );
 }
