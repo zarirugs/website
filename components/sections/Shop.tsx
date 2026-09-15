@@ -34,6 +34,7 @@ function ShopCard({ collection }: { collection: Collection }) {
             style={imageStyle}
             data-fit={collection.imageFit ?? "contain"}
           />
+          <div className={styles.nameShade} aria-hidden="true" />
           <h3 className={styles.name}>{collection.title}</h3>
         </div>
       </Link>
