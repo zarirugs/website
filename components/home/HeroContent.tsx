@@ -41,7 +41,7 @@ export default function HeroContent() {
             </Text>
           </div>
 
-          <Link href="#shop" className={styles.cta}>
+          <Link href="/shop" className={styles.cta}>
             Explore shop <span aria-hidden="true">→</span>
           </Link>
         </div>

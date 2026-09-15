@@ -1,0 +1,10 @@
+.page {
+  min-height: 100vh;
+  padding-top: 4.5rem;
+}
+
+@media (min-width: 48rem) {
+  .page {
+    padding-top: 6rem;
+  }
+}
