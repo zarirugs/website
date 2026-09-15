@@ -9,6 +9,10 @@ import { FadeIn } from "@/components/motion";
 import { collections, type Collection } from "@/lib/data/collections";
 import styles from "./Shop.module.css";
 
+type ShopProps = {
+  headingAs?: "h1" | "h2";
+};
+
 function ShopCard({ collection }: { collection: Collection }) {
   const destination = collection.slug ? `/collections/${collection.slug}` : "#order";
   const imageStyle = collection.image
@@ -38,7 +42,7 @@ function ShopCard({ collection }: { collection: Collection }) {
   );
 }
 
-export default function Shop() {
+export default function Shop({ headingAs: Heading = "h2" }: ShopProps) {
   const [catalog, setCatalog] = useState<Collection[]>(collections);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isSliding, setIsSliding] = useState(false);
@@ -110,7 +114,7 @@ export default function Shop() {
       <Container>
         <FadeIn>
           <header className={styles.header}>
-            <h2 className={styles.title}>Shop</h2>
+            <Heading className={styles.title}>Shop</Heading>
           </header>
         </FadeIn>
         <FadeIn>

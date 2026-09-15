@@ -48,7 +48,7 @@ export default function CartPage() {
               <Text size="sm" className="mt-4">
                 Explore rugs shaped by material, memory, and the rooms they will call home.
               </Text>
-              <Link href="/#shop" className="mt-8 inline-flex items-center gap-3 border-b border-neutral-900 pb-3 text-[10px] uppercase tracking-[0.22em] text-neutral-900 transition-colors hover:border-[#8b7442] hover:text-[#8b7442]">
+              <Link href="/shop" className="mt-8 inline-flex items-center gap-3 border-b border-neutral-900 pb-3 text-[10px] uppercase tracking-[0.22em] text-neutral-900 transition-colors hover:border-[#8b7442] hover:text-[#8b7442]">
                 Explore shop <span aria-hidden="true">→</span>
               </Link>
             </div>
