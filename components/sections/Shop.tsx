@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { type CSSProperties, useCallback, useEffect, useRef, useState } from "react";
 
 import Container from "@/components/layout/Container";
 import Section from "@/components/layout/Section";
@@ -20,7 +21,7 @@ function ShopCard({ collection }: { collection: Collection }) {
     : { backgroundColor: collection.backgroundColor ?? "#f4f1eb" };
 
   return (
-    <article className={styles.card}>
+    <article className={styles.card} data-shop-card>
       <Link
         href={destination}
         aria-label={`Shop ${collection.title}`}
@@ -44,11 +45,13 @@ function ShopCard({ collection }: { collection: Collection }) {
 
 export default function Shop({ headingAs: Heading = "h2" }: ShopProps) {
   const [catalog, setCatalog] = useState<Collection[]>(collections);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isSliding, setIsSliding] = useState(false);
-  const [isResetting, setIsResetting] = useState(false);
-  const [canAutoAdvance, setCanAutoAdvance] = useState(false);
+  const [canMovePrevious, setCanMovePrevious] = useState(false);
+  const [canMoveNext, setCanMoveNext] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [hasUserNavigated, setHasUserNavigated] = useState(false);
+  const [autoStep, setAutoStep] = useState(0);
+  const [cardWidth, setCardWidth] = useState(0);
+  const viewportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function loadCatalog() {
@@ -62,71 +65,114 @@ export default function Shop({ headingAs: Heading = "h2" }: ShopProps) {
     void loadCatalog();
   }, []);
 
-  useEffect(() => {
-    const mobileQuery = window.matchMedia("(max-width: 47.99rem)");
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const updatePreference = () => setCanAutoAdvance(mobileQuery.matches && !motionQuery.matches);
+  const updateNavigation = useCallback(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
 
-    updatePreference();
-    mobileQuery.addEventListener("change", updatePreference);
-    motionQuery.addEventListener("change", updatePreference);
-
-    return () => {
-      mobileQuery.removeEventListener("change", updatePreference);
-      motionQuery.removeEventListener("change", updatePreference);
-    };
+    const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    setCanMovePrevious(viewport.scrollLeft > 2);
+    setCanMoveNext(viewport.scrollLeft < maxScroll - 2);
   }, []);
 
+  const updateCardWidth = useCallback(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const visibleCards = window.matchMedia("(min-width: 48rem)").matches ? 3 : 2;
+    const track = viewport.querySelector<HTMLElement>("[data-shop-track]");
+    const gap = track ? Number.parseFloat(window.getComputedStyle(track).gap) || 0 : 0;
+    setCardWidth((viewport.clientWidth - gap * (visibleCards - 1)) / visibleCards);
+  }, []);
+
+  const cardStep = useCallback(() => {
+    const viewport = viewportRef.current;
+    if (!viewport || !cardWidth) return 0;
+
+    const track = viewport.querySelector<HTMLElement>("[data-shop-track]");
+    const gap = track ? Number.parseFloat(window.getComputedStyle(track).gap) || 0 : 0;
+    return cardWidth + gap;
+  }, [cardWidth]);
+
+  const move = useCallback((direction: "previous" | "next", isManual = true) => {
+    const viewport = viewportRef.current;
+    const step = cardStep();
+    if (!viewport || !step) return;
+
+    if (isManual) setHasUserNavigated(true);
+
+    const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    const target = Math.min(
+      maxScroll,
+      Math.max(0, viewport.scrollLeft + (direction === "next" ? step : -step)),
+    );
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    viewport.scrollTo({ left: target, behavior: reducedMotion ? "auto" : "smooth" });
+  }, [cardStep]);
+
   useEffect(() => {
-    if (!canAutoAdvance || isPaused || catalog.length < 3) return;
-
-    let timer: number;
-    let resetFrame: number;
-    const advance = () => {
-      timer = window.setTimeout(() => {
-        setIsSliding(true);
-        timer = window.setTimeout(() => {
-          setActiveIndex((current) => (current + 1) % catalog.length);
-          setIsSliding(false);
-          setIsResetting(true);
-          resetFrame = window.requestAnimationFrame(() => {
-            setIsResetting(false);
-            advance();
-          });
-        }, 650);
-      }, 4000);
-    };
-
-    advance();
+    const frame = window.requestAnimationFrame(updateCardWidth);
+    window.addEventListener("resize", updateCardWidth);
     return () => {
-      window.clearTimeout(timer);
-      window.cancelAnimationFrame(resetFrame);
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", updateCardWidth);
     };
-  }, [canAutoAdvance, catalog.length, isPaused]);
+  }, [catalog.length, updateCardWidth]);
 
-  const visibleCatalog = [
-    ...catalog.slice(activeIndex),
-    ...catalog.slice(0, activeIndex),
-  ];
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(updateNavigation);
+    return () => window.cancelAnimationFrame(frame);
+  }, [cardWidth, catalog.length, updateNavigation]);
+
+  useEffect(() => {
+    if (hasUserNavigated || isPaused || !canMoveNext) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const timer = window.setTimeout(() => {
+      move("next", false);
+      setAutoStep((current) => current + 1);
+    }, 4000);
+
+    return () => window.clearTimeout(timer);
+  }, [autoStep, canMoveNext, hasUserNavigated, isPaused, move]);
 
   return (
     <Section id="shop" className={styles.section}>
       <Container>
         <FadeIn>
           <header className={styles.header}>
+            <button
+              type="button"
+              className={styles.control}
+              aria-label="Show previous shop pieces"
+              disabled={!canMovePrevious}
+              onClick={() => move("previous")}
+            >
+              <ArrowLeft size={18} strokeWidth={1.25} />
+            </button>
             <Heading className={styles.title}>Shop</Heading>
+            <button
+              type="button"
+              className={styles.control}
+              aria-label="Show next shop pieces"
+              disabled={!canMoveNext}
+              onClick={() => move("next")}
+            >
+              <ArrowRight size={18} strokeWidth={1.25} />
+            </button>
           </header>
         </FadeIn>
         <FadeIn>
           <div
             className={styles.viewport}
+            ref={viewportRef}
+            onScroll={updateNavigation}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
             onFocusCapture={() => setIsPaused(true)}
             onBlurCapture={() => setIsPaused(false)}
           >
-            <div className={`${styles.track} ${isSliding ? styles.isSliding : ""} ${isResetting ? styles.isResetting : ""}`}>
-              {visibleCatalog.map((collection) => (
+            <div className={styles.track} data-shop-track style={{ "--card-width": `${cardWidth}px` } as CSSProperties}>
+              {catalog.map((collection) => (
                 <ShopCard key={collection.id} collection={collection} />
               ))}
             </div>
