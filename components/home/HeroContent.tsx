@@ -41,8 +41,8 @@ export default function HeroContent() {
             </Text>
           </div>
 
-          <Link href="#collections" className={styles.cta}>
-            Explore Collection <span aria-hidden="true">→</span>
+          <Link href="#shop" className={styles.cta}>
+            Explore shop <span aria-hidden="true">→</span>
           </Link>
         </div>
       </div>

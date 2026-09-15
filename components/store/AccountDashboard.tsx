@@ -293,7 +293,7 @@ export default function AccountDashboard({ user, cart, refresh, updateCart }: Da
             <p className={styles.sectionEyebrow}>Private collection</p>
             <h2 className={styles.sectionTitle}>Saved pieces</h2>
           </div>
-          <Link href="/#collections" className={styles.textAction}>Explore collections <span aria-hidden="true">→</span></Link>
+          <Link href="/#shop" className={styles.textAction}>Explore shop <span aria-hidden="true">→</span></Link>
         </div>
 
         {loading ? <p className={styles.sectionLoading}>Loading your saved pieces…</p> : data.wishlist.length ? (

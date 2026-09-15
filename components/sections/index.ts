@@ -1,4 +1,4 @@
-export { default as Collections } from "./Collections";
+export { default as Shop } from "./Shop";
 export { default as AtelierImage } from "./AtelierImage";
 export { default as Philosophy } from "./Philosophy";
 export { default as Projects } from "./Projects";
