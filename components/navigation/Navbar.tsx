@@ -44,7 +44,7 @@ export default function Navbar({ surface = "overlay" }: NavbarProps) {
       )}
     >
       <Container>
-        <nav className="grid h-20 grid-cols-[1fr_auto_1fr] items-center md:h-24">
+        <nav className="grid h-[4.5rem] grid-cols-[1fr_auto_1fr] items-center md:h-24">
           <MobileMenu />
 
           <Link
@@ -52,9 +52,10 @@ export default function Navbar({ surface = "overlay" }: NavbarProps) {
             style={{ fontFamily: "var(--font-wordmark)" }}
             className="
               col-start-2
-              text-[2rem]
-              tracking-[0.18em]
+              text-[1.75rem]
+              tracking-[0.16em]
               md:text-[2.25rem]
+              md:tracking-[0.18em]
             "
           >
             ZARI

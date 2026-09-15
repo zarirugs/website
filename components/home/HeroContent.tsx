@@ -21,9 +21,10 @@ export default function HeroContent() {
             as="h1"
             size="hero"
             className="
-              mt-8
+              mt-6
               text-white
               max-w-2xl
+              sm:mt-8
             "
           >
             Rugs Crafted
@@ -32,7 +33,7 @@ export default function HeroContent() {
           </Heading>
 
           <div className={styles.copy}>
-            <Text className="text-white/80 leading-8">
+            <Text className="text-[1rem] leading-[1.65] text-white/85 sm:text-[1.125rem] sm:leading-8">
               Hand-knotted masterpieces from Bhadohi,
               crafted by master artisans using the finest
               natural fibres to create rugs that last for
