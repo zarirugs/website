@@ -2,7 +2,7 @@ import { Hero } from "@/components/home";
 import { Navbar } from "@/components/navigation";
 
 import {
-  Collections,
+  Shop,
   AtelierImage,
   Philosophy,
   Footer,
@@ -17,7 +17,7 @@ export default function Home() {
 {/* hello  */}
       <main>
         <Hero />
-        <Collections />
+        <Shop />
         <AtelierImage />
         <Philosophy />
         <OrderEnquiry />
