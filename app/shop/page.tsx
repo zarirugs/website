@@ -7,7 +7,7 @@ export default function ShopPage() {
     <>
       <Navbar surface="solid" />
       <main className={styles.page}>
-        <Shop headingAs="h1" />
+        <Shop headingAs="h1" variant="catalogue" />
       </main>
       <Footer />
     </>
