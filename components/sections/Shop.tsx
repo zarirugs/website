@@ -6,19 +6,73 @@ import { type CSSProperties, useCallback, useEffect, useRef, useState } from "re
 import Container from "@/components/layout/Container";
 import Section from "@/components/layout/Section";
 import { FadeIn } from "@/components/motion";
-import { collections, type Collection } from "@/lib/data/collections";
+import { type Collection } from "@/lib/data/collections";
 import styles from "./Shop.module.css";
+import ShopCatalogue from "@/components/store/ShopCatalogue";
+import { useCatalog } from "@/lib/store/use-catalog";
 
 type ShopProps = {
   headingAs?: "h1" | "h2";
   headingLink?: boolean;
+  variant?: "carousel" | "catalogue";
 };
+
+type VisualAsset = Pick<Collection, "image" | "backgroundColor" | "imageFit" | "slug"> & {
+  categorySlug?: string;
+  previewPosition?: "lead" | "detail-one" | "detail-two" | "detail-three" | "detail-four";
+};
+
+function CollectionVisual({ collection, className }: { collection: VisualAsset; className: string }) {
+  const [imageReady, setImageReady] = useState(false);
+
+  useEffect(() => {
+    if (!collection.image) {
+      return;
+    }
+
+    let active = true;
+    const image = new Image();
+    image.onload = () => {
+      if (active) setImageReady(true);
+    };
+    image.onerror = () => {
+      if (active) setImageReady(false);
+    };
+    image.src = collection.image;
+
+    return () => {
+      active = false;
+    };
+  }, [collection.image]);
+
+  return (
+    <div
+      className={`${styles.collectionVisual} ${className}`}
+      aria-hidden="true"
+      style={{ backgroundColor: collection.backgroundColor ?? undefined }}
+      data-fit={collection.imageFit ?? "contain"}
+      data-collection={collection.categorySlug ?? collection.slug ?? "default"}
+      data-preview={collection.previewPosition}
+      data-fallback={!imageReady}
+    >
+      <span className={styles.collectionTexture} />
+      {imageReady && collection.image ? (
+        // The catalog accepts administrator-provided remote image URLs, so Next's fixed image host allowlist is intentionally bypassed here.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          alt=""
+          src={collection.image}
+          className={styles.collectionVisualImage}
+          data-fit={collection.imageFit ?? "contain"}
+          onError={() => setImageReady(false)}
+        />
+      ) : null}
+    </div>
+  );
+}
 
 function ShopCard({ collection }: { collection: Collection }) {
   const destination = collection.slug ? `/collections/${collection.slug}` : "#order";
-  const imageStyle = collection.image
-    ? { backgroundImage: `url(${collection.image})`, backgroundColor: collection.backgroundColor ?? undefined }
-    : { backgroundColor: collection.backgroundColor ?? "#f4f1eb" };
 
   return (
     <article className={styles.card} data-shop-card>
@@ -28,12 +82,7 @@ function ShopCard({ collection }: { collection: Collection }) {
         className={styles.cardLink}
       >
         <div className={styles.visual}>
-          <div
-            className={styles.image}
-            aria-hidden="true"
-            style={imageStyle}
-            data-fit={collection.imageFit ?? "contain"}
-          />
+          <CollectionVisual collection={collection} className={styles.image} />
           <div className={styles.nameShade} aria-hidden="true" />
           <h3 className={styles.name}>{collection.title}</h3>
         </div>
@@ -42,8 +91,8 @@ function ShopCard({ collection }: { collection: Collection }) {
   );
 }
 
-export default function Shop({ headingAs: Heading = "h2", headingLink = false }: ShopProps) {
-  const [catalog, setCatalog] = useState<Collection[]>(collections);
+function CarouselShop({ headingAs: Heading = "h2", headingLink = false }: ShopProps) {
+  const { collections: catalog } = useCatalog();
   const [canMovePrevious, setCanMovePrevious] = useState(false);
   const [canMoveNext, setCanMoveNext] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -51,18 +100,6 @@ export default function Shop({ headingAs: Heading = "h2", headingLink = false }:
   const [autoStep, setAutoStep] = useState(0);
   const [cardWidth, setCardWidth] = useState(0);
   const viewportRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    async function loadCatalog() {
-      const response = await fetch("/api/catalog", { cache: "no-store" });
-      if (!response.ok) return;
-
-      const result = await response.json().catch(() => ({ collections: [] })) as { collections?: Collection[] };
-      if (result.collections?.length) setCatalog(result.collections);
-    }
-
-    void loadCatalog();
-  }, []);
 
   const updateNavigation = useCallback(() => {
     const viewport = viewportRef.current;
@@ -150,37 +187,15 @@ export default function Shop({ headingAs: Heading = "h2", headingLink = false }:
         </FadeIn>
         <FadeIn>
           <div className={styles.carousel}>
-            <button
-              type="button"
-              className={`${styles.control} ${styles.previousControl}`}
-              aria-label="Show previous shop pieces"
-              disabled={!canMovePrevious}
-              onClick={() => move("previous")}
-            >
+            <button type="button" className={`${styles.control} ${styles.previousControl}`} aria-label="Show previous shop pieces" disabled={!canMovePrevious} onClick={() => move("previous")}>
               <span aria-hidden="true">&lt;</span>
             </button>
-            <div
-              className={styles.viewport}
-              ref={viewportRef}
-              onScroll={updateNavigation}
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-              onFocusCapture={() => setIsPaused(true)}
-              onBlurCapture={() => setIsPaused(false)}
-            >
+            <div className={styles.viewport} ref={viewportRef} onScroll={updateNavigation} onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)} onFocusCapture={() => setIsPaused(true)} onBlurCapture={() => setIsPaused(false)}>
               <div className={styles.track} data-shop-track style={{ "--card-width": `${cardWidth}px` } as CSSProperties}>
-                {catalog.map((collection) => (
-                  <ShopCard key={collection.id} collection={collection} />
-                ))}
+                {catalog.map((collection) => <ShopCard key={collection.id} collection={collection} />)}
               </div>
             </div>
-            <button
-              type="button"
-              className={`${styles.control} ${styles.nextControl}`}
-              aria-label="Show next shop pieces"
-              disabled={!canMoveNext}
-              onClick={() => move("next")}
-            >
+            <button type="button" className={`${styles.control} ${styles.nextControl}`} aria-label="Show next shop pieces" disabled={!canMoveNext} onClick={() => move("next")}>
               <span aria-hidden="true">&gt;</span>
             </button>
           </div>
@@ -188,4 +203,8 @@ export default function Shop({ headingAs: Heading = "h2", headingLink = false }:
       </Container>
     </Section>
   );
+}
+
+export default function Shop(props: ShopProps) {
+  return props.variant === "catalogue" ? <ShopCatalogue /> : <CarouselShop {...props} />;
 }

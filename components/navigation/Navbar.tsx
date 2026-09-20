@@ -50,13 +50,7 @@ export default function Navbar({ surface = "overlay" }: NavbarProps) {
           <Link
             href="/"
             style={{ fontFamily: "var(--font-wordmark)" }}
-            className="
-              col-start-2
-              text-[1.75rem]
-              tracking-[0.16em]
-              md:text-[2.25rem]
-              md:tracking-[0.18em]
-            "
+            className="col-start-2 text-[1.75rem] tracking-[0.16em] md:text-[2.25rem] md:tracking-[0.18em]"
           >
             ZARI
           </Link>
