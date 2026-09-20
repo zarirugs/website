@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, ChevronDown, Plus, Search, SlidersHorizontal, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, ChevronDown, Plus, Search, SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useCatalog } from "@/lib/store/use-catalog";
 import { emptyFilters, filterOptions, formatPrice, productMatches, sortProducts, type ShopFilters, type ShopProduct, type ShopSort } from "@/lib/store/shop-catalog";
@@ -32,6 +32,28 @@ export default function ShopCatalogue() {
   const [selected, setSelected] = useState<ShopProduct | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const search = useRef<HTMLInputElement>(null);
+  const collectionRail = useRef<HTMLDivElement>(null);
+  const [railNavigation, setRailNavigation] = useState({ previous: false, next: false });
+
+  useEffect(() => {
+    const rail = collectionRail.current;
+    if (!rail) return;
+    function updateNavigation() {
+      if (!rail) return;
+      setRailNavigation({ previous: rail.scrollLeft > 1, next: rail.scrollWidth - rail.clientWidth - rail.scrollLeft > 1 });
+    }
+    const observer = new ResizeObserver(updateNavigation);
+    observer.observe(rail);
+    updateNavigation();
+    rail.addEventListener("scroll", updateNavigation, { passive: true });
+    return () => { observer.disconnect(); rail.removeEventListener("scroll", updateNavigation); };
+  }, [collections]);
+
+  function moveCollections(direction: number) {
+    const rail = collectionRail.current;
+    if (!rail) return;
+    rail.scrollBy({ left: direction * rail.clientWidth, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+  }
   const selectedCount = Object.values(filters).flat().length;
   const categoryProducts = useMemo(() => products.filter((p) => (category === "all" || p.categorySlug === category) && `${p.name} ${p.description ?? ""} ${p.sku}`.toLowerCase().includes(query.trim().toLowerCase())), [products, category, query]);
   const visible = useMemo(() => sortProducts(categoryProducts.filter((p) => productMatches(p, filters)), sort), [categoryProducts, filters, sort]);
@@ -72,11 +94,17 @@ export default function ShopCatalogue() {
         <a href={`mailto:${site.email}`}>Find your rug <ArrowUpRight size={13} /></a>
       </nav>
       <section className={styles.categories} aria-label="Explore collections">
-        <div className={styles.categoryGrid}>
+        <div className={styles.categoryRail}>
+        <div className={styles.categoryGrid} ref={collectionRail} id="collection-rail">
           {collections.filter((c) => c.slug).map((collection, index) => <button key={collection.id} className={`${styles.categoryCard} ${category === collection.slug ? styles.categorySelected : ""}`} onClick={() => setCategory(category === collection.slug ? "all" : collection.slug!)} aria-pressed={category === collection.slug}>
             <div className={styles.categoryImage}><RugImage src={collection.image} alt={`${collection.title} collection`} eager /></div>
             <span className={styles.categoryText}>{collection.title}<small>0{index + 1}</small></span>
           </button>)}
+        </div>
+        {(railNavigation.previous || railNavigation.next) && <div className={styles.railControls}>
+          <button type="button" onClick={() => moveCollections(-1)} disabled={!railNavigation.previous} aria-label="Previous collections" aria-controls="collection-rail"><ChevronLeft size={18} strokeWidth={1.3} /></button>
+          <button type="button" onClick={() => moveCollections(1)} disabled={!railNavigation.next} aria-label="Next collections" aria-controls="collection-rail"><ChevronRight size={18} strokeWidth={1.3} /></button>
+        </div>}
         </div>
         <div className={styles.categoryNote}><span>THE ZARI COLLECTION</span><p>Woven by hand.<br />Chosen by you.</p></div>
       </section>
