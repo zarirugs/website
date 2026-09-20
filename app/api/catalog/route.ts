@@ -27,6 +27,8 @@ type ProductRow = {
   background_color: string | null;
   price_paise: number | null;
   stock: number;
+  created_at: string;
+  popularity: number;
 };
 
 export async function GET() {
@@ -43,7 +45,8 @@ export async function GET() {
       ).all<CategoryRow>(),
       database.prepare(
         `SELECT inventory_items.sku, inventory_items.name, inventory_items.stock,
-          product_catalog.description, product_catalog.image_url AS fallback_image_url, product_catalog.price_paise,
+          product_catalog.description, product_catalog.image_url AS fallback_image_url, product_catalog.price_paise, product_catalog.created_at,
+          (SELECT COALESCE(SUM(order_items.quantity), 0) FROM order_items JOIN orders ON orders.id = order_items.order_id WHERE order_items.sku = inventory_items.sku AND orders.status IN ('confirmed', 'in_production', 'ready', 'fulfilled')) AS popularity,
           categories.slug AS category_slug,
           media_assets.id AS media_id, media_assets.source_type, media_assets.image_url, media_assets.background_color
          FROM product_catalog
@@ -54,6 +57,16 @@ export async function GET() {
          ORDER BY product_catalog.sort_order ASC, inventory_items.name ASC`,
       ).all<ProductRow>(),
     ]);
+
+    // Attributes are optional during rollout; older databases still serve their catalog.
+    const attributes = await database.prepare("SELECT sku, sizes, colors, materials, weave FROM product_attributes")
+      .all<{ sku: string; sizes: string; colors: string; materials: string; weave: string | null }>()
+      .catch(() => ({ results: [] }));
+    const bySku = new Map(attributes.results.map((row) => [row.sku, row]));
+    function values(raw?: string): string[] {
+      try { const parsed: unknown = JSON.parse(raw ?? "[]"); return Array.isArray(parsed) ? parsed.filter((v): v is string => typeof v === "string") : []; }
+      catch { return []; }
+    }
 
     return NextResponse.json({ collections: categoriesResult.results.map((category) => ({
       id: category.id,
@@ -75,6 +88,12 @@ export async function GET() {
       imageFit: "cover" as const,
       pricePaise: product.price_paise,
       stock: product.stock,
+      createdAt: product.created_at.replace(" ", "T") + "Z",
+      popularity: product.popularity,
+      sizes: values(bySku.get(product.sku)?.sizes),
+      colors: values(bySku.get(product.sku)?.colors),
+      materials: values(bySku.get(product.sku)?.materials),
+      weave: bySku.get(product.sku)?.weave ?? (/hand.knotted/i.test(product.name) ? "Hand-knotted" : null),
     })) }, { headers: { "Cache-Control": "no-store" } });
   } catch {
     // The storefront retains its curated fallback until the catalog migration is applied.

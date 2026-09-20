@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, SlidersHorizontal, X } from "lucide-react";
-import { type CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type CSSProperties, useCallback, useEffect, useRef, useState } from "react";
 
 import Container from "@/components/layout/Container";
 import Section from "@/components/layout/Section";
 import { FadeIn } from "@/components/motion";
-import { collections, type Collection } from "@/lib/data/collections";
-import { orderCatalog } from "@/lib/data/order-catalog";
+import { type Collection } from "@/lib/data/collections";
 import styles from "./Shop.module.css";
+import ShopCatalogue from "@/components/store/ShopCatalogue";
+import { useCatalog } from "@/lib/store/use-catalog";
 
 type ShopProps = {
   headingAs?: "h1" | "h2";
@@ -17,74 +17,10 @@ type ShopProps = {
   variant?: "carousel" | "catalogue";
 };
 
-type ShopProduct = {
-  sku: string;
-  name: string;
-  description: string | null;
-  categorySlug: string;
-  image: string;
-  backgroundColor?: string | null;
-  imageFit?: "contain" | "cover";
-  pricePaise: number | null;
-  stock: number;
-};
-
-type CatalogData = {
-  collections: Collection[];
-  products: ShopProduct[];
-};
-
 type VisualAsset = Pick<Collection, "image" | "backgroundColor" | "imageFit" | "slug"> & {
   categorySlug?: string;
   previewPosition?: "lead" | "detail-one" | "detail-two" | "detail-three" | "detail-four";
 };
-
-type PreviewProduct = ShopProduct & {
-  displayCategory: string;
-  displayLabel: string;
-  previewPosition: NonNullable<VisualAsset["previewPosition"]>;
-};
-
-const previewRugImage = "/images/rug-preview-01.png";
-
-const fallbackProducts: ShopProduct[] = collections.map((collection, index) => {
-  const item = orderCatalog[index];
-
-  return {
-    sku: item?.sku ?? `ZAR-RUG-${index + 1}`,
-    name: item?.name ?? `Rug ${index + 1}`,
-    description: item?.description ?? "A hand-knotted rug from the ZARI atelier.",
-    categorySlug: collection.slug ?? `category-${index + 1}`,
-    image: collection.image,
-    backgroundColor: collection.backgroundColor,
-    imageFit: collection.imageFit ?? "cover",
-    pricePaise: null,
-    stock: item?.quantity ?? 0,
-  };
-});
-
-function useCatalog() {
-  const [catalog, setCatalog] = useState<CatalogData>({ collections, products: fallbackProducts });
-
-  useEffect(() => {
-    async function loadCatalog() {
-      const response = await fetch("/api/catalog", { cache: "no-store" });
-      if (!response.ok) return;
-
-      const result = await response.json().catch(() => ({ collections: [], products: [] })) as Partial<CatalogData>;
-      if (!result.collections?.length && !result.products?.length) return;
-
-      setCatalog((current) => ({
-        collections: result.collections?.length ? result.collections : current.collections,
-        products: result.products?.length ? result.products : current.products,
-      }));
-    }
-
-    void loadCatalog();
-  }, []);
-
-  return catalog;
-}
 
 function CollectionVisual({ collection, className }: { collection: VisualAsset; className: string }) {
   const [imageReady, setImageReady] = useState(false);
@@ -269,121 +205,6 @@ function CarouselShop({ headingAs: Heading = "h2", headingLink = false }: ShopPr
   );
 }
 
-function CatalogueShop({ headingAs: Heading = "h1" }: ShopProps) {
-  const { collections: catalog, products } = useCatalog();
-  const [activeSlug, setActiveSlug] = useState("all");
-  const [sort, setSort] = useState<"featured" | "az">("featured");
-  const [filterOpen, setFilterOpen] = useState(false);
-
-  const visibleProducts = useMemo(() => {
-    const filtered = activeSlug === "all" ? products : products.filter((product) => product.categorySlug === activeSlug);
-    return sort === "az" ? [...filtered].sort((a, b) => a.sku.localeCompare(b.sku)) : filtered;
-  }, [activeSlug, products, sort]);
-
-  const featuredProduct = visibleProducts[0];
-
-  const previewProducts = useMemo<PreviewProduct[]>(() => {
-    const source = visibleProducts.length ? visibleProducts : fallbackProducts;
-    const positions: PreviewProduct["previewPosition"][] = ["lead", "detail-one", "detail-two", "detail-three", "detail-four"];
-
-    return positions.map((previewPosition, index) => {
-      const product = source[index % source.length];
-      const selectedCategoryIndex = catalog.findIndex((collection) => collection.slug === activeSlug);
-      const activeCategory = activeSlug === "all"
-        ? `Category ${(index % Math.max(catalog.length, 1)) + 1}`
-        : `Category ${selectedCategoryIndex === -1 ? 1 : selectedCategoryIndex + 1}`;
-
-      return {
-        ...product,
-        image: previewRugImage,
-        imageFit: "cover",
-        displayCategory: activeCategory,
-        displayLabel: `Rug ${String(index + 1).padStart(2, "0")}`,
-        previewPosition,
-      };
-    });
-  }, [activeSlug, catalog, visibleProducts]);
-
-  function selectCollection(slug: string) {
-    setActiveSlug(slug);
-    setFilterOpen(false);
-  }
-
-  return (
-    <Section id="shop" className={`${styles.section} ${styles.catalogueSection}`}>
-      <Container className={styles.catalogueContainer}>
-        <header className={styles.catalogueHeader}>
-          <p className={styles.kicker}>The Zari collection</p>
-          <Heading className={styles.catalogueTitle}>Rugs</Heading>
-          <p className={styles.catalogueIntro}>Hand-knotted rugs, made patiently in Bhadohi for rooms with a point of view.</p>
-          <nav className={styles.categoryNav} aria-label="Shop by collection">
-            <button type="button" className={`${styles.categoryButton} ${activeSlug === "all" ? styles.categoryActive : ""}`} onClick={() => selectCollection("all")} aria-pressed={activeSlug === "all"}>View all</button>
-            {catalog.map((collection, index) => (
-              <button key={collection.id} type="button" className={`${styles.categoryButton} ${activeSlug === collection.slug ? styles.categoryActive : ""}`} onClick={() => selectCollection(collection.slug ?? "")} aria-pressed={activeSlug === collection.slug}>Category {index + 1}</button>
-            ))}
-          </nav>
-        </header>
-
-        {featuredProduct ? (
-          <section className={styles.productSection} aria-live="polite">
-            <div className={styles.productSectionHeading}>
-              <p>Selected rugs</p>
-              <span>Preview gallery</span>
-            </div>
-            <div className={styles.productGrid}>
-              <Link href={`/collections/${previewProducts[0].categorySlug}`} className={styles.featureProduct} aria-label={`View ${previewProducts[0].displayLabel}`}>
-                <CollectionVisual collection={previewProducts[0]} className={styles.featureProductImage} />
-                <div className={styles.featureProductContent}>
-                  <p>{previewProducts[0].displayCategory}</p>
-                  <h2>{previewProducts[0].displayLabel}</h2>
-                  <span>Preview piece <ArrowRight size={16} strokeWidth={1.5} /></span>
-                </div>
-              </Link>
-              {previewProducts.slice(1).map((product) => (
-                <Link href={`/collections/${product.categorySlug}`} className={styles.productCard} key={product.previewPosition} aria-label={`View ${product.displayLabel}`}>
-                  <CollectionVisual collection={product} className={styles.productImage} />
-                  <div className={styles.productCardContent}>
-                    <p>{product.displayCategory}</p>
-                    <h3>{product.displayLabel}</h3>
-                    <span>Preview piece</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-        ) : null}
-      </Container>
-
-      <button type="button" className={styles.filterTrigger} onClick={() => setFilterOpen(true)} aria-haspopup="dialog">
-        <SlidersHorizontal size={18} strokeWidth={1.5} />
-        <span>Filter &amp; sort</span>
-      </button>
-
-      {filterOpen && (
-        <div className={styles.filterOverlay} onClick={() => setFilterOpen(false)}>
-          <aside className={styles.filterPanel} role="dialog" aria-modal="true" aria-labelledby="shop-filter-title" onClick={(event) => event.stopPropagation()}>
-            <div className={styles.filterPanelHeader}>
-              <div><p>Refine your view</p><h2 id="shop-filter-title">Filter &amp; sort</h2></div>
-              <button type="button" onClick={() => setFilterOpen(false)} aria-label="Close filters"><X size={20} strokeWidth={1.5} /></button>
-            </div>
-            <fieldset className={styles.filterGroup}>
-              <legend>Collection</legend>
-              <button type="button" className={activeSlug === "all" ? styles.filterChoiceActive : ""} onClick={() => selectCollection("all")}>All rugs</button>
-              {catalog.map((collection, index) => <button type="button" key={collection.id} className={activeSlug === collection.slug ? styles.filterChoiceActive : ""} onClick={() => selectCollection(collection.slug ?? "")}>Category {index + 1}</button>)}
-            </fieldset>
-            <fieldset className={styles.filterGroup}>
-              <legend>Sort by</legend>
-              <button type="button" className={sort === "featured" ? styles.filterChoiceActive : ""} onClick={() => setSort("featured")}>Featured</button>
-              <button type="button" className={sort === "az" ? styles.filterChoiceActive : ""} onClick={() => setSort("az")}>Alphabetical, A–Z</button>
-            </fieldset>
-            <button type="button" className={styles.applyButton} onClick={() => setFilterOpen(false)}>Show {visibleProducts.length} {visibleProducts.length === 1 ? "rug" : "rugs"}</button>
-          </aside>
-        </div>
-      )}
-    </Section>
-  );
-}
-
 export default function Shop(props: ShopProps) {
-  return props.variant === "catalogue" ? <CatalogueShop {...props} /> : <CarouselShop {...props} />;
+  return props.variant === "catalogue" ? <ShopCatalogue /> : <CarouselShop {...props} />;
 }

@@ -102,3 +102,13 @@ hello
 ```bash
 npm run deploy:cloudflare
 ```
+
+### Shop catalogue redesign
+
+`/shop` includes a minimal white storefront, sticky collection tabs and image cards, an edge-to-edge editorial gallery, switchable editorial/two-column/three-column views, search, a floating filter-and-sort drawer with multi-select size/color/material/weave/price filters, price/popularity/new-arrival sorting, and accessible product quick views. Run `node --test tests/shop-catalog.test.mjs` on Node 22.18+ to check filtering and sorting behavior.
+
+Apply `db/migrations/0009_product_filter_attributes.sql` with the other D1 migrations before populating filter metadata. The optional `product_attributes` table is keyed by catalog SKU. `sizes`, `colors`, and `materials` are JSON arrays of verified strings (for example the UI's `6 × 9 ft`, `Blue`, and `Wool` labels); `weave` is a string such as `Hand-knotted`. Additional catalog values automatically appear as filter options. This table is not yet editable in the existing admin portal; populate verified attributes through the catalog data workflow or D1. The API remains compatible with databases that have not applied this migration.
+
+Unknown attributes are excluded from attribute-specific matches. Unpriced pieces display “Price on request” and sort after priced pieces in both price directions. Popularity counts quantities on confirmed/in-progress/ready/fulfilled orders, excluding new and cancelled orders; new arrivals use catalog creation dates. Existing sample entries have no verified size/color/material data or published prices, so those filters may return no results until catalog details are supplied. No sample prices or specifications are invented.
+
+Development previews load the existing public ZARI default photographs from `zarirugs.com` because local R2 does not contain these assets. Production continues to use the configured media URLs. Run `npm run dev` and open `/shop` for the preview.
