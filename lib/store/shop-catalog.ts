@@ -4,6 +4,7 @@ export type ShopProduct = {
   description: string | null;
   categorySlug: string;
   image: string;
+  images?: { id: string; url: string; alt: string }[];
   backgroundColor?: string | null;
   imageFit?: "contain" | "cover";
   pricePaise: number | null;
