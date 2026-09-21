@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { authenticatedAdminContext } from "@/lib/server/guard";
 import { databaseErrorResponse, errorResponse, optionalText, requiredText, validImageUrl } from "@/lib/server/http";
 
+import { parseImageIds, validProductImages, replaceProductImages } from "@/lib/server/product-images";
+
 type CurrentProduct = { sku: string; stock: number; category_id: string | null; category_name: string | null; description: string | null; image_url: string | null; media_asset_id: string | null; price_paise: number | null; is_visible: number | null; sort_order: number | null; tags: string | null; dimensions: string | null; material: string | null; weave: string | null; colour: string | null; pile_height: string | null; origin: string | null };
 type CategoryRow = { id: string; name: string };
 
@@ -31,7 +33,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ sk
     const isVisible = values.isVisible;
     const description = values.description === undefined ? current.description : optionalText(values.description, 1_500);
     const imageUrl = values.imageUrl === undefined ? current.image_url : validImageUrl(values.imageUrl);
-    const mediaAssetId = values.mediaAssetId === undefined ? current.media_asset_id : optionalText(values.mediaAssetId, 100);
+    const imageIds = values.imageIds === undefined ? undefined : parseImageIds(values.imageIds);
+    if (imageIds === null) return errorResponse("Choose up to 12 distinct product images.");
+    const mediaAssetId = imageIds ? imageIds[0] ?? null : values.mediaAssetId === undefined ? current.media_asset_id : optionalText(values.mediaAssetId, 100);
     const pricePaise = values.pricePaise === undefined ? current.price_paise : values.pricePaise === "" || values.pricePaise === null ? null : values.pricePaise;
     const sortOrder = values.sortOrder === undefined ? current.sort_order ?? 0 : values.sortOrder;
     const tags = values.tags === undefined ? current.tags : serialisedTags(values.tags);
@@ -60,6 +64,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ sk
     }
     if (mediaAssetId && !await context.database.prepare("SELECT id FROM media_assets WHERE id = ? AND category_id = ?").bind(mediaAssetId, categoryId).first()) return errorResponse("Choose an image from this category.");
 
+    const existingImages = await context.database.prepare("SELECT media_asset_id FROM product_images WHERE sku = ? ORDER BY sort_order").bind(sku).all<{ media_asset_id: string }>();
+    // Legacy clients changing the cover must not leave a conflicting gallery behind.
+    const nextImages = imageIds ?? (values.mediaAssetId !== undefined ? (mediaAssetId ? [mediaAssetId] : []) : existingImages.results.map((row) => row.media_asset_id));
+    if (!await validProductImages(context.database, nextImages, categoryId)) return errorResponse("Choose photographs from this category.");
     const nextStock = stock ?? current.stock;
     await context.database.batch([
       context.database.prepare(
@@ -75,8 +83,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ sk
            image_url = excluded.image_url, media_asset_id = excluded.media_asset_id, price_paise = excluded.price_paise, is_visible = excluded.is_visible,
            sort_order = excluded.sort_order, tags = excluded.tags, dimensions = excluded.dimensions, material = excluded.material,
            weave = excluded.weave, colour = excluded.colour, pile_height = excluded.pile_height, origin = excluded.origin, updated_at = CURRENT_TIMESTAMP`,
-      ).bind(sku, categoryId, description, imageUrl, mediaAssetId, pricePaise, isVisible === undefined ? 1 : Number(isVisible), sortOrder,
+      ).bind(sku, categoryId, description, imageIds ? null : imageUrl, mediaAssetId, pricePaise, isVisible === undefined ? current.is_visible ?? 1 : Number(isVisible), sortOrder,
         tags, dimensions, material, weave, colour, pileHeight, origin),
+      ...replaceProductImages(context.database, sku, nextImages),
       ...(nextStock !== current.stock ? [context.database.prepare(
         "INSERT INTO stock_movements (sku, quantity_delta, reason) VALUES (?, ?, ?)",
       ).bind(sku, nextStock - current.stock, "Manual stock count")] : []),

@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { authenticatedAdminContext } from "@/lib/server/guard";
 import { databaseErrorResponse, errorResponse, optionalText, requiredText, validImageUrl } from "@/lib/server/http";
 
+import { parseImageIds, validProductImages, replaceProductImages } from "@/lib/server/product-images";
+
 type ProductRow = {
   sku: string;
   name: string;
@@ -81,7 +83,8 @@ export async function GET(request: Request) {
        LEFT JOIN categories ON categories.id = product_catalog.category_id
        ORDER BY categories.sort_order ASC, product_catalog.sort_order ASC, inventory_items.name ASC`,
     ).all<ProductRow>();
-    return NextResponse.json({ products: result.results.map(productResponse) }, { headers: { "Cache-Control": "no-store" } });
+    const gallery = await context.database.prepare("SELECT sku, media_asset_id FROM product_images ORDER BY sku, sort_order").all<{ sku: string; media_asset_id: string }>();
+    return NextResponse.json({ products: result.results.map((product) => ({ ...productResponse(product), imageIds: gallery.results.filter((image) => image.sku === product.sku).map((image) => image.media_asset_id) })) }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     return databaseErrorResponse(error);
   }
@@ -99,7 +102,9 @@ export async function POST(request: Request) {
     const categoryId = requiredText(values.categoryId, 100);
     const description = optionalText(values.description, 1_500);
     const imageUrl = values.imageUrl === undefined ? null : validImageUrl(values.imageUrl);
-    const mediaAssetId = optionalText(values.mediaAssetId, 100);
+    const imageIds = values.imageIds === undefined ? undefined : parseImageIds(values.imageIds);
+    if (imageIds === null) return errorResponse("Choose up to 12 distinct product images.");
+    const mediaAssetId = imageIds ? imageIds[0] ?? null : optionalText(values.mediaAssetId, 100);
     const stock = values.stock;
     const reorderLevel = values.reorderLevel;
     const pricePaise = values.pricePaise === "" || values.pricePaise === undefined || values.pricePaise === null ? null : values.pricePaise;
@@ -124,6 +129,7 @@ export async function POST(request: Request) {
     if (!category) return errorResponse("Choose an active category.");
     if (mediaAssetId && !await context.database.prepare("SELECT id FROM media_assets WHERE id = ? AND category_id = ?").bind(mediaAssetId, category.id).first()) return errorResponse("Choose an image from this category.");
 
+    if (imageIds && !await validProductImages(context.database, imageIds, category.id)) return errorResponse("Choose photographs from this category.");
     await context.database.batch([
       context.database.prepare(
         "INSERT INTO inventory_items (sku, name, collection, stock, reorder_level) VALUES (?, ?, ?, ?, ?)",
@@ -132,8 +138,9 @@ export async function POST(request: Request) {
         `INSERT INTO product_catalog (sku, category_id, description, image_url, media_asset_id, price_paise, is_visible, sort_order,
           tags, dimensions, material, weave, colour, pile_height, origin)
          VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      ).bind(sku, category.id, description, imageUrl, mediaAssetId, pricePaise, sortOrder,
+      ).bind(sku, category.id, description, imageIds ? null : imageUrl, mediaAssetId, pricePaise, sortOrder,
         JSON.stringify(tags), dimensions, material, weave, colour, pileHeight, origin),
+      ...(imageIds ? replaceProductImages(context.database, sku, imageIds) : []),
       ...(stock > 0 ? [context.database.prepare(
         "INSERT INTO stock_movements (sku, quantity_delta, reason) VALUES (?, ?, ?)",
       ).bind(sku, stock, "Initial stock count")] : []),

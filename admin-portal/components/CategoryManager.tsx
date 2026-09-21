@@ -8,7 +8,7 @@ import type { AuthenticatedAdmin } from "@/lib/server/auth";
 import styles from "./category-management.module.css";
 
 type Category = { id: string; name: string; slug: string; description: string | null; imageUrl: string | null; mediaAssetId: string | null; sortOrder: number; isActive: boolean; productCount: number };
-type Product = { sku: string; name: string; stock: number; reorderLevel: number; isActive: boolean; categoryId: string | null; categoryName: string | null; description: string | null; imageUrl: string | null; mediaAssetId: string | null; pricePaise: number | null; isVisible: boolean; sortOrder: number; tags: string[]; dimensions: string | null; material: string | null; weave: string | null; colour: string | null; pileHeight: string | null; origin: string | null };
+type Product = { imageIds: string[]; sku: string; name: string; stock: number; reorderLevel: number; isActive: boolean; categoryId: string | null; categoryName: string | null; description: string | null; imageUrl: string | null; mediaAssetId: string | null; pricePaise: number | null; isVisible: boolean; sortOrder: number; tags: string[]; dimensions: string | null; material: string | null; weave: string | null; colour: string | null; pileHeight: string | null; origin: string | null };
 type MediaAsset = { id: string; name: string; altText: string | null; sourceType: "upload" | "url" | "color"; imageUrl: string | null; backgroundColor: string | null; previewUrl: string | null };
 
 function currency(value: number | null) {
@@ -39,7 +39,7 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
   const [productSku, setProductSku] = useState("");
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
-  const [productMediaAssetId, setProductMediaAssetId] = useState("");
+  const [productImageIds, setProductImageIds] = useState<string[]>([]);
   const [productPrice, setProductPrice] = useState("");
   const [productStock, setProductStock] = useState("0");
   const [productReorder, setProductReorder] = useState("0");
@@ -95,8 +95,10 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
       await action();
       await refresh();
       setMessage(success);
+      return true;
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "The update could not be saved.");
+      return false;
     } finally {
       setSaving(false);
     }
@@ -166,6 +168,19 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
     })();
   }
 
+  async function uploadProductImage(file: File): Promise<string> {
+    const form = new FormData();
+    form.set("name", file.name.replace(/\.[^.]+$/, ""));
+    form.set("sourceType", "upload");
+    form.set("categoryId", categoryId);
+    form.set("file", file);
+    const response = await fetch("/api/media", { method: "POST", body: form });
+    const result = await response.json() as { id?: string; error?: string };
+    if (!response.ok || !result.id) throw new Error(result.error ?? "Image upload failed.");
+    await refresh();
+    return result.id;
+  }
+
   function createProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!category) return;
@@ -175,7 +190,7 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
         name: productName,
         categoryId: category.id,
         description: productDescription,
-        mediaAssetId: productMediaAssetId || undefined,
+        imageIds: productImageIds,
         pricePaise: productPrice === "" ? null : Math.round(Number(productPrice) * 100),
         stock: Number(productStock),
         reorderLevel: Number(productReorder),
@@ -188,13 +203,13 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
         pileHeight: productPileHeight,
         origin: productOrigin,
       }) });
-      setProductSku(""); setProductName(""); setProductDescription(""); setProductMediaAssetId(""); setProductPrice(""); setProductStock("0"); setProductReorder("0");
+      setProductSku(""); setProductName(""); setProductDescription(""); setProductImageIds([]); setProductPrice(""); setProductStock("0"); setProductReorder("0");
       setProductTags(""); setProductDimensions(""); setProductMaterial(""); setProductWeave(""); setProductColour(""); setProductPileHeight(""); setProductOrigin("Bhadohi, India");
     }, "Product added to this category.");
   }
 
   function updateProduct(sku: string, values: Record<string, unknown>, success: string) {
-    void run(() => json(`/api/products/${encodeURIComponent(sku)}`, { method: "PATCH", body: JSON.stringify(values) }), success);
+    return run(() => json(`/api/products/${encodeURIComponent(sku)}`, { method: "PATCH", body: JSON.stringify(values) }), success);
   }
 
   async function signOut() {
@@ -251,7 +266,7 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
 
       <section className={styles.productSection}>
         <div className={styles.sectionTitle}><div><p className={styles.eyebrow}>Category inventory</p><h2>{products.length} {products.length === 1 ? "product" : "products"}</h2></div><p>{totalStock} in stock across this category.</p></div>
-        <div className={styles.productGrid}>{products.map((product) => <ProductCard key={`${product.sku}-${product.stock}-${product.pricePaise ?? "quote"}-${product.mediaAssetId ?? "none"}`} product={product} media={media} saving={saving} onSave={updateProduct} />)}</div>
+        <div className={styles.productGrid}>{products.map((product) => <ProductCard key={`${product.sku}-${product.stock}-${product.pricePaise ?? "quote"}-${product.imageIds.join(",")}`} product={product} media={media} saving={saving} onSave={updateProduct} onUpload={uploadProductImage} onBusy={setSaving} />)}</div>
         {products.length === 0 && <p className={styles.empty}>This category has no products yet. Add the first product below.</p>}
       </section>
 
@@ -261,7 +276,7 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
           <label>SKU<input value={productSku} onChange={(event) => setProductSku(event.target.value.toUpperCase())} placeholder="ZAR-NEW-001" required /></label>
           <label>Product name<input value={productName} onChange={(event) => setProductName(event.target.value)} required /></label>
           <label className={styles.wideField}>Description<textarea value={productDescription} onChange={(event) => setProductDescription(event.target.value)} rows={3} /></label>
-          <label>Product visual (optional)<select value={productMediaAssetId} onChange={(event) => setProductMediaAssetId(event.target.value)}><option value="">No product visual</option>{media.map((asset) => <option key={asset.id} value={asset.id}>{asset.name}</option>)}</select></label>
+          <ProductImages media={media} ids={productImageIds} onChange={setProductImageIds} disabled={saving} onUpload={uploadProductImage} onBusy={setSaving} />
           <label>Price (₹)<input value={productPrice} onChange={(event) => setProductPrice(event.target.value)} type="number" min="0" step="1" /></label>
           <label>Opening stock<input value={productStock} onChange={(event) => setProductStock(event.target.value)} type="number" min="0" required /></label>
           <label>Reorder at<input value={productReorder} onChange={(event) => setProductReorder(event.target.value)} type="number" min="0" required /></label>
@@ -280,12 +295,12 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
   );
 }
 
-function ProductCard({ product, media, saving, onSave }: { product: Product; media: MediaAsset[]; saving: boolean; onSave: (sku: string, values: Record<string, unknown>, success: string) => void }) {
+function ProductCard({ product, media, saving, onSave, onUpload, onBusy }: { onUpload: (file: File) => Promise<string>; onBusy: (busy: boolean) => void; product: Product; media: MediaAsset[]; saving: boolean; onSave: (sku: string, values: Record<string, unknown>, success: string) => Promise<boolean> }) {
   const [editing, setEditing] = useState(false);
   const [stock, setStock] = useState(String(product.stock));
   const [reorderLevel, setReorderLevel] = useState(String(product.reorderLevel));
   const [description, setDescription] = useState(product.description ?? "");
-  const [mediaAssetId, setMediaAssetId] = useState(product.mediaAssetId ?? "");
+  const [imageIds, setImageIds] = useState(product.imageIds);
   const [price, setPrice] = useState(product.pricePaise === null ? "" : String(product.pricePaise / 100));
   const [tags, setTags] = useState(product.tags.join(", "));
   const [dimensions, setDimensions] = useState(product.dimensions ?? "");
@@ -300,13 +315,13 @@ function ProductCard({ product, media, saving, onSave }: { product: Product; med
   const productImageUrl = asset?.previewUrl ?? product.imageUrl;
   const specs = [["Size", product.dimensions], ["Material", product.material], ["Weave", product.weave], ["Colour", product.colour], ["Pile", product.pileHeight], ["Origin", product.origin]].filter(([, value]) => Boolean(value));
 
-  function saveProduct(event: FormEvent<HTMLFormElement>) {
+  async function saveProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onSave(product.sku, {
+    const saved = await onSave(product.sku, {
       stock: Number(stock),
       reorderLevel: Number(reorderLevel),
       description,
-      mediaAssetId: mediaAssetId || null,
+      imageIds,
       pricePaise: price === "" ? null : Math.round(Number(price) * 100),
       tags: tags.split(",").map((tag) => tag.trim()).filter(Boolean),
       dimensions,
@@ -318,7 +333,7 @@ function ProductCard({ product, media, saving, onSave }: { product: Product; med
       isVisible,
       isActive,
     }, `${product.name} saved.`);
-    setEditing(false);
+    if (saved) setEditing(false);
   }
 
   return <article className={`${styles.productCard}${product.isActive && product.stock <= product.reorderLevel ? ` ${styles.lowStock}` : ""}`}>
@@ -332,7 +347,7 @@ function ProductCard({ product, media, saving, onSave }: { product: Product; med
       <button className={styles.textButton} type="button" onClick={() => setEditing((current) => !current)} disabled={saving}>{editing ? "Close editor" : "Manage product"}</button>
       {editing && <form className={styles.editor} onSubmit={saveProduct}>
         <label>Description<textarea value={description} onChange={(event) => setDescription(event.target.value)} rows={3} /></label>
-        <label>Product visual (optional)<select value={mediaAssetId} onChange={(event) => setMediaAssetId(event.target.value)}><option value="">No product visual</option>{media.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+        <ProductImages media={media} ids={imageIds} onChange={setImageIds} disabled={saving} onUpload={onUpload} onBusy={onBusy} />
         <p className={styles.editorNote}>The category cover is intentionally not used as a product visual.</p>
         <div><label>Stock<input value={stock} onChange={(event) => setStock(event.target.value)} type="number" min="0" required /></label><label>Reorder at<input value={reorderLevel} onChange={(event) => setReorderLevel(event.target.value)} type="number" min="0" required /></label></div>
         <label>Price (₹)<input value={price} onChange={(event) => setPrice(event.target.value)} type="number" min="0" step="1" /></label>
@@ -345,4 +360,53 @@ function ProductCard({ product, media, saving, onSave }: { product: Product; med
       </form>}
     </div>
   </article>;
+}
+
+function ProductImages({ media, ids, onChange, disabled, onUpload, onBusy }: {
+  media: MediaAsset[]; ids: string[]; onChange: (ids: string[]) => void; disabled: boolean;
+  onUpload: (file: File) => Promise<string>; onBusy: (busy: boolean) => void;
+}) {
+  const [error, setError] = useState("");
+  async function upload(files: File[]) {
+    if (!files.length) return;
+    if (ids.length + files.length > 12) { setError("Choose up to 12 images per product."); return; }
+    onBusy(true);
+    setError("");
+    const next = [...ids];
+    try {
+      for (const file of files) {
+        next.push(await onUpload(file));
+        onChange([...next]);
+      }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Upload failed. You can retry the remaining images.");
+    } finally { onBusy(false); }
+  }
+  function move(index: number, direction: number) {
+    const next = [...ids];
+    [next[index], next[index + direction]] = [next[index + direction], next[index]];
+    onChange(next);
+  }
+  return <fieldset className={styles.productImages} disabled={disabled}>
+    <legend>Product images ({ids.length}/12)</legend>
+    <p>The first image is the main product photo. Add, reorder or remove photos, then save the product.</p>
+    <ol>{ids.map((id, index) => {
+      const asset = media.find((item) => item.id === id);
+      return <li key={id}>
+        {asset?.previewUrl && <div className={styles.galleryPreview} style={{ backgroundImage: `url(${asset.previewUrl})` }} role="img" aria-label={asset.altText || asset.name} />}
+        <span>{index + 1}. {asset?.name ?? "Product photo"}{index === 0 ? " · Main photo" : ""}</span>
+        <div className={styles.actions}>
+          <button type="button" onClick={() => move(index, -1)} disabled={index === 0} aria-label={`Move image ${index + 1} earlier`}>←</button>
+          <button type="button" onClick={() => move(index, 1)} disabled={index === ids.length - 1} aria-label={`Move image ${index + 1} later`}>→</button>
+          <button type="button" onClick={() => onChange(ids.filter((value) => value !== id))}>Remove</button>
+        </div>
+      </li>;
+    })}</ol>
+    <label>Add from image library<select value="" disabled={ids.length >= 12} onChange={(event) => { if (event.target.value) onChange([...ids, event.target.value]); }}>
+      <option value="">Choose an image</option>
+      {media.filter((asset) => asset.sourceType !== "color" && !ids.includes(asset.id)).map((asset) => <option key={asset.id} value={asset.id}>{asset.name}</option>)}
+    </select></label>
+    <label>Upload product photos<input type="file" multiple accept="image/jpeg,image/png,image/webp,image/avif,image/gif" disabled={ids.length >= 12} onChange={(event) => { const files = Array.from(event.target.files ?? []); event.target.value = ""; void upload(files); }} /></label>
+    {error && <p role="alert">{error}</p>}
+  </fieldset>;
 }
