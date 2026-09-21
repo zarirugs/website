@@ -83,8 +83,9 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
       `SELECT
         (SELECT COUNT(*) FROM site_media_slots WHERE media_asset_id = ?) +
         (SELECT COUNT(*) FROM categories WHERE media_asset_id = ?) +
-        (SELECT COUNT(*) FROM product_catalog WHERE media_asset_id = ?) AS count`,
-    ).bind(id, id, id).first<{ count: number }>();
+        (SELECT COUNT(*) FROM product_catalog WHERE media_asset_id = ?) +
+        (SELECT COUNT(*) FROM product_images WHERE media_asset_id = ?) AS count`,
+    ).bind(id, id, id, id).first<{ count: number }>();
     if ((usage?.count ?? 0) > 0) return errorResponse("Replace this image everywhere it is used before removing it.", 409);
 
     await context.database.prepare("DELETE FROM media_assets WHERE id = ?").bind(id).run();
