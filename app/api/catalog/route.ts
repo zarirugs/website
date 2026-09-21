@@ -68,6 +68,21 @@ export async function GET() {
       catch { return []; }
     }
 
+    const gallery = await database.prepare(`SELECT product_images.sku, media_assets.id, media_assets.source_type, media_assets.image_url, media_assets.alt_text
+      FROM product_images JOIN media_assets ON media_assets.id = product_images.media_asset_id
+      JOIN product_catalog ON product_catalog.sku = product_images.sku
+      JOIN inventory_items ON inventory_items.sku = product_catalog.sku
+      JOIN categories ON categories.id = product_catalog.category_id
+      WHERE product_catalog.is_visible = 1 AND inventory_items.is_active = 1 AND categories.is_active = 1
+      ORDER BY product_images.sku, product_images.sort_order`)
+      .all<{ sku: string; id: string; source_type: "upload" | "url" | "color"; image_url: string | null; alt_text: string | null }>()
+      .catch((error) => { if (error instanceof Error && /no such table: product_images/i.test(error.message)) return { results: [] }; throw error; });
+    const imagesBySku = new Map<string, { id: string; url: string; alt: string }[]>();
+    for (const image of gallery.results) {
+      const url = publicMediaUrl(image);
+      if (url) imagesBySku.set(image.sku, [...(imagesBySku.get(image.sku) ?? []), { id: image.id, url, alt: image.alt_text ?? "" }]);
+    }
+
     return NextResponse.json({ collections: categoriesResult.results.map((category) => ({
       id: category.id,
       title: category.name,
@@ -81,9 +96,10 @@ export async function GET() {
       name: product.name,
       description: product.description,
       categorySlug: product.category_slug,
-      image: product.media_id && product.source_type
+      images: imagesBySku.get(product.sku) ?? [],
+      image: imagesBySku.get(product.sku)?.[0]?.url ?? (product.media_id && product.source_type
         ? publicMediaUrl({ id: product.media_id, source_type: product.source_type, image_url: product.image_url }) ?? ""
-        : product.fallback_image_url ?? "",
+        : product.fallback_image_url ?? ""),
       backgroundColor: product.media_id ? product.background_color : null,
       imageFit: "cover" as const,
       pricePaise: product.price_paise,
@@ -96,7 +112,6 @@ export async function GET() {
       weave: bySku.get(product.sku)?.weave ?? (/hand.knotted/i.test(product.name) ? "Hand-knotted" : null),
     })) }, { headers: { "Cache-Control": "no-store" } });
   } catch {
-    // The storefront retains its curated fallback until the catalog migration is applied.
-    return NextResponse.json({ collections: [] }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ error: "The catalog is temporarily unavailable." }, { status: 503, headers: { "Cache-Control": "no-store" } });
   }
 }

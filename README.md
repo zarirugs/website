@@ -66,6 +66,17 @@ Then deploy the latest storefront and admin portal. Their deployment workflows a
 
 ## Getting Started
 
+### Product galleries
+
+The shop’s “View all” lists products across active categories. Category tabs filter
+those products in place; product quick views show the ordered photo gallery.
+
+Apply `db/migrations/0011_product_images.sql` before releasing the matching admin
+gallery editor. Existing product photos are preserved as the first gallery image.
+The admin editor supports up to 12 photos per product, including multiple uploads,
+selection from the category’s image library, reordering, and removal. The first
+photo is the storefront thumbnail. Category covers are managed separately.
+
 First, run the development server:
 
 ```bash
