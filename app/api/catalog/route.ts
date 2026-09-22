@@ -31,6 +31,12 @@ type ProductRow = {
   popularity: number;
 };
 
+const retiredDefaultImages = new Set([
+  "/images/collection-1.jpg",
+  "/images/collection-2.png",
+  "/images/collection-3.jpg",
+]);
+
 export async function GET() {
   try {
     const database = await getDatabase();
@@ -82,13 +88,19 @@ export async function GET() {
       const url = publicMediaUrl(image);
       if (url) imagesBySku.set(image.sku, [...(imagesBySku.get(image.sku) ?? []), { id: image.id, url, alt: image.alt_text ?? "" }]);
     }
+    const categoryImages = new Map(categoriesResult.results.map((category) => [
+      category.slug,
+      (category.media_id && category.source_type
+        ? publicMediaUrl({ id: category.media_id, source_type: category.source_type, image_url: category.image_url })
+        : null) || category.fallback_image_url || "/api/media/media-default-heritage",
+    ]));
 
     return NextResponse.json({ collections: categoriesResult.results.map((category) => ({
       id: category.id,
       title: category.name,
       slug: category.slug,
       subtitle: category.description ?? "Hand-knotted pieces from the ZARI atelier.",
-      image: category.media_id && category.source_type ? publicMediaUrl({ id: category.media_id, source_type: category.source_type, image_url: category.image_url }) ?? "" : category.fallback_image_url ?? "/api/media/media-default-heritage",
+      image: categoryImages.get(category.slug) ?? "",
       backgroundColor: category.media_id ? category.background_color : null,
       imageFit: "cover" as const,
     })), products: productsResult.results.map((product) => ({
@@ -97,9 +109,15 @@ export async function GET() {
       description: product.description,
       categorySlug: product.category_slug,
       images: imagesBySku.get(product.sku) ?? [],
-      image: imagesBySku.get(product.sku)?.[0]?.url ?? (product.media_id && product.source_type
-        ? publicMediaUrl({ id: product.media_id, source_type: product.source_type, image_url: product.image_url }) ?? ""
-        : product.fallback_image_url ?? ""),
+      image: imagesBySku.get(product.sku)?.[0]?.url
+        || (product.media_id && product.source_type
+          ? publicMediaUrl({ id: product.media_id, source_type: product.source_type, image_url: product.image_url })
+          : null)
+        || (product.fallback_image_url && !retiredDefaultImages.has(product.fallback_image_url)
+          ? product.fallback_image_url
+          : null)
+        || categoryImages.get(product.category_slug)
+        || "",
       backgroundColor: product.media_id ? product.background_color : null,
       imageFit: "cover" as const,
       pricePaise: product.price_paise,
