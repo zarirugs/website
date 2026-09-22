@@ -73,7 +73,7 @@ function CollectionVisual({ collection, className }: { collection: VisualAsset; 
 }
 
 function ShopCard({ collection }: { collection: Collection }) {
-  const destination = collection.slug === "heritage" ? "/shop?category=heritage" : collection.slug ? `/collections/${collection.slug}` : "#order";
+  const destination = collection.slug ? `/shop?category=${encodeURIComponent(collection.slug)}` : "#order";
 
   return (
     <article className={styles.card} data-shop-card>
