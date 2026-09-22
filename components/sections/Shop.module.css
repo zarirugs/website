@@ -74,8 +74,8 @@
 .collectionVisual[data-collection="bespoke"] .collectionTexture { background-color: #a68165; background-image: linear-gradient(90deg, transparent 46%, rgba(241, 221, 180, 0.55) 46.5% 53.5%, transparent 54%), linear-gradient(0deg, transparent 46%, rgba(241, 221, 180, 0.55) 46.5% 53.5%, transparent 54%), repeating-linear-gradient(45deg, rgba(255,255,255,0.12) 0 1px, transparent 1px 7px), linear-gradient(145deg, #583f36, #c49a72 48%, #685246); }
 .image { width: 100%; aspect-ratio: 4 / 5; }
 .visual { position: relative; overflow: hidden; }
-.nameShade { position: absolute; right: 0; bottom: 0; left: 0; min-height: clamp(5.5rem, 20%, 8.5rem); background: linear-gradient(to top, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.42) 54%, transparent); pointer-events: none; }
-.name { position: absolute; right: 1rem; bottom: 1rem; left: 1rem; margin: 0; color: #fff; font-family: var(--font-display); font-size: clamp(0.9375rem, 2.3vw, 1.125rem); font-weight: 400; letter-spacing: -0.015em; line-height: 1.1; text-shadow: 0 0.125rem 1rem rgba(0, 0, 0, 0.8); }
+.nameShade { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; min-height: clamp(5.5rem, 20%, 8.5rem); background: linear-gradient(to top, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.42) 54%, transparent); pointer-events: none; }
+.name { position: absolute; z-index: 3; right: 1rem; bottom: 1rem; left: 1rem; margin: 0; color: #fff; font-family: var(--font-display); font-size: clamp(0.9375rem, 2.3vw, 1.125rem); font-weight: 400; letter-spacing: -0.015em; line-height: 1.1; text-shadow: 0 0.125rem 1rem rgba(0, 0, 0, 0.8); }
 
 @media (min-width: 48rem) {
   .carousel { padding-inline: 3.5rem; }
