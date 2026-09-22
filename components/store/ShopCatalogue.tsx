@@ -2,6 +2,7 @@
 
 import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, ChevronDown, Plus, Search, SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useCatalog } from "@/lib/store/use-catalog";
 import { emptyFilters, filterOptions, formatPrice, productMatches, sortProducts, type ShopFilters, type ShopProduct, type ShopSort } from "@/lib/store/shop-catalog";
 import { site } from "@/lib/data/site";
@@ -35,7 +36,15 @@ const filterLabels = { size: "Size", color: "Color", material: "Material", price
 
 export default function ShopCatalogue() {
   const { collections, products, loading, error } = useCatalog();
-  const [category, setCategory] = useState("all");
+  const searchParams = useSearchParams();
+  const category = searchParams.get("category") || "all";
+
+  function setCategory(value: string) {
+    const url = new URL(window.location.href);
+    if (value === "all") url.searchParams.delete("category");
+    else url.searchParams.set("category", value);
+    window.history.pushState(null, "", url.toString());
+  }
   const [filters, setFilters] = useState<ShopFilters>(emptyFilters);
   const [sort, setSort] = useState<ShopSort>("featured");
   const [query, setQuery] = useState("");

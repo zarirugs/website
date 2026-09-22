@@ -11,7 +11,7 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
   const hasImage = Boolean(collection.image);
   const externalImage = /^https?:\/\//.test(collection.image);
   const mediaApiImage = collection.image.startsWith("/api/media/");
-  const destination = collection.slug ? `/collections/${collection.slug}` : "#order";
+  const destination = collection.slug === "heritage" ? "/shop?category=heritage" : collection.slug ? `/collections/${collection.slug}` : "#order";
 
   return (
     <article className="group cursor-pointer">
