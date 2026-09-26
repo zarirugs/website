@@ -26,14 +26,23 @@ It publishes only entries in `queue.json` whose status is `approved` and whose
 `publishAt` time has passed. Published IDs receive a Git tag, preventing the same
 entry from being selected again.
 
-## Approval flow
+## Once-a-week approval flow
 
-1. Add the final public JPEG or MP4 to `public/marketing/instagram/`.
-2. Add or revise its entry in `queue.json` with `status: "draft"`.
-3. Run `npm run marketing:validate` and review the asset, caption, date, and CTA.
-4. Change only the reviewed entry to `status: "approved"` and merge it to `main`.
-5. The next scheduled run publishes it. A specific approved post can be published
-   sooner with the workflow's `post_id` input.
+1. Every Monday morning, the Codex scheduled task prepares the next three posts in
+   an isolated `codex/instagram-week-YYYY-MM-DD` branch.
+2. Pushing that branch makes GitHub open one weekly review pull request. Its review
+   page shows the three visuals, full captions, calls to action, and publish times.
+3. Review the pack once. Leave a PR comment if anything needs revision, or merge
+   the PR to approve the entire week.
+4. Only content merged into `main` can be selected by the publisher. The scheduled
+   workflow then publishes at 19:30 India time on Tuesday, Thursday, and Saturday.
+
+Posts in a weekly review branch use `status: "approved"` because merging the branch
+is the approval action. Posts still being developed outside a weekly review branch
+must remain `draft`.
+
+A specific approved post can be published sooner with the publishing workflow's
+`post_id` input.
 
 Never commit access tokens. Add these GitHub Actions secrets to the repository:
 
@@ -48,9 +57,10 @@ Meta requires a later supported version.
 
 ## What remains human
 
-Founder voice, original photographs/video, final factual review, and approval stay
-human. Scheduling, eligibility checks, API publishing, duplicate prevention, and
-the recurring content-planning cycle are automated.
+Founder voice, original photographs/video, final factual review, and one weekly
+approval stay human. Drafting, formatting, validation, review-PR creation,
+scheduling, API publishing, duplicate prevention, and the recurring content cycle
+are automated.
 
 Track the weekly numbers in `metrics.csv`. Follower count matters for the first
 milestone, but saves, shares, profile visits, replies, and qualified conversations
