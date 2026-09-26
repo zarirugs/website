@@ -1,0 +1,28 @@
+{
+  "posts": [
+    {
+      "id": "01-meet-zari",
+      "status": "draft",
+      "publishAt": "2026-09-29T14:00:00.000Z",
+      "mediaType": "IMAGE",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/01-meet-zari.jpg",
+      "caption": "Meet ZARI.\n\nWe are building a house of hand-knotted rugs rooted in Indian craftsmanship and made for timeless homes.\n\nThe first collection is still taking shape. Follow @zarirugs to see the decisions, materials and hands behind its making.\n\n#ZARIRugs #IndianCraft #HandKnottedRugs #TimelessInteriors"
+    },
+    {
+      "id": "02-from-bhadohi",
+      "status": "draft",
+      "publishAt": "2026-10-01T14:00:00.000Z",
+      "mediaType": "IMAGE",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/02-from-bhadohi.jpg",
+      "caption": "From Bhadohi, for homes everywhere.\n\nZARI begins in a place shaped by generations of rug making. We are learning from that tradition as we create a contemporary rug house of our own.\n\nFollow the making of our first collection.\n\n#ZARIRugs #Bhadohi #IndianCraftsmanship #RugDesign"
+    },
+    {
+      "id": "03-follow-the-making",
+      "status": "draft",
+      "publishAt": "2026-10-03T14:00:00.000Z",
+      "mediaType": "IMAGE",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/03-follow-the-making.jpg",
+      "caption": "A rug begins long before it reaches a room.\n\nHere we will share the making of ZARI: the ideas, palettes, materials, craft and questions behind our first collection.\n\nWhat would you most like to see first?\n\n#ZARIRugs #BehindTheBrand #InteriorDesignIndia #CraftedInIndia"
+    }
+  ]
+}
