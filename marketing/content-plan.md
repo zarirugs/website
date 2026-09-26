@@ -6,9 +6,9 @@
 
 **Bio:**
 
-> Rugs rooted in Indian craftsmanship.<br>
-> Follow the making of ZARI.<br>
-> Our first collection is taking shape.
+> Hand-knotted rugs rooted in Indian craftsmanship.<br>
+> From Bhadohi, made for timeless homes.<br>
+> Follow our first collection ↓
 
 Pin the first three posts so a new visitor immediately understands the brand,
 origin, and reason to follow.
