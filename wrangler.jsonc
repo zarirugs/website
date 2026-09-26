@@ -13,9 +13,16 @@
 	},
 	"d1_databases": [
 		{
-			"binding": "ZARI_DB",
-			"database_name": "zari-orders",
-			"database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+      "binding": "ZARI_DB",
+      "database_name": "zari-orders",
+      "database_id": "a7b61e2e-09b1-4f8a-b771-8db62f284f9f",
+      "migrations_dir": "db/migrations"
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "ZARI_MEDIA",
+			"bucket_name": "zari-media"
 		}
 	],
 	"services": [

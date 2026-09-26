@@ -1,16 +1,14 @@
 export const site = {
-    name: "The House of ZARI",
+    name: "ZARI",
   
     shortName: "ZARI",
   
     description:
       "Luxury hand-knotted rugs crafted in Bhadohi for collectors, designers, and exceptional homes.",
   
-    url: "https://thehouseofzari.com",
+    url: "https://zarirugs.com",
   
-    email: "concierge@thehouseofzari.com",
-  
-    phone: "+91 98765 43210",
+    email: "consultant@zarirugs.com",
   
     address: {
       city: "Bhadohi",
@@ -19,13 +17,13 @@ export const site = {
     },
   
     social: {
-      instagram: "https://instagram.com/thehouseofzari",
-      pinterest: "https://pinterest.com/thehouseofzari",
-      linkedin: "https://linkedin.com/company/thehouseofzari",
+      instagram: "https://instagram.com/zarirugs",
+      pinterest: "https://pinterest.com/zarirugs",
+      linkedin: "https://linkedin.com/company/zarirugs",
     },
   
     seo: {
-      title: "The House of ZARI",
+      title: "ZARI",
       description:
         "Luxury handmade rugs crafted over seasons, destined for generations.",
     },

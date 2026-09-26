@@ -1,11 +1,10 @@
 import { Container } from "@/components/layout";
+import Link from "next/link";
 import {
   Heading,
   Text,
-  Eyebrow,
 } from "@/components/typography";
-
-import { Button } from "@/components/buttons";
+import styles from "./HeroContent.module.css";
 
 export default function HeroContent() {
   return (
@@ -17,19 +16,15 @@ export default function HeroContent() {
           items-center
         "
       >
-        <div className="max-w-2xl">
-          <Eyebrow className="text-white/80">
-            THE HOUSE OF ZARI
-          </Eyebrow>
-
-          {/* Changed size from "display" to "xl" to reduce bulkiness */}
+        <div className="max-w-2xl text-white">
           <Heading
             as="h1"
-            size="xl"
+            size="hero"
             className="
-              mt-8
+              mt-6
               text-white
               max-w-2xl
+              sm:mt-8
             "
           >
             Rugs Crafted
@@ -37,25 +32,18 @@ export default function HeroContent() {
             For Timeless Homes
           </Heading>
 
-          <Text
-            className="
-              mt-8
-              max-w-xl
-              text-white/80
-              leading-8
-            "
-          >
-            Hand-knotted masterpieces from Bhadohi,
-            crafted by master artisans using the finest
-            natural fibres to create rugs that last for
-            generations.
-          </Text>
-
-          <div className="mt-12">
-            <Button>
-              Explore Collection
-            </Button>
+          <div className={styles.copy}>
+            <Text className="text-[1rem] leading-[1.65] text-white/85 sm:text-[1.125rem] sm:leading-8">
+              Hand-knotted masterpieces from Bhadohi,
+              crafted by master artisans using the finest
+              natural fibres to create rugs that last for
+              generations.
+            </Text>
           </div>
+
+          <Link href="/shop" className={styles.cta}>
+            Explore shop <span aria-hidden="true">→</span>
+          </Link>
         </div>
       </div>
     </Container>

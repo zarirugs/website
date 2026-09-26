@@ -43,4 +43,5 @@ export interface PublicOrderItem {
   sku: string;
   name: string;
   quantity: number;
+  collection?: string;
 }

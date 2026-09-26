@@ -10,6 +10,12 @@ type DashboardState = {
   orders: OrderRecord[];
 };
 
+type DashboardResponse = {
+  error?: string;
+  inventory?: InventoryItem[];
+  orders?: OrderRecord[];
+};
+
 const initialState: DashboardState = { inventory: [], orders: [] };
 
 function authHeaders(token: string) {
@@ -52,7 +58,7 @@ export default function AdminDashboard() {
     const [inventoryResult, ordersResult] = await Promise.all([
       inventoryResponse.json().catch(() => ({})),
       ordersResponse.json().catch(() => ({})),
-    ]);
+    ]) as [DashboardResponse, DashboardResponse];
     setLoading(false);
 
     if (!inventoryResponse.ok || !ordersResponse.ok) {
@@ -60,8 +66,10 @@ export default function AdminDashboard() {
       return;
     }
 
-    setDashboard({ inventory: inventoryResult.inventory, orders: ordersResult.orders });
-    setStockDrafts(Object.fromEntries(inventoryResult.inventory.map((item: InventoryItem) => [item.sku, String(item.stock)])));
+    const inventory = inventoryResult.inventory ?? [];
+    const orders = ordersResult.orders ?? [];
+    setDashboard({ inventory, orders });
+    setStockDrafts(Object.fromEntries(inventory.map((item) => [item.sku, String(item.stock)])));
   }
 
   function unlock(event: FormEvent<HTMLFormElement>) {
@@ -76,7 +84,7 @@ export default function AdminDashboard() {
       headers: authHeaders(token),
       body: JSON.stringify(body),
     });
-    const result = await response.json().catch(() => ({}));
+    const result = await response.json().catch(() => ({})) as { error?: string };
     if (!response.ok) {
       setMessage(result.error ?? "The update could not be saved.");
       return;
@@ -99,7 +107,7 @@ export default function AdminDashboard() {
         reorderLevel: Number(form.get("reorderLevel")),
       }),
     });
-    const result = await response.json().catch(() => ({}));
+    const result = await response.json().catch(() => ({})) as { error?: string };
     if (!response.ok) {
       setMessage(result.error ?? "The item could not be created.");
       return;
@@ -110,7 +118,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f4f1eb] px-5 py-8 text-neutral-900 md:px-10 md:py-12">
+    <main className="min-h-screen bg-white px-5 py-8 text-neutral-900 md:px-10 md:py-12">
       <div className="mx-auto max-w-7xl">
         <header className="flex flex-col justify-between gap-6 border-b border-neutral-300 pb-8 md:flex-row md:items-end">
           <div>

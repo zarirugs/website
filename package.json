@@ -1,5 +1,5 @@
 {
-  "name": "the-house-of-zari",
+  "name": "website",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "marketing:validate": "node scripts/marketing/validate-queue.mjs",
+    "marketing:due": "DRY_RUN=1 node scripts/marketing/publish-instagram.mjs",
     "build:cloudflare": "npx @opennextjs/cloudflare build",
     "preview:cloudflare": "npx @opennextjs/cloudflare preview",
     "deploy:cloudflare": "npx @opennextjs/cloudflare deploy"
@@ -32,6 +34,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "sharp": "0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5",
     "wrangler": "^4.118.0"

@@ -1,0 +1,90 @@
+.section {
+  overflow: hidden;
+  scroll-margin-top: 6rem;
+}
+
+/* Compact collection carousel used on the home page. */
+.shopContainer { max-width: 92rem; }
+
+.header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+.title {
+  color: #57534e;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.38em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.titleLink {
+  display: inline-flex;
+  padding: 0.75rem;
+  transition: color 180ms ease;
+}
+
+.titleLink:hover .title { color: #6e5a31; }
+.titleLink:focus-visible { outline: 1px solid #9d8655; outline-offset: 0.125rem; }
+
+.carousel { position: relative; padding-inline: 2.5rem; }
+
+.control {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border: 1px solid #49423a;
+  border-radius: 50%;
+  background: #292521;
+  box-shadow: 0 0.25rem 0.875rem rgba(0, 0, 0, 0.18);
+  color: #fff;
+  transform: translateY(-50%);
+  transition: background 180ms ease, opacity 180ms ease, box-shadow 180ms ease;
+}
+
+.previousControl { left: 0; }
+.nextControl { right: 0; }
+.control:hover:not(:disabled), .control:focus-visible { background: #806b43; box-shadow: 0 0.35rem 1rem rgba(0, 0, 0, 0.24); }
+.control:focus-visible { outline: 2px solid #9d8655; outline-offset: 0.1875rem; }
+.control:disabled { cursor: default; opacity: 0.65; }
+
+.viewport {
+  --card-gap: 0.875rem;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.track { display: flex; gap: var(--card-gap); width: 100%; }
+.card { flex: 0 0 calc((100% - var(--card-gap)) / 2); min-width: 0; }
+.cardLink { display: block; color: inherit; }
+.cardLink:focus-visible { outline: 1px solid #8b7442; outline-offset: 0.375rem; }
+.collectionVisual { position: relative; overflow: hidden; background-color: #e9e6df; }
+.collectionVisualImage { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 700ms cubic-bezier(.22,.61,.36,1); }
+.collectionVisualImage[data-fit="contain"] { object-fit: contain; }
+.collectionTexture { position: absolute; inset: 0; background-color: #b59c78; background-image: radial-gradient(circle at 48% 48%, rgba(243, 221, 177, 0.54) 0 3%, transparent 3.5%), radial-gradient(circle at 48% 48%, transparent 0 18%, rgba(51, 42, 32, 0.42) 18.5% 20%, transparent 20.5%), repeating-linear-gradient(90deg, rgba(255,255,255,0.11) 0 1px, transparent 1px 5px), linear-gradient(145deg, #7d654a, #c6aa80 50%, #4d4034); }
+.collectionVisual[data-collection="contemporary"] .collectionTexture { background-color: #879da2; background-image: radial-gradient(ellipse at 50% 52%, transparent 0 26%, rgba(240, 235, 221, 0.65) 26.5% 31%, transparent 31.5%), repeating-linear-gradient(0deg, rgba(255,255,255,0.11) 0 1px, transparent 1px 6px), linear-gradient(135deg, #4d6971, #b7c8c6 53%, #394f55); }
+.collectionVisual[data-collection="bespoke"] .collectionTexture { background-color: #a68165; background-image: linear-gradient(90deg, transparent 46%, rgba(241, 221, 180, 0.55) 46.5% 53.5%, transparent 54%), linear-gradient(0deg, transparent 46%, rgba(241, 221, 180, 0.55) 46.5% 53.5%, transparent 54%), repeating-linear-gradient(45deg, rgba(255,255,255,0.12) 0 1px, transparent 1px 7px), linear-gradient(145deg, #583f36, #c49a72 48%, #685246); }
+.image { width: 100%; aspect-ratio: 4 / 5; }
+.visual { position: relative; overflow: hidden; }
+.nameShade { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; min-height: clamp(5.5rem, 20%, 8.5rem); background: linear-gradient(to top, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.42) 54%, transparent); pointer-events: none; }
+.name { position: absolute; z-index: 3; right: 1rem; bottom: 1rem; left: 1rem; margin: 0; color: #fff; font-family: var(--font-display); font-size: clamp(0.9375rem, 2.3vw, 1.125rem); font-weight: 400; letter-spacing: -0.015em; line-height: 1.1; text-shadow: 0 0.125rem 1rem rgba(0, 0, 0, 0.8); }
+
+@media (min-width: 48rem) {
+  .carousel { padding-inline: 3.5rem; }
+  .control { width: 2.75rem; height: 2.75rem; }
+  .previousControl { left: 0.375rem; }
+  .nextControl { right: 0.375rem; }
+  .viewport { --card-gap: 1.5rem; }
+  .card { flex-basis: calc((100% - 2 * var(--card-gap)) / 3); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .collectionVisualImage { transition: none; }
+}
