@@ -1,0 +1,46 @@
+name: Publish approved Instagram content
+
+on:
+  schedule:
+    # 19:30 India time on Tuesday, Thursday and Saturday.
+    - cron: "0 14 * * 2,4,6"
+  workflow_dispatch:
+    inputs:
+      post_id:
+        description: "Approved post ID to publish now (optional)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: zari-instagram-publisher
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish next approved post
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source and publication tags
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Validate content queue
+        run: node scripts/marketing/validate-queue.mjs
+
+      - name: Publish one post
+        env:
+          INSTAGRAM_ACCOUNT_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_GRAPH_VERSION: ${{ vars.INSTAGRAM_GRAPH_VERSION }}
+          POST_ID: ${{ inputs.post_id }}
+        run: node scripts/marketing/publish-instagram.mjs

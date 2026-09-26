@@ -1,0 +1,48 @@
+name: Open weekly Instagram review
+
+on:
+  push:
+    branches:
+      - "codex/instagram-week-*"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: instagram-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Create or update weekly approval PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out weekly content branch
+        uses: actions/checkout@v6
+
+      - name: Open weekly review
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          WEEKLY_BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          week="${WEEKLY_BRANCH#codex/instagram-week-}"
+          review_file="marketing/reviews/${week}.md"
+
+          if [[ ! -f "$review_file" ]]; then
+            echo "Missing weekly review file: $review_file" >&2
+            exit 1
+          fi
+
+          existing_pr="$(gh pr list --repo "$REPOSITORY" --head "$WEEKLY_BRANCH" --state open --json number --jq '.[0].number // empty')"
+          title="Instagram content — week of ${week}"
+
+          if [[ -n "$existing_pr" ]]; then
+            gh pr edit "$existing_pr" --repo "$REPOSITORY" --title "$title" --body-file "$review_file"
+          else
+            gh pr create --repo "$REPOSITORY" --base main --head "$WEEKLY_BRANCH" --title "$title" --body-file "$review_file"
+          fi

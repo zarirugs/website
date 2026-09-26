@@ -1,5 +1,11 @@
 This is a [Next.js](https://nextjs.org) project for ZARI.
 
+## Pre-launch Instagram marketing
+
+The approval-based content queue, first-100-follower plan, launch assets, metrics
+sheet, and scheduled Instagram publisher live in [`marketing/`](marketing/README.md).
+Run `npm run marketing:validate` before approving any post.
+
 ## Orders and inventory backend
 
 The storefront includes an order-request form (`#order`) and a protected operations dashboard at `/admin`.
