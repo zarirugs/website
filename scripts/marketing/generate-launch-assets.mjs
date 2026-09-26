@@ -4,17 +4,33 @@ import process from "node:process";
 import sharp from "sharp";
 
 const outputDir = path.join(process.cwd(), "public", "marketing", "instagram");
+const prataFontPath = path.join(
+  process.cwd(),
+  "node_modules",
+  "@fontsource",
+  "prata",
+  "files",
+  "prata-latin-400-normal.woff2",
+);
 const cards = [
   { file: "01-meet-zari.jpg", eyebrow: "INTRODUCING", lines: ["ZARI"], footer: "RUGS FOR TIMELESS HOMES", dark: true },
   { file: "02-from-bhadohi.jpg", eyebrow: "OUR BEGINNING", lines: ["From Bhadohi,", "for homes", "everywhere."], footer: "FOLLOW THE MAKING OF ZARI", dark: false },
   { file: "03-follow-the-making.jpg", eyebrow: "BEFORE THE FIRST COLLECTION", lines: ["Follow", "the making."], footer: "@ZARIRUGS", dark: true },
 ];
 
-function profileSvg() {
+function profileSvg(prataFont) {
   return `<svg width="1080" height="1080" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+    <style>
+      @font-face {
+        font-family: "Prata";
+        font-style: normal;
+        font-weight: 400;
+        src: url("data:font/woff2;base64,${prataFont.toString("base64")}") format("woff2");
+      }
+    </style>
     <rect width="1080" height="1080" fill="#1d1d1b"/>
     <circle cx="540" cy="540" r="430" fill="none" stroke="#b89b5e" stroke-width="5"/>
-    <text x="540" y="600" text-anchor="middle" fill="#f7f3eb" font-family="Georgia, serif" font-size="190" font-weight="400" letter-spacing="24">ZARI</text>
+    <text x="540" y="600" text-anchor="middle" fill="#f7f3eb" font-family="Prata" font-size="190" font-weight="400" letter-spacing="34.2">ZARI</text>
   </svg>`;
 }
 
@@ -44,7 +60,8 @@ function cardSvg(card) {
 }
 
 await fs.mkdir(outputDir, { recursive: true });
-await sharp(Buffer.from(profileSvg())).jpeg({ quality: 94, chromaSubsampling: "4:4:4" }).toFile(path.join(outputDir, "zari-profile.jpg"));
+const prataFont = await fs.readFile(prataFontPath);
+await sharp(Buffer.from(profileSvg(prataFont))).jpeg({ quality: 94, chromaSubsampling: "4:4:4" }).toFile(path.join(outputDir, "zari-profile.jpg"));
 console.log("Generated zari-profile.jpg");
 for (const card of cards) {
   await sharp(Buffer.from(cardSvg(card))).jpeg({ quality: 92, chromaSubsampling: "4:4:4" }).toFile(path.join(outputDir, card.file));
