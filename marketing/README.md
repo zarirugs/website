@@ -39,6 +39,13 @@ entry from being selected again.
 4. Only content merged into `main` can be selected by the publisher. The scheduled
    workflow then publishes at 19:30 India time on Tuesday, Thursday, and Saturday.
 
+At 12:30 India time each Sunday, the Codex weekly marketing review runs after the
+stock workflow. It records the previous week's verified results, applies
+`image-review-rubric.md` to every candidate and the three-image sequence, replaces
+weak selections, adjusts queries and captions from the evidence, and leaves the
+PR unmerged for approval. The next review includes what to repeat, what to stop,
+and what the coming week is testing.
+
 Posts in a weekly review branch use `status: "approved"` because merging the branch
 is the approval action. Posts still being developed outside a weekly review branch
 must remain `draft`.
