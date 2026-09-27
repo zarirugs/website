@@ -23,16 +23,21 @@ Replace an image without scoring it if any of these are true:
 
 ## Score each surviving image
 
-Score each category from 0 to 3. An image must score at least 12/15 and have no
-immediate-rejection condition.
+Score every category from 1 to 5. An image must reach 21/25, score at least 4 in
+both aesthetic strength and authenticity, and have no immediate-rejection
+condition. The user's rejection always overrides the numeric score.
 
-| Category | 0 | 1 | 2 | 3 |
-| --- | --- | --- | --- | --- |
-| Authenticity | Synthetic or misleading | Staged/generic | Believable | Observational and specific |
-| ZARI relevance | Unrelated | Decorative association | Clear rug/craft link | Advances the week's brand story |
-| Editorial strength | Weak stock framing | Familiar stock image | Strong crop or moment | Distinctive fashion-editorial frame |
-| Feed contribution | Repeats another post | Minor variation | Useful contrast | Makes the three-post sequence stronger |
-| Technical quality | Unusable | Noticeable defects | Publishable | Excellent detail, crop and tonal range |
+| Category | Review question |
+| --- | --- |
+| Aesthetic strength | Would this stop the right person in a premium fashion or interiors feed? |
+| Brand relevance | Does it build ZARI's world of rugs, material, Indian craft, and considered homes? |
+| Authenticity | Does it feel real, specific, culturally accurate, and free of synthetic details? |
+| Story value | Does it add a clear idea instead of acting as decoration? |
+| Technical execution | Is the crop deliberate, the subject clear, and the 1080 × 1350 file crisp and tonally controlled? |
+
+Also score the complete three-image sequence from 1 to 5 for rhythm, visual
+variety, colour balance, and narrative progression. The sequence must score 4 or
+5 before it is presented for approval.
 
 ## Weekly learning loop
 
@@ -41,7 +46,8 @@ Before judging the next pack, record the previous week's verified signals in
 saves, shares, profile visits, story replies, and qualified conversations. Mark
 unavailable metrics as unavailable; never estimate them.
 
-State three decisions in the new review:
+Record the per-image scores, sequence score, user decisions, and rejection reasons
+in `image-score-history.csv`. State three decisions in the new review:
 
 1. What visual or topic should be repeated.
 2. What should be stopped or changed.
@@ -60,4 +66,4 @@ their campaigns, logos, layouts, or protected creative assets.
    real artisan, documentary event, or factual workshop scene.
 
 Do not reuse a source merely because it already exists in the website repository.
-If no candidate reaches 12/15, leave the slot blocked for review.
+If no candidate reaches 21/25, leave the slot blocked for review.

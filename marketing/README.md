@@ -35,8 +35,10 @@ entry from being selected again.
    recurring content source.
 2. Pushing that branch makes GitHub open one weekly review pull request. Its review
    page shows the three visuals, full captions, calls to action, and publish times.
-3. Review the pack once. Leave a PR comment if anything needs revision, or merge
-   the PR to approve the entire week.
+3. Review the pack once. To reject one image, comment `REJECT 1 — reason`,
+   `REJECT 2 — reason`, or `REJECT 3 — reason` on the PR. Only that image is held
+   and replaced; the others retain their accepted state. Merge only when all three
+   are accepted.
 4. Only content merged into `main` can be selected by the publisher. The scheduled
    workflow then publishes at 19:30 India time on Tuesday, Thursday, and Saturday.
 
@@ -45,7 +47,9 @@ stock workflow. It records the previous week's verified results, applies
 `image-review-rubric.md` to every candidate and the three-image sequence, replaces
 weak selections, adjusts queries and captions from the evidence, and leaves the
 PR unmerged for approval. The next review includes what to repeat, what to stop,
-and what the coming week is testing.
+and what the coming week is testing. It also appends the week's image scores,
+accept/reject decisions, reasons, and later performance to
+`image-score-history.csv`, so selection standards improve from evidence.
 
 The content supply does not depend on the website library. Each week should use,
 in order: new original founder/workshop media when available, newly licensed
@@ -70,9 +74,9 @@ Never commit access tokens. Add these GitHub Actions secrets to the repository:
 
 Create the free Pexels API key at `https://www.pexels.com/api/`. The sourcing
 script records the photo ID, photographer, source page, search query, week, and
-local filename in `stock-usage.json`. The review and Instagram caption include
-the photographer credit. Search themes and caption rotations live in
-`stock-sourcing.json`.
+local filename privately in `stock-usage.json`. Pexels attribution is optional,
+so sources do not appear in the public caption or the approval page. Search themes
+and caption rotations live in `stock-sourcing.json`.
 
 The repository owner must also enable **Settings → Actions → General → Workflow
 permissions → Allow GitHub Actions to create and approve pull requests**. This

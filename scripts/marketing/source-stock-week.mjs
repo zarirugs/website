@@ -118,18 +118,17 @@ for (const [index, slot] of config.posts.entries()) {
   const publishAt = new Date(monday);
   publishAt.setUTCDate(publishAt.getUTCDate() + slot.dayOffset);
   publishAt.setUTCHours(14, 0, 0, 0);
-  const credit = `Photo by ${photo.photographer} via Pexels.`;
-  const caption = `${slot.captions[rotation % slot.captions.length]}\n\n${credit}`;
+  const caption = slot.captions[rotation % slot.captions.length];
   const mediaUrl = `https://zarirugs.com/marketing/instagram/${filename}`;
   posts.push({ id, status: "approved", publishAt: publishAt.toISOString(), mediaType: "IMAGE", mediaUrl, caption });
 
   const branchPreview = `https://raw.githubusercontent.com/zarirugs/website/codex/instagram-week-${week}/public/marketing/instagram/${filename}`;
-  reviewSections.push(`## ${publishAt.toLocaleDateString("en-IN", { weekday: "long", timeZone: "UTC" })} — 19:30 IST\n\n![${slot.title}](${branchPreview})\n\n**Caption**\n\n${caption.split("\n").map((line) => `> ${line}`).join("\n")}\n\n**Source:** [${photo.photographer} on Pexels](${photo.url})`);
+  reviewSections.push(`## ${publishAt.toLocaleDateString("en-IN", { weekday: "long", timeZone: "UTC" })} — 19:30 IST\n\n![${slot.title}](${branchPreview})\n\n**Image score:** pending Codex visual review\n\n**Caption**\n\n${caption.split("\n").map((line) => `> ${line}`).join("\n")}`);
   usage.assets.push({ provider: "pexels", id: String(photo.id), photographer: photo.photographer, sourceUrl: photo.url, query, week, filename });
 }
 
 fs.writeFileSync(queuePath, `${JSON.stringify({ posts }, null, 2)}\n`);
 fs.writeFileSync(usagePath, `${JSON.stringify(usage, null, 2)}\n`);
-const review = `# Instagram week of ${week}\n\nMerge this pull request to approve all three posts. The photographs were sourced through the Pexels API, resized to 1080 × 1350, checked against the usage ledger, and credited below.\n\n${reviewSections.join("\n\n")}\n\n## Approval checklist\n\n- [ ] Every image feels consistent with ZARI.\n- [ ] The people, setting and craft are represented appropriately.\n- [ ] Captions sound like ZARI.\n- [ ] Dates and times are correct.\n- [ ] Photographer credits are present.\n\n**Merge = approve the complete weekly pack.**\n`;
+const review = `# Instagram week of ${week}\n\nMerge this pull request after all three images are accepted. Reject one image by commenting \`REJECT 1 — reason\`, \`REJECT 2 — reason\`, or \`REJECT 3 — reason\`; only that image will be replaced. The photographs were sourced through the Pexels API, resized to 1080 × 1350, and checked against the private usage ledger.\n\n${reviewSections.join("\n\n")}\n\n## Approval checklist\n\n- [ ] Every image scored at least 21/25.\n- [ ] Aesthetic strength and authenticity are at least 4/5 for every image.\n- [ ] The complete sequence scored at least 4/5.\n- [ ] The people, setting and craft are represented appropriately.\n- [ ] Captions sound like ZARI.\n- [ ] Dates and times are correct.\n\n**Merge = approve the complete weekly pack.**\n`;
 fs.writeFileSync(path.join(reviewDirectory, `${week}.md`), review);
 console.log(`Prepared ${posts.length} Pexels-backed posts for the week of ${week}.`);
