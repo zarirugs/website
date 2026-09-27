@@ -2,11 +2,23 @@
 
 import { useEffect, useState } from "react";
 
-type HeroMedia = { imageUrl?: string | null; backgroundColor?: string | null };
+import styles from "./HeroBackground.module.css";
+
+type HeroMedia = {
+  imageUrl?: string | null;
+  backgroundColor?: string | null;
+  mediaKind?: "image" | "video";
+};
 type SiteMediaResponse = { media?: { hero?: HeroMedia } };
 
+const defaultHero: HeroMedia = {
+  imageUrl: "/videos/hero-rug-making.mp4",
+  backgroundColor: "#171717",
+  mediaKind: "video",
+};
+
 export default function HeroBackground() {
-  const [media, setMedia] = useState<HeroMedia>({ imageUrl: "/api/media/media-default-hero" });
+  const [media, setMedia] = useState<HeroMedia>(defaultHero);
 
   useEffect(() => {
     void fetch("/api/site-media", { cache: "no-store" })
@@ -17,7 +29,24 @@ export default function HeroBackground() {
 
   return (
     <>
-      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundColor: media.backgroundColor ?? "#171717", backgroundImage: media.imageUrl ? `url(${media.imageUrl})` : undefined }} />
+      <div className={styles.media} style={{ backgroundColor: media.backgroundColor ?? "#171717" }} aria-hidden="true">
+        {media.mediaKind === "video" && media.imageUrl ? (
+          <video
+            key={media.imageUrl}
+            className={styles.video}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            tabIndex={-1}
+          >
+            <source src={media.imageUrl} type="video/mp4" />
+          </video>
+        ) : media.imageUrl ? (
+          <div className={styles.image} style={{ backgroundImage: `url(${media.imageUrl})` }} />
+        ) : null}
+      </div>
 
       <div className="absolute inset-0 bg-black/35" />
 
