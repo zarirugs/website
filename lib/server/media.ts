@@ -10,6 +10,7 @@ export type MediaAssetRow = {
   image_url: string | null;
   object_key: string | null;
   background_color: string | null;
+  media_kind: "image" | "video";
 };
 
 export type R2ObjectBody = {
