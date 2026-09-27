@@ -44,6 +44,24 @@
       "query": "dramatic light carpet editorial",
       "week": "2026-09-28",
       "filename": "03-follow-the-making.jpg"
+    },
+    {
+      "provider": "pexels",
+      "id": "36936824",
+      "photographer": "Paolo Bici",
+      "sourceUrl": "https://www.pexels.com/photo/traditional-rug-weaving-in-artisan-workshop-36936824/",
+      "query": "traditional rug weaving artisan workshop",
+      "week": "2026-09-28",
+      "filename": "02-from-bhadohi.jpg"
+    },
+    {
+      "provider": "pexels",
+      "id": "37477419",
+      "photographer": "Céline",
+      "sourceUrl": "https://www.pexels.com/photo/sunlit-traditional-interior-with-rugs-and-curtains-37477419/",
+      "query": "sunlit rug interior editorial",
+      "week": "2026-09-28",
+      "filename": "03-follow-the-making.jpg"
     }
   ]
 }
