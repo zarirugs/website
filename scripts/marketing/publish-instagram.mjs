@@ -6,6 +6,7 @@ const apiVersion = process.env.INSTAGRAM_GRAPH_VERSION || "v26.0";
 const apiBase = `https://graph.instagram.com/${apiVersion}`;
 const manualPostId = process.env.POST_ID?.trim();
 const dryRun = process.env.DRY_RUN === "1";
+const connectionOnly = ["1", "true"].includes(process.env.CONNECTION_ONLY?.toLowerCase());
 
 function tagFor(post) {
   return `instagram-post/${post.id}`;
@@ -51,6 +52,23 @@ async function graphRequest(pathname, body) {
   return result;
 }
 
+async function verifyConnection(accountId, accessToken) {
+  const url = new URL(`${apiBase}/me`);
+  url.searchParams.set("fields", "id,username,account_type");
+  url.searchParams.set("access_token", accessToken);
+
+  const response = await fetch(url);
+  const result = await response.json();
+  if (!response.ok || result.error) {
+    throw new Error(`Instagram connection check failed (${response.status}): ${result.error?.message || JSON.stringify(result)}`);
+  }
+  if (String(result.id) !== String(accountId)) {
+    throw new Error(`Instagram account mismatch: token belongs to ${result.id}, expected ${accountId}`);
+  }
+
+  console.log(`Authenticated Instagram account @${result.username} (${result.account_type}).`);
+}
+
 async function containerStatus(containerId, accessToken) {
   const url = new URL(`${apiBase}/${containerId}`);
   url.searchParams.set("fields", "status_code,status");
@@ -81,6 +99,18 @@ function markPublished(post, mediaId) {
   execFileSync("git", ["push", "origin", tag], { stdio: "inherit" });
 }
 
+const accountId = process.env.INSTAGRAM_ACCOUNT_ID;
+const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN;
+
+if (connectionOnly) {
+  if (!accountId || !accessToken) {
+    throw new Error("INSTAGRAM_ACCOUNT_ID and INSTAGRAM_ACCESS_TOKEN are required");
+  }
+  await verifyConnection(accountId, accessToken);
+  console.log("Instagram connection check completed without publishing content.");
+  process.exit(0);
+}
+
 const posts = readAndValidateQueue();
 const post = selectPost(posts);
 
@@ -94,11 +124,11 @@ if (dryRun) {
   process.exit(0);
 }
 
-const accountId = process.env.INSTAGRAM_ACCOUNT_ID;
-const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN;
 if (!accountId || !accessToken) {
   throw new Error("INSTAGRAM_ACCOUNT_ID and INSTAGRAM_ACCESS_TOKEN are required");
 }
+
+await verifyConnection(accountId, accessToken);
 
 const createBody = {
   access_token: accessToken,

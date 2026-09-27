@@ -2,7 +2,7 @@
   "posts": [
     {
       "id": "01-meet-zari",
-      "status": "draft",
+      "status": "approved",
       "publishAt": "2026-09-29T14:00:00.000Z",
       "mediaType": "IMAGE",
       "mediaUrl": "https://zarirugs.com/marketing/instagram/01-meet-zari.jpg",
@@ -10,7 +10,7 @@
     },
     {
       "id": "02-from-bhadohi",
-      "status": "draft",
+      "status": "approved",
       "publishAt": "2026-10-01T14:00:00.000Z",
       "mediaType": "IMAGE",
       "mediaUrl": "https://zarirugs.com/marketing/instagram/02-from-bhadohi.jpg",
@@ -18,7 +18,7 @@
     },
     {
       "id": "03-follow-the-making",
-      "status": "draft",
+      "status": "approved",
       "publishAt": "2026-10-03T14:00:00.000Z",
       "mediaType": "IMAGE",
       "mediaUrl": "https://zarirugs.com/marketing/instagram/03-follow-the-making.jpg",
