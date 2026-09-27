@@ -1,0 +1,50 @@
+{
+  "provider": "pexels",
+  "posts": [
+    {
+      "slug": "brand-world",
+      "title": "The ZARI world",
+      "dayOffset": 1,
+      "queries": [
+        "luxury rug interior editorial",
+        "woman sitting on rug interior",
+        "handmade carpet interior design"
+      ],
+      "captions": [
+        "A room changes when the floor becomes part of the architecture.\n\nZARI is building a world around rugs, craft and considered interiors. Follow the first collection as it takes shape.\n\n#ZARIRugs #InteriorDesignIndia #RugDesign #IndianCraft",
+        "The rug is not the finishing touch. It is where the room begins.\n\nFollow @zarirugs as we build our first collection around material, proportion and Indian craftsmanship.\n\n#ZARIRugs #HandmadeRugs #TimelessInteriors #DesignIndia",
+        "Objects give a room character. A rug gives it ground.\n\nWe are documenting the making of ZARI before the first collection arrives.\n\n#ZARIRugs #InteriorInspiration #RugArt #IndianDesign"
+      ]
+    },
+    {
+      "slug": "made-by-hand",
+      "title": "Made by hand",
+      "dayOffset": 3,
+      "queries": [
+        "artisan weaving loom",
+        "rug weaving craftsman",
+        "traditional carpet weaving"
+      ],
+      "captions": [
+        "Before pattern comes repetition: knot after knot, row after row.\n\nThe first ZARI collection begins with respect for the hands and time behind a rug.\n\n#ZARIRugs #MadeByHand #IndianCraftsmanship #RugMaking",
+        "The surface is only the final chapter. The work begins at the loom.\n\nFollow the materials, decisions and craft behind our first collection.\n\n#ZARIRugs #AtTheLoom #HandKnottedRugs #CraftedInIndia",
+        "Time is one of the materials in every handmade rug.\n\nWe are building ZARI slowly, with craft at the centre.\n\n#ZARIRugs #SlowCraft #RugWeaving #IndianDesign"
+      ]
+    },
+    {
+      "slug": "look-closer",
+      "title": "Look closer",
+      "dayOffset": 5,
+      "queries": [
+        "handmade rug detail",
+        "carpet texture close up",
+        "rolled rugs textile detail"
+      ],
+      "captions": [
+        "Look closer. Pile, edge, colour and the small irregularities that make a handmade surface feel alive.\n\nWhich details do you notice first in a rug?\n\n#ZARIRugs #TextileDetail #RugDesign #MaterialStudy",
+        "Texture changes with every step and every shift of light.\n\nThese are the material questions shaping our first collection.\n\n#ZARIRugs #Materiality #HandmadeRugs #InteriorDetails",
+        "A rug rewards attention at every distance: composition from across the room, texture up close.\n\nFollow @zarirugs for the making of our first collection.\n\n#ZARIRugs #RugArt #TextileDesign #CraftedInteriors"
+      ]
+    }
+  ]
+}

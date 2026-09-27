@@ -28,8 +28,10 @@ entry from being selected again.
 
 ## Once-a-week approval flow
 
-1. Every Monday morning, the Codex scheduled task prepares the next three posts in
-   an isolated `codex/instagram-week-YYYY-MM-DD` branch.
+1. Every Sunday at 11:00 India time, GitHub searches Pexels for the next three
+   photographs, rejects low-resolution and previously used results, crops the
+   selected files to 1080 × 1350, rotates the caption set, and prepares an isolated
+   `codex/instagram-week-YYYY-MM-DD` branch.
 2. Pushing that branch makes GitHub open one weekly review pull request. Its review
    page shows the three visuals, full captions, calls to action, and publish times.
 3. Review the pack once. Leave a PR comment if anything needs revision, or merge
@@ -48,6 +50,24 @@ Never commit access tokens. Add these GitHub Actions secrets to the repository:
 
 - `INSTAGRAM_ACCOUNT_ID`
 - `INSTAGRAM_ACCESS_TOKEN`
+- `PEXELS_API_KEY`
+
+Create the free Pexels API key at `https://www.pexels.com/api/`. The sourcing
+script records the photo ID, photographer, source page, search query, week, and
+local filename in `stock-usage.json`. The review and Instagram caption include
+the photographer credit. Search themes and caption rotations live in
+`stock-sourcing.json`.
+
+The repository owner must also enable **Settings → Actions → General → Workflow
+permissions → Allow GitHub Actions to create and approve pull requests**. This
+allows the Sunday workflow to open the approval PR; merging still remains a human
+decision.
+
+The stock workflow intentionally uses Pexels for materialized post files.
+Unsplash's API requires direct CDN hotlinking, attribution to both the photographer
+and Unsplash, and a download-tracking request when an image is selected. Do not
+download Unsplash API results into this repository. An Unsplash provider should
+only be added if the publishing queue is extended to preserve those requirements.
 
 The Instagram account must be a Professional account. The Meta app needs Instagram
 Login and the `instagram_business_basic` and
@@ -57,10 +77,10 @@ Meta requires a later supported version.
 
 ## What remains human
 
-Founder voice, original photographs/video, final factual review, and one weekly
-approval stay human. Drafting, formatting, validation, review-PR creation,
-scheduling, API publishing, duplicate prevention, and the recurring content cycle
-are automated.
+Founder voice, final factual review, and one weekly approval stay human. Stock
+search, reuse prevention, cropping, credits, caption rotation, formatting,
+validation, review-PR creation, scheduling, API publishing, duplicate prevention,
+and the recurring content cycle are automated.
 
 Track the weekly numbers in `metrics.csv`. Follower count matters for the first
 milestone, but saves, shares, profile visits, replies, and qualified conversations
