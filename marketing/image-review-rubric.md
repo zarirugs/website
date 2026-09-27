@@ -18,6 +18,8 @@ Replace an image without scoring it if any of these are true:
 - It is below 1080 × 1350, visibly soft, badly cropped, watermarked, or missing
   its licence/source record.
 - It has already appeared in `stock-usage.json`.
+- It was copied from the ZARI website merely to fill a weekly slot; website assets
+  may be used only when the week is intentionally revisiting that original story.
 
 ## Score each surviving image
 
@@ -48,3 +50,14 @@ State three decisions in the new review:
 Use Bluorng for product/process immediacy and feed rhythm, and Louis Vuitton for
 campaign sequencing, human context, restraint, and confident crops. Do not copy
 their campaigns, logos, layouts, or protected creative assets.
+
+## Source order
+
+1. New original ZARI founder, workshop, material, or process media.
+2. Fresh licensed photography recorded in `stock-usage.json`.
+3. At most one generated editorial image in a weekly pack, recorded as
+   `provider: "generated"`. It cannot depict a supposed ZARI product, identifiable
+   real artisan, documentary event, or factual workshop scene.
+
+Do not reuse a source merely because it already exists in the website repository.
+If no candidate reaches 12/15, leave the slot blocked for review.

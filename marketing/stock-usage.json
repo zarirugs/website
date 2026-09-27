@@ -1,3 +1,31 @@
 {
-  "assets": []
+  "assets": [
+    {
+      "provider": "pexels",
+      "id": "14769077",
+      "photographer": "Connor Scott McManus",
+      "sourceUrl": "https://www.pexels.com/photo/photo-of-woman-sitting-on-a-rug-14769077/",
+      "query": "woman seated on rug editorial photography",
+      "week": "2026-09-28",
+      "filename": "01-meet-zari.jpg"
+    },
+    {
+      "provider": "pexels",
+      "id": "28382914",
+      "photographer": "Susheel Parihar",
+      "sourceUrl": "https://www.pexels.com/photo/traditional-loom-weaving-by-skilled-artisan-28382914/",
+      "query": "India artisan handloom weaving",
+      "week": "2026-09-28",
+      "filename": "02-from-bhadohi.jpg"
+    },
+    {
+      "provider": "pexels",
+      "id": "28389984",
+      "photographer": "Engin Akyurt",
+      "sourceUrl": "https://www.pexels.com/photo/texture-of-a-beautiful-carpet-28389984/",
+      "query": "carpet texture close up natural fiber",
+      "week": "2026-09-28",
+      "filename": "03-follow-the-making.jpg"
+    }
+  ]
 }

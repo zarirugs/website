@@ -28,10 +28,11 @@ entry from being selected again.
 
 ## Once-a-week approval flow
 
-1. Every Sunday at 11:00 India time, GitHub searches Pexels for the next three
+1. Every Sunday at 11:00 India time, GitHub searches Pexels for a fresh pool of
    photographs, rejects low-resolution and previously used results, crops the
    selected files to 1080 × 1350, rotates the caption set, and prepares an isolated
-   `codex/instagram-week-YYYY-MM-DD` branch.
+   `codex/instagram-week-YYYY-MM-DD` branch. Website photography is not used as a
+   recurring content source.
 2. Pushing that branch makes GitHub open one weekly review pull request. Its review
    page shows the three visuals, full captions, calls to action, and publish times.
 3. Review the pack once. Leave a PR comment if anything needs revision, or merge
@@ -45,6 +46,14 @@ stock workflow. It records the previous week's verified results, applies
 weak selections, adjusts queries and captions from the evidence, and leaves the
 PR unmerged for approval. The next review includes what to repeat, what to stop,
 and what the coming week is testing.
+
+The content supply does not depend on the website library. Each week should use,
+in order: new original founder/workshop media when available, newly licensed
+photography with recorded provenance, and at most one generated editorial image
+when neither source can express the idea. Generated work must be recorded as such,
+must not depict a claimed ZARI product or real artisan, and must pass the same
+visual review. A failed review blocks the pack instead of silently recycling an
+old image.
 
 Posts in a weekly review branch use `status: "approved"` because merging the branch
 is the approval action. Posts still being developed outside a weekly review branch
