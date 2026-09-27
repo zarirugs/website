@@ -1,0 +1,89 @@
+name: Prepare weekly Instagram stock content
+
+on:
+  schedule:
+    - cron: "30 5 * * 0"
+  workflow_dispatch:
+    inputs:
+      week:
+        description: "Monday of the content week (YYYY-MM-DD); defaults to next Monday"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: instagram-stock-week
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Source photos and open approval PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Resolve content week
+        id: week
+        env:
+          REQUESTED_WEEK: ${{ inputs.week }}
+        run: |
+          if [[ -n "$REQUESTED_WEEK" ]]; then
+            week="$REQUESTED_WEEK"
+          else
+            week="$(date -u -d 'next monday' +%F)"
+          fi
+          echo "value=$week" >> "$GITHUB_OUTPUT"
+
+      - name: Create weekly content branch
+        env:
+          WEEK: ${{ steps.week.outputs.value }}
+        run: git checkout -B "codex/instagram-week-${WEEK}" "${GITHUB_SHA}"
+
+      - name: Source and prepare the week
+        env:
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          WEEK: ${{ steps.week.outputs.value }}
+        run: |
+          npm run marketing:source-stock -- --week "$WEEK"
+          npm run marketing:validate
+
+      - name: Commit and push review branch
+        env:
+          WEEK: ${{ steps.week.outputs.value }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add marketing/queue.json marketing/stock-usage.json "marketing/reviews/${WEEK}.md" public/marketing/instagram
+          git commit -m "content: prepare Instagram week of ${WEEK}"
+          git push --force-with-lease origin "codex/instagram-week-${WEEK}"
+
+      - name: Open or update approval PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          WEEK: ${{ steps.week.outputs.value }}
+        run: |
+          branch="codex/instagram-week-${WEEK}"
+          review="marketing/reviews/${WEEK}.md"
+          existing="$(gh pr list --repo "$REPOSITORY" --head "$branch" --state open --json number --jq '.[0].number // empty')"
+          if [[ -n "$existing" ]]; then
+            gh pr edit "$existing" --repo "$REPOSITORY" --title "Instagram content — week of ${WEEK}" --body-file "$review"
+          else
+            gh pr create --repo "$REPOSITORY" --base main --head "$branch" --title "Instagram content — week of ${WEEK}" --body-file "$review"
+          fi

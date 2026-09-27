@@ -6,6 +6,11 @@ on:
     - cron: "0 14 * * 2,4,6"
   workflow_dispatch:
     inputs:
+      connection_only:
+        description: "Verify the Instagram credentials without publishing"
+        required: false
+        default: false
+        type: boolean
       post_id:
         description: "Approved post ID to publish now (optional)"
         required: false
@@ -42,5 +47,6 @@ jobs:
           INSTAGRAM_ACCOUNT_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_GRAPH_VERSION: ${{ vars.INSTAGRAM_GRAPH_VERSION }}
+          CONNECTION_ONLY: ${{ inputs.connection_only }}
           POST_ID: ${{ inputs.post_id }}
         run: node scripts/marketing/publish-instagram.mjs

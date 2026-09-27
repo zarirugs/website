@@ -3,6 +3,10 @@
 Merge this pull request to approve all three posts for the week. Nothing in this
 branch can publish before it is merged to `main`.
 
+Reject one image by commenting `REJECT 1 — reason`, `REJECT 2 — reason`, or
+`REJECT 3 — reason`. Only that image will be replaced. Merge after all three are
+accepted.
+
 ## Last week's signal
 
 - Followers: VALUE (CHANGE)
@@ -15,6 +19,8 @@ branch can publish before it is merged to `main`.
 
 **Purpose:** VALUE
 
+**Image score:** VALUE/25 — Aesthetic VALUE · Brand VALUE · Authenticity VALUE · Story VALUE · Technical VALUE
+
 **Caption**
 
 > FULL CAPTION
@@ -25,6 +31,8 @@ branch can publish before it is merged to `main`.
 
 **Purpose:** VALUE
 
+**Image score:** VALUE/25 — Aesthetic VALUE · Brand VALUE · Authenticity VALUE · Story VALUE · Technical VALUE
+
 **Caption**
 
 > FULL CAPTION
@@ -34,6 +42,8 @@ branch can publish before it is merged to `main`.
 ![Saturday post](RAW_GITHUB_ASSET_URL)
 
 **Purpose:** VALUE
+
+**Image score:** VALUE/25 — Aesthetic VALUE · Brand VALUE · Authenticity VALUE · Story VALUE · Technical VALUE
 
 **Caption**
 
@@ -46,5 +56,7 @@ branch can publish before it is merged to `main`.
 - [ ] Captions sound like ZARI.
 - [ ] Dates and times are correct.
 - [ ] Each post has one clear purpose.
+- [ ] Every image scored at least 21/25 and at least 4 for aesthetic strength and authenticity.
+- [ ] The three-image sequence scored 4/5 or better.
 
 **Merge = approve the complete weekly pack.**

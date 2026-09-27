@@ -2,7 +2,7 @@
   "posts": [
     {
       "id": "01-meet-zari",
-      "status": "draft",
+      "status": "approved",
       "publishAt": "2026-09-29T14:00:00.000Z",
       "mediaType": "IMAGE",
       "mediaUrl": "https://zarirugs.com/marketing/instagram/01-meet-zari.jpg",
@@ -10,19 +10,19 @@
     },
     {
       "id": "02-from-bhadohi",
-      "status": "draft",
+      "status": "approved",
       "publishAt": "2026-10-01T14:00:00.000Z",
       "mediaType": "IMAGE",
       "mediaUrl": "https://zarirugs.com/marketing/instagram/02-from-bhadohi.jpg",
-      "caption": "From Bhadohi, for homes everywhere.\n\nZARI begins in a place shaped by generations of rug making. We are learning from that tradition as we create a contemporary rug house of our own.\n\nFollow the making of our first collection.\n\n#ZARIRugs #Bhadohi #IndianCraftsmanship #RugDesign"
+      "caption": "A rug begins one row at a time.\n\nBefore a pattern can be seen, the structure must be built: warp held in tension, wool placed by hand, each decision repeated until an image appears.\n\n#ZARIRugs #RugWeaving #MadeByHand #TextileCraft"
     },
     {
       "id": "03-follow-the-making",
-      "status": "draft",
+      "status": "approved",
       "publishAt": "2026-10-03T14:00:00.000Z",
       "mediaType": "IMAGE",
       "mediaUrl": "https://zarirugs.com/marketing/instagram/03-follow-the-making.jpg",
-      "caption": "A rug begins long before it reaches a room.\n\nHere we will share the making of ZARI: the ideas, palettes, materials, craft and questions behind our first collection.\n\nWhat would you most like to see first?\n\n#ZARIRugs #BehindTheBrand #InteriorDesignIndia #CraftedInIndia"
+      "caption": "A room changes when the floor has a point of view.\n\nPattern anchors the space, while daylight changes its tone through the day. This is the atmosphere guiding ZARI's first collection.\n\n#ZARIRugs #RugInterior #TimelessInteriors #InteriorDesignIndia"
     }
   ]
 }

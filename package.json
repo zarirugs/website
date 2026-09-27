@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "marketing:validate": "node scripts/marketing/validate-queue.mjs",
     "marketing:due": "DRY_RUN=1 node scripts/marketing/publish-instagram.mjs",
+    "marketing:source-stock": "node scripts/marketing/source-stock-week.mjs",
     "build:cloudflare": "npx @opennextjs/cloudflare build",
     "preview:cloudflare": "npx @opennextjs/cloudflare preview",
     "deploy:cloudflare": "npx @opennextjs/cloudflare deploy"
