@@ -26,6 +26,24 @@
       "query": "carpet texture close up natural fiber",
       "week": "2026-09-28",
       "filename": "03-follow-the-making.jpg"
+    },
+    {
+      "provider": "pexels",
+      "id": "6634701",
+      "photographer": "Kaboompics.com",
+      "sourceUrl": "https://www.pexels.com/photo/a-woman-using-a-loom-6634701/",
+      "query": "close up hands weaving loom textile editorial",
+      "week": "2026-09-28",
+      "filename": "02-from-bhadohi.jpg"
+    },
+    {
+      "provider": "pexels",
+      "id": "8763335",
+      "photographer": "Dmitry Alexandrovich",
+      "sourceUrl": "https://www.pexels.com/photo/light-on-carpet-in-dark-room-8763335/",
+      "query": "dramatic light carpet editorial",
+      "week": "2026-09-28",
+      "filename": "03-follow-the-making.jpg"
     }
   ]
 }
