@@ -11,6 +11,7 @@ type MediaRow = {
   source_type: MediaSourceType;
   image_url: string | null;
   background_color: string | null;
+  media_kind: "image" | "video";
   created_at: string;
   updated_at: string;
 };
@@ -20,6 +21,7 @@ function mediaResponse(asset: MediaRow) {
   return {
     id: asset.id, name: asset.name, altText: asset.alt_text, sourceType: asset.source_type,
     imageUrl: asset.image_url, backgroundColor: asset.background_color,
+    mediaKind: asset.media_kind,
     previewUrl: publicMediaPath(asset.id, asset.source_type, asset.image_url),
     createdAt: asset.created_at, updatedAt: asset.updated_at,
   };
@@ -34,8 +36,8 @@ export async function GET(request: Request) {
       return errorResponse("Category not found.", 404);
     }
     const assets = categoryId
-      ? await context.database.prepare("SELECT id, name, alt_text, source_type, image_url, background_color, created_at, updated_at FROM media_assets WHERE category_id = ? ORDER BY updated_at DESC, name ASC").bind(categoryId).all<MediaRow>()
-      : await context.database.prepare("SELECT id, name, alt_text, source_type, image_url, background_color, created_at, updated_at FROM media_assets WHERE category_id IS NULL ORDER BY updated_at DESC, name ASC").all<MediaRow>();
+      ? await context.database.prepare("SELECT id, name, alt_text, source_type, image_url, background_color, media_kind, created_at, updated_at FROM media_assets WHERE category_id = ? ORDER BY updated_at DESC, name ASC").bind(categoryId).all<MediaRow>()
+      : await context.database.prepare("SELECT id, name, alt_text, source_type, image_url, background_color, media_kind, created_at, updated_at FROM media_assets WHERE category_id IS NULL ORDER BY updated_at DESC, name ASC").all<MediaRow>();
     const slots = categoryId
       ? []
       : (await context.database.prepare("SELECT slot_key, label, description, media_asset_id FROM site_media_slots ORDER BY slot_key ASC").all<SlotRow>()).results;
@@ -54,8 +56,16 @@ export async function POST(request: Request) {
     const altText = optionalText(form.get("altText"), 250);
     const categoryId = optionalText(form.get("categoryId"), 100);
     const sourceType = form.get("sourceType");
+    const requestedMediaKind = form.get("mediaKind") ?? "image";
+    const mediaKind = sourceType === "color" ? "image" : requestedMediaKind;
     if (!name || (sourceType !== "upload" && sourceType !== "url" && sourceType !== "color")) {
-      return errorResponse("Enter a name and choose an image source.");
+      return errorResponse("Enter a name and choose a media source.");
+    }
+    if (mediaKind !== "image" && mediaKind !== "video") {
+      return errorResponse("Choose whether this item is an image or video.");
+    }
+    if (categoryId && mediaKind === "video") {
+      return errorResponse("Videos can currently be used only for the homepage hero.");
     }
     if (categoryId && !await context.database.prepare("SELECT id FROM categories WHERE id = ?").bind(categoryId).first()) {
       return errorResponse("Category not found.", 404);
@@ -68,9 +78,13 @@ export async function POST(request: Request) {
 
     if (sourceType === "upload") {
       const file = form.get("file");
-      const accepted = new Set(["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif"]);
-      if (!(file instanceof File) || !accepted.has(file.type) || file.size < 1 || file.size > 10 * 1024 * 1024) {
-        return errorResponse("Upload a JPG, PNG, WebP, AVIF, or GIF no larger than 10 MB.");
+      const acceptedImages = new Set(["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif"]);
+      const isAccepted = file instanceof File && (mediaKind === "video" ? file.type === "video/mp4" : acceptedImages.has(file.type));
+      const maximumSize = mediaKind === "video" ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+      if (!(file instanceof File) || !isAccepted || file.size < 1 || file.size > maximumSize) {
+        return errorResponse(mediaKind === "video"
+          ? "Upload an MP4 video no larger than 50 MB."
+          : "Upload a JPG, PNG, WebP, AVIF, or GIF no larger than 10 MB.");
       }
       const extension = file.type.split("/")[1] ?? "image";
       objectKey = `media/${id}.${extension}`;
@@ -86,9 +100,9 @@ export async function POST(request: Request) {
     }
 
     await context.database.prepare(
-      `INSERT INTO media_assets (id, name, alt_text, source_type, image_url, object_key, background_color, category_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    ).bind(id, name, altText, sourceType, imageUrl, objectKey, backgroundColor, categoryId).run();
+      `INSERT INTO media_assets (id, name, alt_text, source_type, image_url, object_key, background_color, category_id, media_kind)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ).bind(id, name, altText, sourceType, imageUrl, objectKey, backgroundColor, categoryId, mediaKind).run();
     return NextResponse.json({ created: true, id }, { status: 201, headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     return databaseErrorResponse(error);

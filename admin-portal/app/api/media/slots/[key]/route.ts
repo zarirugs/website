@@ -12,8 +12,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ ke
     if (!body || typeof body !== "object") return errorResponse("Choose a media item.");
     const mediaAssetId = optionalText((body as Record<string, unknown>).mediaAssetId, 100);
     if (!mediaAssetId) return errorResponse("Choose a media item.");
-    const asset = await context.database.prepare("SELECT id FROM media_assets WHERE id = ?").bind(mediaAssetId).first<{ id: string }>();
+    const asset = await context.database.prepare("SELECT id, media_kind FROM media_assets WHERE id = ?").bind(mediaAssetId).first<{ id: string; media_kind: "image" | "video" }>();
     if (!asset) return errorResponse("Media item not found.", 404);
+    if (asset.media_kind === "video" && key !== "hero") return errorResponse("Videos can currently be assigned only to the homepage hero.");
     await context.database.prepare("UPDATE site_media_slots SET media_asset_id = ?, updated_at = CURRENT_TIMESTAMP WHERE slot_key = ?").bind(mediaAssetId, key).run();
     return NextResponse.json({ updated: true }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {

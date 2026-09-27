@@ -5,7 +5,7 @@ It has its own admin-only session cookie and shares the `zari-orders` D1 databas
 
 ## Storefront media library
 
-The dashboard includes a **Storefront media** library. Each item has a name and optional image description, and can be created from an uploaded file, an external image link, or a hex colour. Assign items to the Homepage hero and Atelier craftsmanship placements, then select them when creating a collection or product.
+The dashboard includes a **Storefront media** library. Each item has a name and optional description, and can be created from an uploaded image or MP4 video, an external media link, or a hex colour. Videos can be assigned to the Homepage hero; images and colours remain available for the other placements. The original hero image stays in the library so the homepage can be switched back at any time.
 
 Uploaded files are stored in the shared Cloudflare R2 bucket. Create it once before the first deploy:
 
