@@ -11,7 +11,7 @@ import styles from "./operations.module.css";
 type Metrics = { openOrders: number; awaitingPayment: number; lowStock: number; visibleProducts: number };
 type Category = { id: string; name: string; slug: string; description: string | null; imageUrl: string | null; mediaAssetId: string | null; coverPreviewUrl: string | null; coverBackgroundColor: string | null; coverAltText: string | null; sortOrder: number; isActive: boolean; productCount: number };
 type Order = { id: number; orderNumber: string; customerName: string; customerEmail: string; customerPhone: string | null; deliveryAddress: string | null; notes: string | null; stage: OrderStage; createdAt: string; items: { sku: string; name: string; quantity: number }[] };
-type MediaAsset = { id: string; name: string; altText: string | null; sourceType: "upload" | "url" | "color"; imageUrl: string | null; backgroundColor: string | null; previewUrl: string | null };
+type MediaAsset = { id: string; name: string; altText: string | null; sourceType: "upload" | "url" | "color"; mediaKind: "image" | "video"; imageUrl: string | null; backgroundColor: string | null; previewUrl: string | null };
 type MediaSlot = { slot_key: string; label: string; description: string; media_asset_id: string | null };
 
 function date(value: string) {
@@ -39,6 +39,7 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
   const [mediaName, setMediaName] = useState("");
   const [mediaAltText, setMediaAltText] = useState("");
   const [mediaSourceType, setMediaSourceType] = useState<MediaAsset["sourceType"]>("upload");
+  const [mediaKind, setMediaKind] = useState<MediaAsset["mediaKind"]>("image");
   const [mediaUrl, setMediaUrl] = useState("");
   const [mediaColor, setMediaColor] = useState("#A88957");
   const [mediaFile, setMediaFile] = useState<File | null>(null);
@@ -124,13 +125,14 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
       form.set("name", mediaName);
       form.set("altText", mediaAltText);
       form.set("sourceType", mediaSourceType);
+      form.set("mediaKind", mediaKind);
       if (mediaSourceType === "upload" && mediaFile) form.set("file", mediaFile);
       if (mediaSourceType === "url") form.set("imageUrl", mediaUrl);
       if (mediaSourceType === "color") form.set("backgroundColor", mediaColor);
       const response = await fetch("/api/media", { method: "POST", body: form });
       const result = await response.json().catch(() => ({})) as { error?: string };
       if (!response.ok) throw new Error(result.error ?? "The media item could not be saved.");
-      setMediaName(""); setMediaAltText(""); setMediaUrl(""); setMediaColor("#A88957"); setMediaFile(null);
+      setMediaName(""); setMediaAltText(""); setMediaUrl(""); setMediaColor("#A88957"); setMediaFile(null); setMediaKind("image");
     }, "Media added to the library.");
   }
 
@@ -206,16 +208,16 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
         </section>
 
         <section className={styles.section}>
-          <div className={styles.sectionTitle}><div><p className={styles.eyebrow}>Visual library</p><h2>Storefront media</h2></div><p>Create a named image, external image link, or colour treatment once, then assign it anywhere on the public website.</p></div>
+          <div className={styles.sectionTitle}><div><p className={styles.eyebrow}>Visual library</p><h2>Storefront media</h2></div><p>Create a named image, hero video, external link, or colour treatment, then assign it to the public website.</p></div>
           <div className={styles.mediaLayout}>
             <div>
               <div className={styles.slotGrid}>{mediaSlots.map((slot) => <article className={styles.slot} key={slot.slot_key}>
                 <div><h3>{slot.label}</h3><p>{slot.description}</p></div>
-                <label>Assigned media<select value={slot.media_asset_id ?? ""} onChange={(event) => assignMediaSlot(slot, event.target.value)} disabled={saving}><option value="" disabled>Select media</option>{media.map((asset) => <option key={asset.id} value={asset.id}>{asset.name}</option>)}</select></label>
+                <label>Assigned media<select value={slot.media_asset_id ?? ""} onChange={(event) => assignMediaSlot(slot, event.target.value)} disabled={saving}><option value="" disabled>Select media</option>{media.filter((asset) => slot.slot_key === "hero" || asset.mediaKind !== "video").map((asset) => <option key={asset.id} value={asset.id}>{asset.name}{asset.mediaKind === "video" ? " · Video" : ""}</option>)}</select></label>
               </article>)}</div>
               <div className={styles.mediaGrid}>{media.map((asset) => <article className={styles.mediaCard} key={asset.id}>
                 <MediaPreview asset={asset} />
-                <div><p className={styles.mediaType}>{asset.sourceType}</p><h3>{asset.name}</h3><p>{asset.altText || "No alt text yet."}</p><div className={styles.mediaActions}><button className={styles.textButton} type="button" onClick={() => beginMediaEdit(asset)} disabled={saving}>Edit</button><button className={styles.dangerButton} type="button" onClick={() => deleteMedia(asset)} disabled={saving}>Remove</button></div></div>
+                <div><p className={styles.mediaType}>{asset.mediaKind} · {asset.sourceType}</p><h3>{asset.name}</h3><p>{asset.altText || "No description yet."}</p><div className={styles.mediaActions}><button className={styles.textButton} type="button" onClick={() => beginMediaEdit(asset)} disabled={saving}>Edit</button><button className={styles.dangerButton} type="button" onClick={() => deleteMedia(asset)} disabled={saving}>Remove</button></div></div>
               </article>)}</div>
               {media.length === 0 && <Empty text="Add your first visual to the media library." />}
             </div>
@@ -230,12 +232,13 @@ export default function OperationsDashboard({ initialAdmin }: { initialAdmin: Au
             </form> : <form className={styles.formCard} onSubmit={createMedia}>
               <p className={styles.eyebrow}>Add to library</p>
               <label>Name<input value={mediaName} onChange={(event) => setMediaName(event.target.value)} placeholder="e.g. Autumn collection hero" required /></label>
-              <label>Image description (alt text)<input value={mediaAltText} onChange={(event) => setMediaAltText(event.target.value)} placeholder="Describe the image for visitors" /></label>
-              <label>Source<select value={mediaSourceType} onChange={(event) => setMediaSourceType(event.target.value as MediaAsset["sourceType"])}><option value="upload">Upload image</option><option value="url">Image link</option><option value="color">Colour only</option></select></label>
-              {mediaSourceType === "upload" && <label>Image file<input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" onChange={(event) => setMediaFile(event.target.files?.[0] ?? null)} required /></label>}
-              {mediaSourceType === "url" && <label>Image URL<input value={mediaUrl} onChange={(event) => setMediaUrl(event.target.value)} type="url" placeholder="https://…" required /></label>}
+              <label>Media description<input value={mediaAltText} onChange={(event) => setMediaAltText(event.target.value)} placeholder="Describe the image or video" /></label>
+              {mediaSourceType !== "color" && <label>Media type<select value={mediaKind} onChange={(event) => { setMediaKind(event.target.value as MediaAsset["mediaKind"]); setMediaFile(null); }}><option value="image">Image</option><option value="video">Hero video</option></select></label>}
+              <label>Source<select value={mediaSourceType} onChange={(event) => setMediaSourceType(event.target.value as MediaAsset["sourceType"])}><option value="upload">Upload file</option><option value="url">External link</option><option value="color">Colour only</option></select></label>
+              {mediaSourceType === "upload" && <label>{mediaKind === "video" ? "MP4 video file" : "Image file"}<input type="file" accept={mediaKind === "video" ? "video/mp4" : "image/jpeg,image/png,image/webp,image/avif,image/gif"} onChange={(event) => setMediaFile(event.target.files?.[0] ?? null)} required /></label>}
+              {mediaSourceType === "url" && <label>{mediaKind === "video" ? "MP4 video URL" : "Image URL"}<input value={mediaUrl} onChange={(event) => setMediaUrl(event.target.value)} type="url" placeholder="https://…" required /></label>}
               {mediaSourceType === "color" && <label>Colour code<input value={mediaColor} onChange={(event) => setMediaColor(event.target.value)} pattern="#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?" placeholder="#A88957" required /></label>}
-              <button className={styles.primaryButton} disabled={saving}>{mediaSourceType === "upload" ? "Upload image" : "Save media"}</button>
+              <button className={styles.primaryButton} disabled={saving}>{mediaSourceType === "upload" ? `Upload ${mediaKind}` : "Save media"}</button>
             </form>}
           </div>
         </section>
@@ -263,6 +266,9 @@ function Empty({ text }: { text: string }) {
 }
 
 function MediaPreview({ asset }: { asset: MediaAsset }) {
+  if (asset.mediaKind === "video" && asset.previewUrl) {
+    return <video className={styles.mediaPreview} src={asset.previewUrl} aria-label={asset.altText ?? asset.name} autoPlay loop muted playsInline preload="metadata" />;
+  }
   return <div className={styles.mediaPreview} style={{ backgroundColor: asset.backgroundColor ?? "#e7e4dc", backgroundImage: asset.previewUrl ? `url(${asset.previewUrl})` : undefined }} aria-label={asset.altText ?? asset.name} role="img" />;
 }
 
