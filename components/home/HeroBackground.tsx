@@ -12,7 +12,7 @@ type HeroMedia = {
 type SiteMediaResponse = { media?: { hero?: HeroMedia } };
 
 const defaultHero: HeroMedia = {
-  imageUrl: "/videos/hero-rug-making.mp4",
+  imageUrl: "/api/media/media-default-hero-video",
   backgroundColor: "#171717",
   mediaKind: "video",
 };

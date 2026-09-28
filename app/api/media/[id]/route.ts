@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 import { getDatabase } from "@/lib/server/database";
 import { getMediaBucket, type MediaAssetRow } from "@/lib/server/media";
 
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const cache = (caches as CacheStorage & { default: Cache }).default;
+    const cached = await cache.match(request);
+    if (cached) return cached;
+
     const { id } = await params;
     const database = await getDatabase();
     const asset = await database.prepare(
@@ -19,10 +24,17 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 
     const headers = new Headers({
       "Cache-Control": "public, max-age=31536000, immutable",
+      "Content-Length": object.size.toString(),
       ETag: object.httpEtag,
+      "Accept-Ranges": "bytes",
+      "X-Content-Type-Options": "nosniff",
     });
     object.writeHttpMetadata(headers);
-    return new Response(object.body, { headers });
+    const response = new Response(object.body, { headers });
+    const cacheKey = new Request(request.url, { method: "GET" });
+    const { ctx } = await getCloudflareContext({ async: true });
+    ctx.waitUntil(cache.put(cacheKey, response.clone()).catch(() => undefined));
+    return response;
   } catch {
     return NextResponse.json({ error: "Media is unavailable." }, { status: 503 });
   }
