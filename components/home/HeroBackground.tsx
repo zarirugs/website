@@ -1,31 +1,18 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
 import styles from "./HeroBackground.module.css";
+import type { SiteMedia } from "@/lib/server/site-media";
 
-type HeroMedia = {
-  imageUrl?: string | null;
-  backgroundColor?: string | null;
-  mediaKind?: "image" | "video";
-};
-type SiteMediaResponse = { media?: { hero?: HeroMedia } };
-
-const defaultHero: HeroMedia = {
+const defaultHero: Pick<SiteMedia, "imageUrl" | "backgroundColor" | "mediaKind" | "sourceType"> = {
   imageUrl: "/api/media/media-default-hero-video",
   backgroundColor: "#171717",
   mediaKind: "video",
+  sourceType: "upload",
 };
 
-export default function HeroBackground() {
-  const [media, setMedia] = useState<HeroMedia>(defaultHero);
-
-  useEffect(() => {
-    void fetch("/api/site-media", { cache: "no-store" })
-      .then(async (response): Promise<SiteMediaResponse> => response.ok ? response.json() as Promise<SiteMediaResponse> : { media: {} })
-      .then((result) => result.media?.hero && setMedia(result.media.hero))
-      .catch(() => undefined);
-  }, []);
+export default function HeroBackground({ media = defaultHero }: { media?: SiteMedia | typeof defaultHero }) {
+  const imageWidths = [640, 750, 828, 1080, 1200, 1920];
+  const uploadedImageSrcSet = media.mediaKind === "image" && media.imageUrl && media.sourceType === "upload"
+    ? imageWidths.map((width) => `${media.imageUrl}?w=${width} ${width}w`).join(", ")
+    : undefined;
 
   return (
     <>
@@ -44,7 +31,17 @@ export default function HeroBackground() {
             <source src={media.imageUrl} type="video/mp4" />
           </video>
         ) : media.imageUrl ? (
-          <div className={styles.image} style={{ backgroundImage: `url(${media.imageUrl})` }} />
+          // Admin-managed images use the native element so external URLs remain supported.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={uploadedImageSrcSet ? `${media.imageUrl}?w=1920` : media.imageUrl}
+            srcSet={uploadedImageSrcSet}
+            sizes={uploadedImageSrcSet ? "100vw" : undefined}
+            alt=""
+            className={styles.image}
+            fetchPriority="high"
+            decoding="async"
+          />
         ) : null}
       </div>
 
