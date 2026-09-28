@@ -6,8 +6,8 @@ import { getMediaBucket, type MediaAssetRow } from "@/lib/server/media";
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const cache = (caches as CacheStorage & { default: Cache }).default;
-    const cached = await cache.match(request);
+    const cache = await caches.open("zari-media-v1");
+    const cached = await cache.match(request.url);
     if (cached) return cached;
 
     const { id } = await params;
@@ -31,11 +31,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     });
     object.writeHttpMetadata(headers);
     const response = new Response(object.body, { headers });
-    const cacheKey = new Request(request.url, { method: "GET" });
     const { ctx } = await getCloudflareContext({ async: true });
-    ctx.waitUntil(cache.put(cacheKey, response.clone()).catch(() => undefined));
+    ctx.waitUntil(cache.put(request.url, response.clone()).catch(() => undefined));
     return response;
-  } catch {
+  } catch (error) {
+    console.error("Media delivery failed.", error);
     return NextResponse.json({ error: "Media is unavailable." }, { status: 503 });
   }
 }
