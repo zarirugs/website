@@ -6,9 +6,11 @@ import { getMediaBucket, type MediaAssetRow } from "@/lib/server/media";
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const cache = await caches.open("zari-media-v1");
+    const cache = await caches.open("zari-media-v2");
     const cached = await cache.match(request.url);
     if (cached) return cached;
+
+    const { ctx, env } = await getCloudflareContext({ async: true });
 
     const { id } = await params;
     const database = await getDatabase();
@@ -22,6 +24,23 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     const object = await (await getMediaBucket()).get(asset.object_key);
     if (!object) return NextResponse.json({ error: "Media not found." }, { status: 404 });
 
+    const requestedWidth = Number(new URL(request.url).searchParams.get("w"));
+    const imageWidths = [640, 750, 828, 1080, 1200, 1920];
+    const imageWidth = imageWidths.includes(requestedWidth) ? requestedWidth : null;
+    if (asset.media_kind === "image" && imageWidth && env.IMAGES) {
+      const transformed = await env.IMAGES.input(object.body)
+        .transform({ width: imageWidth, fit: "scale-down" })
+        .output({ format: "image/webp", quality: 80 });
+      const response = transformed.response({
+        headers: {
+          "Cache-Control": "public, max-age=31536000, immutable",
+          "X-Content-Type-Options": "nosniff",
+        },
+      });
+      ctx.waitUntil(cache.put(request.url, response.clone()).catch(() => undefined));
+      return response;
+    }
+
     const headers = new Headers({
       "Cache-Control": "public, max-age=31536000, immutable",
       "Content-Length": object.size.toString(),
@@ -31,7 +50,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     });
     object.writeHttpMetadata(headers);
     const response = new Response(object.body, { headers });
-    const { ctx } = await getCloudflareContext({ async: true });
     ctx.waitUntil(cache.put(request.url, response.clone()).catch(() => undefined));
     return response;
   } catch (error) {
