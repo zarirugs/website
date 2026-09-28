@@ -16,6 +16,7 @@ export type MediaAssetRow = {
 export type R2ObjectBody = {
   body: ReadableStream;
   httpEtag: string;
+  size: number;
   writeHttpMetadata(headers: Headers): void;
 };
 
