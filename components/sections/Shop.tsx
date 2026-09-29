@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 
 import Container from "@/components/layout/Container";
@@ -84,63 +84,50 @@ function ShopCard({ collection }: { collection: Collection }) {
       >
         <div className={styles.visual}>
           <CollectionVisual collection={collection} className={styles.image} />
-          <div className={styles.nameShade} aria-hidden="true" />
-          <h3 className={styles.name}>{collection.title}</h3>
+          <span className={styles.imageAction} aria-hidden="true">
+            <ArrowUpRight size={18} strokeWidth={1.35} />
+          </span>
+        </div>
+        <div className={styles.cardCopy}>
+          <div>
+            <p className={styles.cardEyebrow}>Collection</p>
+            <h3 className={styles.name}>{collection.title}</h3>
+          </div>
+          <p className={styles.subtitle}>{collection.subtitle}</p>
         </div>
       </Link>
     </article>
   );
 }
 
-function CarouselShop({ headingAs: Heading = "h2", headingLink = false }: ShopProps) {
+function CollectionGallery({ headingAs: Heading = "h2", headingLink = false }: ShopProps) {
   const { collections: catalog } = useCatalog();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [hasUserNavigated, setHasUserNavigated] = useState(false);
-  const orderedCollections = catalog.map((_, index) => catalog[(activeIndex + index) % catalog.length]);
-
-  function move(direction: "previous" | "next", isManual = true) {
-    if (catalog.length < 2) return;
-    if (isManual) setHasUserNavigated(true);
-    setActiveIndex((current) => (current + (direction === "next" ? 1 : -1) + catalog.length) % catalog.length);
-  }
-
-  useEffect(() => {
-    if (hasUserNavigated || isPaused || catalog.length < 2) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const timer = window.setTimeout(() => setActiveIndex((current) => (current + 1) % catalog.length), 4000);
-
-    return () => window.clearTimeout(timer);
-  }, [activeIndex, catalog.length, hasUserNavigated, isPaused]);
 
   return (
     <Section id="shop" className={styles.section}>
       <Container className={styles.shopContainer}>
         <FadeIn>
           <header className={styles.header}>
-            {headingLink ? (
-              <Link href="/shop" className={styles.titleLink} aria-label="Open shop">
-                <Heading className={styles.title}>Shop</Heading>
-              </Link>
-            ) : (
-              <Heading className={styles.title}>Shop</Heading>
-            )}
+            <div className={styles.headingGroup}>
+              <p className={styles.eyebrow}>The collections</p>
+              <Heading className={styles.title}>Made to live with you.</Heading>
+            </div>
+            <div className={styles.intro}>
+              <p>
+                From quiet contemporary forms to storied motifs, discover rugs
+                shaped by hand, material and time.
+              </p>
+              {headingLink && (
+                <Link href="/shop" className={styles.titleLink} aria-label="View all rugs">
+                  View all rugs <ArrowUpRight size={16} strokeWidth={1.4} />
+                </Link>
+              )}
+            </div>
           </header>
         </FadeIn>
         <FadeIn>
-          <div className={styles.carousel}>
-            <button type="button" className={`${styles.control} ${styles.previousControl}`} aria-label="Show previous shop pieces" disabled={catalog.length < 2} onClick={() => move("previous")}>
-              <ChevronLeft aria-hidden="true" size={24} strokeWidth={1.5} />
-            </button>
-            <div className={styles.viewport} onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)} onFocusCapture={() => setIsPaused(true)} onBlurCapture={() => setIsPaused(false)}>
-              <div className={styles.track}>
-                {orderedCollections.map((collection) => <ShopCard key={collection.id} collection={collection} />)}
-              </div>
-            </div>
-            <button type="button" className={`${styles.control} ${styles.nextControl}`} aria-label="Show next shop pieces" disabled={catalog.length < 2} onClick={() => move("next")}>
-              <ChevronRight aria-hidden="true" size={24} strokeWidth={1.5} />
-            </button>
+          <div className={styles.gallery}>
+            {catalog.map((collection) => <ShopCard key={collection.id} collection={collection} />)}
           </div>
         </FadeIn>
       </Container>
@@ -149,5 +136,5 @@ function CarouselShop({ headingAs: Heading = "h2", headingLink = false }: ShopPr
 }
 
 export default function Shop(props: ShopProps) {
-  return props.variant === "catalogue" ? <Suspense fallback={<p role="status">Loading rugs…</p>}><ShopCatalogue /></Suspense> : <CarouselShop {...props} />;
+  return props.variant === "catalogue" ? <Suspense fallback={<p role="status">Loading rugs…</p>}><ShopCatalogue /></Suspense> : <CollectionGallery {...props} />;
 }
