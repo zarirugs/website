@@ -1,69 +1,75 @@
 .section {
   overflow: hidden;
   scroll-margin-top: 6rem;
+  background: #f6f4ef;
 }
 
-/* Compact collection carousel used on the home page. */
-.shopContainer { max-width: 92rem; }
+.shopContainer { max-width: 96rem; }
 
 .header {
-  display: flex;
-  justify-content: center;
-  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  display: grid;
+  gap: 1.75rem;
+  margin-bottom: clamp(2.5rem, 6vw, 5.5rem);
 }
 
-.title {
-  color: #57534e;
+.headingGroup { max-width: 48rem; }
+
+.eyebrow,
+.cardEyebrow {
+  color: #88775b;
   font-size: 0.625rem;
-  font-weight: 500;
-  letter-spacing: 0.38em;
+  font-weight: 600;
+  letter-spacing: 0.3em;
   line-height: 1;
   text-transform: uppercase;
 }
 
+.title {
+  max-width: 9em;
+  margin-top: 1.25rem;
+  color: #24221f;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.75rem);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+.intro {
+  max-width: 29rem;
+  color: #68635b;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+}
+
 .titleLink {
   display: inline-flex;
-  padding: 0.75rem;
-  transition: color 180ms ease;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+  border-bottom: 1px solid #b0a58e;
+  padding-bottom: 0.35rem;
+  color: #24221f;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, color 180ms ease;
 }
 
-.titleLink:hover .title { color: #6e5a31; }
-.titleLink:focus-visible { outline: 1px solid #9d8655; outline-offset: 0.125rem; }
+.titleLink:hover { border-color: #6e5a31; color: #6e5a31; }
+.titleLink:focus-visible { outline: 1px solid #9d8655; outline-offset: 0.375rem; }
 
-.carousel { position: relative; padding-inline: 2.5rem; }
-
-.control {
-  position: absolute;
-  top: 50%;
-  z-index: 2;
+.gallery {
   display: grid;
-  width: 2.25rem;
-  height: 2.25rem;
-  place-items: center;
-  border: 1px solid #49423a;
-  border-radius: 50%;
-  background: #292521;
-  box-shadow: 0 0.25rem 0.875rem rgba(0, 0, 0, 0.18);
-  color: #fff;
-  transform: translateY(-50%);
-  transition: background 180ms ease, opacity 180ms ease, box-shadow 180ms ease;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  align-items: start;
+  column-gap: clamp(1.25rem, 2.4vw, 2.5rem);
+  row-gap: clamp(3rem, 6vw, 5rem);
 }
 
-.previousControl { left: 0; }
-.nextControl { right: 0; }
-.control:hover:not(:disabled), .control:focus-visible { background: #806b43; box-shadow: 0 0.35rem 1rem rgba(0, 0, 0, 0.24); }
-.control:focus-visible { outline: 2px solid #9d8655; outline-offset: 0.1875rem; }
-.control:disabled { cursor: default; opacity: 0.65; }
-
-.viewport {
-  --card-gap: 0.875rem;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-}
-
-.track { display: flex; gap: var(--card-gap); width: 100%; }
-.card { flex: 0 0 calc((100% - var(--card-gap)) / 2); min-width: 0; }
+.card { min-width: 0; }
 .cardLink { display: block; color: inherit; }
 .cardLink:focus-visible { outline: 1px solid #8b7442; outline-offset: 0.375rem; }
 .collectionVisual { position: relative; overflow: hidden; background-color: #e9e6df; }
@@ -74,17 +80,65 @@
 .collectionVisual[data-collection="bespoke"] .collectionTexture { background-color: #a68165; background-image: linear-gradient(90deg, transparent 46%, rgba(241, 221, 180, 0.55) 46.5% 53.5%, transparent 54%), linear-gradient(0deg, transparent 46%, rgba(241, 221, 180, 0.55) 46.5% 53.5%, transparent 54%), repeating-linear-gradient(45deg, rgba(255,255,255,0.12) 0 1px, transparent 1px 7px), linear-gradient(145deg, #583f36, #c49a72 48%, #685246); }
 .image { width: 100%; aspect-ratio: 4 / 5; }
 .visual { position: relative; overflow: hidden; }
-.nameShade { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; min-height: clamp(5.5rem, 20%, 8.5rem); background: linear-gradient(to top, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.42) 54%, transparent); pointer-events: none; }
-.name { position: absolute; z-index: 3; right: 1rem; bottom: 1rem; left: 1rem; margin: 0; color: #fff; font-family: var(--font-display); font-size: clamp(0.9375rem, 2.3vw, 1.125rem); font-weight: 400; letter-spacing: -0.015em; line-height: 1.1; text-shadow: 0 0.125rem 1rem rgba(0, 0, 0, 0.8); }
+.imageAction {
+  position: absolute;
+  z-index: 2;
+  right: 1rem;
+  bottom: 1rem;
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(249, 247, 242, 0.92);
+  color: #24221f;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 280ms ease, transform 280ms ease;
+}
+
+.cardCopy {
+  padding-top: 1.25rem;
+  border-top: 1px solid transparent;
+}
+
+.cardEyebrow { margin-bottom: 0.6rem; color: #948a79; letter-spacing: 0.22em; }
+
+.name {
+  color: #24221f;
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 4vw, 2.25rem);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.subtitle {
+  max-width: 19rem;
+  margin-top: 0.75rem;
+  color: #716c63;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.cardLink:hover .collectionVisualImage { transform: scale(1.025); }
+.cardLink:hover .imageAction { opacity: 1; transform: translateY(0); }
+
+@media (hover: hover) and (pointer: fine) {
+  .imageAction { opacity: 0; transform: translateY(0.5rem); }
+}
 
 @media (min-width: 48rem) {
-  .carousel { padding-inline: 3.5rem; }
-  .control { width: 2.75rem; height: 2.75rem; }
-  .previousControl { left: 0.375rem; }
-  .nextControl { right: 0.375rem; }
-  .viewport { --card-gap: 1.5rem; }
-  .card { flex-basis: calc((100% - 2 * var(--card-gap)) / 3); }
+  .header {
+    grid-template-columns: minmax(0, 1.6fr) minmax(19rem, 0.75fr);
+    align-items: end;
+    gap: 4rem;
+  }
+
+  .intro { justify-self: end; padding-bottom: 0.25rem; }
+
 }
 @media (prefers-reduced-motion: reduce) {
-  .collectionVisualImage { transition: none; }
+  .collectionVisualImage,
+  .imageAction { transition: none; }
 }
