@@ -28,15 +28,3 @@
   object-fit: cover;
   object-position: center;
 }
-
-@media (min-width: 48rem) {
-  .video {
-    inset: auto;
-    top: 50%;
-    left: 50%;
-    width: 100vh;
-    height: 100vw;
-    transform: translate(-50%, -50%) rotate(90deg);
-    transform-origin: center;
-  }
-}
