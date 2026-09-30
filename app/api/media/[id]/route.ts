@@ -2,16 +2,26 @@ import { NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 import { getDatabase } from "@/lib/server/database";
-import { getMediaBucket, type MediaAssetRow, type R2Range } from "@/lib/server/media";
+import { getMediaBucket, type MediaAssetRow } from "@/lib/server/media";
 
-function resolveRange(range: R2Range, totalSize: number) {
-  if ("suffix" in range) {
-    const length = Math.min(range.suffix, totalSize);
+function resolveRange(header: string, totalSize: number) {
+  const match = /^bytes=(\d*)-(\d*)$/i.exec(header.trim());
+  if (!match || (!match[1] && !match[2])) return null;
+
+  if (!match[1]) {
+    const suffixLength = Number(match[2]);
+    if (!Number.isSafeInteger(suffixLength) || suffixLength <= 0) return null;
+    const length = Math.min(suffixLength, totalSize);
     return { offset: totalSize - length, length };
   }
 
-  const offset = range.offset ?? 0;
-  return { offset, length: range.length ?? totalSize - offset };
+  const offset = Number(match[1]);
+  const requestedEnd = match[2] ? Number(match[2]) : totalSize - 1;
+  if (!Number.isSafeInteger(offset) || !Number.isSafeInteger(requestedEnd) || offset >= totalSize) return null;
+
+  const end = Math.min(requestedEnd, totalSize - 1);
+  if (end < offset) return null;
+  return { offset, length: end - offset + 1 };
 }
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -63,8 +73,12 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     });
     object.writeHttpMetadata(headers);
     let status = 200;
-    if (requestedRange && object.range) {
-      const range = resolveRange(object.range, object.size);
+    if (requestedRange) {
+      const range = resolveRange(requestedRange, object.size);
+      if (!range) {
+        headers.set("Content-Range", `bytes */${object.size}`);
+        return new Response(null, { status: 416, headers });
+      }
       headers.set("Content-Length", range.length.toString());
       headers.set("Content-Range", `bytes ${range.offset}-${range.offset + range.length - 1}/${object.size}`);
       status = 206;

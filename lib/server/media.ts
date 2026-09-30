@@ -17,7 +17,6 @@ export type R2ObjectBody = {
   body: ReadableStream;
   httpEtag: string;
   size: number;
-  range?: R2Range;
   writeHttpMetadata(headers: Headers): void;
 };
 
