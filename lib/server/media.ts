@@ -17,11 +17,17 @@ export type R2ObjectBody = {
   body: ReadableStream;
   httpEtag: string;
   size: number;
+  range?: R2Range;
   writeHttpMetadata(headers: Headers): void;
 };
 
+export type R2Range =
+  | { offset: number; length?: number }
+  | { offset?: number; length: number }
+  | { suffix: number };
+
 export interface R2Bucket {
-  get(key: string): Promise<R2ObjectBody | null>;
+  get(key: string, options?: { range?: R2Range | Headers }): Promise<R2ObjectBody | null>;
 }
 
 type RuntimeEnvironment = { ZARI_MEDIA?: R2Bucket };
