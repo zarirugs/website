@@ -7,6 +7,7 @@ const defaultHero: Pick<SiteMedia, "imageUrl" | "backgroundColor" | "mediaKind" 
   mediaKind: "video",
   sourceType: "upload",
 };
+const heroPoster = "/api/media/media-default-hero";
 
 export default function HeroBackground({ media = defaultHero }: { media?: SiteMedia | typeof defaultHero }) {
   const imageWidths = [640, 750, 828, 1080, 1200, 1920];
@@ -18,18 +19,22 @@ export default function HeroBackground({ media = defaultHero }: { media?: SiteMe
     <>
       <div className={styles.media} style={{ backgroundColor: media.backgroundColor ?? "#171717" }} aria-hidden="true">
         {media.mediaKind === "video" && media.imageUrl ? (
-          <video
-            key={media.imageUrl}
-            className={styles.video}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            tabIndex={-1}
-          >
-            <source src={media.imageUrl} type="video/mp4" />
-          </video>
+          <>
+            <div className={styles.image} style={{ backgroundImage: `url(${heroPoster})` }} />
+            <video
+              key={media.imageUrl}
+              className={styles.video}
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster={heroPoster}
+              preload="metadata"
+              tabIndex={-1}
+            >
+              <source src={media.imageUrl} type="video/mp4" />
+            </video>
+          </>
         ) : media.imageUrl ? (
           // Admin-managed images use the native element so external URLs remain supported.
           // eslint-disable-next-line @next/next/no-img-element

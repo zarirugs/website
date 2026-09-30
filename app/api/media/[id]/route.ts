@@ -2,12 +2,23 @@ import { NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 import { getDatabase } from "@/lib/server/database";
-import { getMediaBucket, type MediaAssetRow } from "@/lib/server/media";
+import { getMediaBucket, type MediaAssetRow, type R2Range } from "@/lib/server/media";
+
+function resolveRange(range: R2Range, totalSize: number) {
+  if ("suffix" in range) {
+    const length = Math.min(range.suffix, totalSize);
+    return { offset: totalSize - length, length };
+  }
+
+  const offset = range.offset ?? 0;
+  return { offset, length: range.length ?? totalSize - offset };
+}
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const cache = await caches.open("zari-media-v2");
-    const cached = await cache.match(request.url);
+    const requestedRange = request.headers.get("range");
+    const cache = requestedRange ? null : await caches.open("zari-media-v2");
+    const cached = cache ? await cache.match(request.url) : null;
     if (cached) return cached;
 
     const { ctx, env } = await getCloudflareContext({ async: true });
@@ -21,13 +32,16 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       return NextResponse.json({ error: "Media not found." }, { status: 404 });
     }
 
-    const object = await (await getMediaBucket()).get(asset.object_key);
+    const object = await (await getMediaBucket()).get(
+      asset.object_key,
+      requestedRange ? { range: request.headers } : undefined,
+    );
     if (!object) return NextResponse.json({ error: "Media not found." }, { status: 404 });
 
     const requestedWidth = Number(new URL(request.url).searchParams.get("w"));
     const imageWidths = [640, 750, 828, 1080, 1200, 1920];
     const imageWidth = imageWidths.includes(requestedWidth) ? requestedWidth : null;
-    if (asset.media_kind === "image" && imageWidth && env.IMAGES) {
+    if (!requestedRange && cache && asset.media_kind === "image" && imageWidth && env.IMAGES) {
       const transformed = await env.IMAGES.input(object.body)
         .transform({ width: imageWidth, fit: "scale-down" })
         .output({ format: "image/webp", quality: 80 });
@@ -43,14 +57,25 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     const headers = new Headers({
       "Cache-Control": "public, max-age=31536000, immutable",
-      "Content-Length": object.size.toString(),
       ETag: object.httpEtag,
       "Accept-Ranges": "bytes",
       "X-Content-Type-Options": "nosniff",
     });
     object.writeHttpMetadata(headers);
-    const response = new Response(object.body, { headers });
-    ctx.waitUntil(cache.put(request.url, response.clone()).catch(() => undefined));
+    let status = 200;
+    if (requestedRange && object.range) {
+      const range = resolveRange(object.range, object.size);
+      headers.set("Content-Length", range.length.toString());
+      headers.set("Content-Range", `bytes ${range.offset}-${range.offset + range.length - 1}/${object.size}`);
+      status = 206;
+    } else {
+      headers.set("Content-Length", object.size.toString());
+    }
+
+    const response = new Response(object.body, { status, headers });
+    if (cache) {
+      ctx.waitUntil(cache.put(request.url, response.clone()).catch(() => undefined));
+    }
     return response;
   } catch (error) {
     console.error("Media delivery failed.", error);
