@@ -1,8 +1,11 @@
 week,post_id,aesthetic,brand_relevance,authenticity,story_value,technical,total,sequence_score,user_decision,rejection_reason,performance_note,feedback_reference
-2026-09-28,01-meet-zari,5,4,5,4,5,23,4,pending,,pending publication,
+2026-09-28,01-meet-zari,5,4,5,4,5,23,4,approved,,1 interaction; strongest post; Instagram showed 0 views,
 2026-09-28,02-from-bhadohi,4,5,5,5,4,23,4,rejected,ugly; makes brand image bad,pending publication,https://github.com/zarirugs/website/pull/64#issuecomment-5855247165
 2026-09-28,03-follow-the-making,4,4,5,4,5,22,4,rejected,does not communicate enough; not eye-catching,pending publication,https://github.com/zarirugs/website/pull/64#issuecomment-5855247165
 2026-09-28,02-from-bhadohi,5,5,5,5,4,24,5,rejected,this is not a rug,pending publication,https://github.com/zarirugs/website/pull/64#issuecomment-5855317328
 2026-09-28,03-follow-the-making,5,4,5,5,5,24,5,rejected,what is this?; subject was unclear,pending publication,https://github.com/zarirugs/website/pull/64#issuecomment-5855319214
-2026-09-28,02-from-bhadohi,5,5,5,5,5,25,5,pending,,pending publication,replacement after latest individual rejection
-2026-09-28,03-follow-the-making,5,5,5,4,5,24,5,pending,,pending publication,replacement after latest individual rejection
+2026-09-28,02-from-bhadohi,5,5,5,5,5,25,5,approved,,0 interactions; tied weakest; Instagram showed 0 views,replacement after latest individual rejection
+2026-09-28,03-follow-the-making,5,5,5,4,5,24,5,approved,,0 interactions; tied weakest; Instagram showed 0 views,replacement after latest individual rejection
+2026-10-05,04-size-the-room,5,5,5,5,5,25,5,pending,,pending publication,weekly selection
+2026-10-05,05-read-the-surface,5,5,5,5,5,25,5,pending,,pending publication,weekly selection
+2026-10-05,06-light-finds-pattern,5,5,5,4,5,24,5,pending,,pending publication,weekly selection

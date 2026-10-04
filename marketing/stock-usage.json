@@ -62,6 +62,33 @@
       "query": "sunlit rug interior editorial",
       "week": "2026-09-28",
       "filename": "03-follow-the-making.jpg"
+    },
+    {
+      "provider": "pexels",
+      "id": "34119222",
+      "photographer": "Joshua Bull",
+      "sourceUrl": "https://www.pexels.com/photo/cozy-modern-living-room-with-patterned-decor-34119222/",
+      "query": "editorial living room statement rug",
+      "week": "2026-10-05",
+      "filename": "04-size-the-room.jpg"
+    },
+    {
+      "provider": "pexels",
+      "id": "16275030",
+      "photographer": "Elif Gökçe",
+      "sourceUrl": "https://www.pexels.com/photo/woman-hand-touching-carpet-16275030/",
+      "query": "hand touching rug texture close up",
+      "week": "2026-10-05",
+      "filename": "05-read-the-surface.jpg"
+    },
+    {
+      "provider": "pexels",
+      "id": "32072732",
+      "photographer": "Shuttercraftsman",
+      "sourceUrl": "https://www.pexels.com/photo/sunlit-interior-with-vintage-rug-and-modern-decor-32072732/",
+      "query": "sunlit patterned rug editorial interior",
+      "week": "2026-10-05",
+      "filename": "06-light-finds-pattern.jpg"
     }
   ]
 }
