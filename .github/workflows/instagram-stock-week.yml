@@ -1,8 +1,6 @@
 name: Prepare weekly Instagram stock content
 
 on:
-  schedule:
-    - cron: "30 5 * * 0"
   workflow_dispatch:
     inputs:
       week:
