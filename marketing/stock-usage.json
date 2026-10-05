@@ -126,6 +126,98 @@
       "week": "2026-10-05",
       "filename": "reel-02-room-begins-underfoot.mp4",
       "rights": "Original composition; no third-party samples"
+    },
+    {
+      "provider": "pexels",
+      "id": "5973147",
+      "photographer": "Grisha Grishkoff",
+      "sourceUrl": "https://www.pexels.com/video/close-up-shot-of-a-carpet-5973147/",
+      "query": "carpet fringe macro cinematic video",
+      "week": "2026-10-12",
+      "filename": "reel-03-material-remembers.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "4788152",
+      "photographer": "Ketut Subiyanto",
+      "sourceUrl": "https://www.pexels.com/video/a-woman-s-hand-touching-a-fabric-4788152/",
+      "query": "hand touching textured fabric cinematic video",
+      "week": "2026-10-12",
+      "filename": "reel-03-material-remembers.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "4465895",
+      "photographer": "Luna Lovegood",
+      "sourceUrl": "https://www.pexels.com/video/a-person-feeling-fabric-samples-4465895/",
+      "query": "hand feeling textile samples video",
+      "week": "2026-10-12",
+      "filename": "reel-03-material-remembers.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "26569044",
+      "photographer": "K",
+      "sourceUrl": "https://www.pexels.com/video/a-person-s-hand-is-touching-a-piece-of-fabric-26569044/",
+      "query": "hand weaving green fibers macro video",
+      "week": "2026-10-12",
+      "filename": "reel-03-material-remembers.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "7689269",
+      "photographer": "KoolShooters",
+      "sourceUrl": "https://www.pexels.com/video/couple-reading-a-book-7689269/",
+      "query": "fashion on patterned carpet vertical video",
+      "week": "2026-10-12",
+      "filename": "reel-04-made-in-rhythm.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "30449368",
+      "photographer": "Hafize Balcı",
+      "sourceUrl": "https://www.pexels.com/video/skillful-hands-weaving-textile-on-loom-30449368/",
+      "query": "sunlit loom hands vertical video",
+      "week": "2026-10-12",
+      "filename": "reel-04-made-in-rhythm.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "15902228",
+      "photographer": "khanhhoangminh",
+      "sourceUrl": "https://www.pexels.com/video/a-man-is-working-on-a-woven-rug-15902228/",
+      "query": "hands working woven rug video",
+      "week": "2026-10-12",
+      "filename": "reel-04-made-in-rhythm.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "6842637",
+      "photographer": "Teona Swift",
+      "sourceUrl": "https://www.pexels.com/video/arts-and-crafts-on-the-table-6842637/",
+      "query": "sunlit textile craft studio vertical video",
+      "week": "2026-10-12",
+      "filename": "reel-04-made-in-rhythm.mp4"
+    },
+    {
+      "provider": "original",
+      "id": "zari-material-memory-001",
+      "creator": "ZARI / in-repository procedural composition",
+      "sourceUrl": "scripts/marketing/build-weekly-reels.mjs",
+      "query": "original 100 BPM tactile ambient pulse",
+      "week": "2026-10-12",
+      "filename": "reel-03-material-remembers.mp4",
+      "rights": "Original composition; no third-party samples"
+    },
+    {
+      "provider": "original",
+      "id": "zari-made-in-rhythm-001",
+      "creator": "ZARI / in-repository procedural composition",
+      "sourceUrl": "scripts/marketing/build-weekly-reels.mjs",
+      "query": "original 128 BPM percussive electronic score",
+      "week": "2026-10-12",
+      "filename": "reel-04-made-in-rhythm.mp4",
+      "rights": "Original composition; no third-party samples"
     }
   ]
 }

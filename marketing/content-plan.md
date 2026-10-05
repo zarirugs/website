@@ -30,6 +30,23 @@ origin, and reason to follow.
 | 11 | Collaboration | Designer's view on anchoring a room | Audience crossover | One relevant designer partner |
 | 12 | Founder update | What the first followers shaped | Reward early audience | Founder photograph or video |
 
+## Ongoing Monday–Saturday cadence
+
+Sunday is the learning and production day, with no feed publication. The Sunday
+run records verified metrics, compares the strongest and weakest posts, reviews
+image and video scores plus exact rejection reasons, and opens one approval PR
+for the following week.
+
+| Day | Default format | Role |
+| --- | --- | --- |
+| Monday | Reel | Luxury world-building and reach |
+| Tuesday | Reel | Test a second creative premise |
+| Wednesday | Still or carousel | A single editorial or saveable idea |
+| Thursday | Founder, interior, or craft post | Context and trust |
+| Friday | Reel | Test a third visual rhythm or narrative |
+| Saturday | Carousel, community, or behind-the-scenes | Saves, replies, and participation |
+| Sunday | No publish | Measure, learn, and create next week's approval PR |
+
 ## Distribution target
 
 - First 25: founders' personal networks, past professional contacts, and WhatsApp status.

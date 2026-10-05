@@ -15,26 +15,31 @@ The account should earn a follow through three things:
 
 ## Weekly rhythm
 
-- Tuesday: brand story or founder perspective.
-- Thursday: useful, saveable interior or rug education.
-- Saturday: craft, mood, or behind-the-scenes content.
+- Monday: luxury Reel led by carpet, space, or fashion movement.
+- Tuesday: a second Reel testing a distinct material or visual premise.
+- Wednesday: editorial still or carousel with one clear idea.
+- Thursday: founder, interior, or craft story.
+- Friday: a third Reel with a distinct rhythm or narrative treatment.
+- Saturday: saveable carousel, community prompt, or behind-the-scenes post.
+- Sunday: no publishing. Review verified results and prepare the next weekly approval PR.
 - Stories: three to five informal updates per week, including one poll or question.
 - Community: 20 minutes each weekday leaving thoughtful comments and replying to every genuine interaction.
 
-The scheduled publisher runs at 19:30 India time on Tuesday, Thursday, and Saturday.
+The scheduled publisher runs at 19:30 India time from Monday through Saturday.
 It publishes only entries in `queue.json` whose status is `approved` and whose
 `publishAt` time has passed. Published IDs receive a Git tag, preventing the same
 entry from being selected again.
 
 ## Once-a-week approval flow
 
-1. Every Sunday at 11:00 India time, GitHub searches Pexels for a fresh pool of
-   photographs, rejects low-resolution and previously used results, crops the
-   selected files to 1080 × 1350, rotates the caption set, and prepares an isolated
+1. Every Sunday, the weekly cycle records only verified results from the week,
+   identifies the strongest and weakest posts, and turns those findings into a
+   Monday–Saturday plan. It prepares fresh media and an isolated
    `codex/instagram-week-YYYY-MM-DD` branch. Website photography is not used as a
    recurring content source.
-2. Pushing that branch makes GitHub open one weekly review pull request. Its review
-   page shows the three visuals, full captions, calls to action, and publish times.
+2. Pushing that branch opens one weekly review pull request. Its review page shows
+   all six publishing slots, including Reels on Monday, Tuesday, and Friday, with
+   previews, captions, music rights, scores, and publish times.
 3. Review the pack once. To reject one image, comment `REJECT 1 — reason`,
    `REJECT 2 — reason`, or `REJECT 3 — reason` on the PR. Only that image is held
    and replaced; the others retain their accepted state. Merge only when all three

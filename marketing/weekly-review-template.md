@@ -1,11 +1,11 @@
 # Instagram week of YYYY-MM-DD
 
-Merge this pull request to approve all three posts for the week. Nothing in this
+Merge this pull request to approve the Monday–Saturday plan. Nothing in this
 branch can publish before it is merged to `main`.
 
-Reject one image by commenting `REJECT 1 — reason`, `REJECT 2 — reason`, or
-`REJECT 3 — reason`. Only that image will be replaced. Merge after all three are
-accepted.
+Reject one slot with `REJECT MONDAY — reason`, `REJECT REEL 1 — reason`, or an
+equivalent plain-language comment. Only that slot is replaced. Merge after all
+six are accepted.
 
 ## Last week's signal
 
@@ -13,7 +13,11 @@ accepted.
 - Best-performing post: VALUE
 - What we learned: VALUE
 
-## Tuesday — HH:MM IST
+## Monday Reel — 19:30 IST
+
+REEL PREVIEW, MUSIC, RIGHTS, SCORE, AND CAPTION
+
+## Tuesday Reel — 19:30 IST
 
 ![Tuesday post](RAW_GITHUB_ASSET_URL)
 
@@ -25,7 +29,11 @@ accepted.
 
 > FULL CAPTION
 
-## Thursday — HH:MM IST
+## Wednesday — 19:30 IST
+
+VISUAL, SCORE, AND CAPTION
+
+## Thursday — 19:30 IST
 
 ![Thursday post](RAW_GITHUB_ASSET_URL)
 
@@ -37,7 +45,11 @@ accepted.
 
 > FULL CAPTION
 
-## Saturday — HH:MM IST
+## Friday Reel — 19:30 IST
+
+REEL PREVIEW, MUSIC, RIGHTS, SCORE, AND CAPTION
+
+## Saturday — 19:30 IST
 
 ![Saturday post](RAW_GITHUB_ASSET_URL)
 
@@ -57,6 +69,7 @@ accepted.
 - [ ] Dates and times are correct.
 - [ ] Each post has one clear purpose.
 - [ ] Every image scored at least 21/25 and at least 4 for aesthetic strength and authenticity.
-- [ ] The three-image sequence scored 4/5 or better.
+- [ ] Every Reel scored at least 21/25, shows its music rights route, and changes one primary test variable.
+- [ ] The complete six-post sequence scored 4/5 or better.
 
 **Merge = approve the complete weekly pack.**
