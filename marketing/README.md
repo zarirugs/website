@@ -28,6 +28,14 @@ It publishes only entries in `queue.json` whose status is `approved` and whose
 `publishAt` time has passed. Published IDs receive a Git tag, preventing the same
 entry from being selected again.
 
+Reels support an optional mixed audio track. Build one with
+`npm run marketing:reel-draft -- --input=... --output=... --title=... --subtitle=... --audio=licensed-track.mp3`.
+The default audio level is 22%; use `--audio-volume=0.18` or another value from 0
+to 1 when the visual needs a quieter mix. Only use audio with documented commercial
+rights. For a current English or Punjabi trend, select the track from the catalog
+available inside the ZARI Instagram account and record the exact excerpt in the
+weekly review.
+
 ## Once-a-week approval flow
 
 1. At 12:30 India time each Sunday, the Codex marketing review records the previous

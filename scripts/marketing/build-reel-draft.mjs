@@ -16,6 +16,7 @@ for (const key of required) {
 }
 if (!fs.existsSync(values.input)) throw new Error(`Input does not exist: ${values.input}`);
 if (path.extname(values.output).toLowerCase() !== ".mp4") throw new Error("Output must be an .mp4 file");
+if (values.audio && !fs.existsSync(values.audio)) throw new Error(`Audio does not exist: ${values.audio}`);
 fs.mkdirSync(path.dirname(values.output), { recursive: true });
 
 const displayCandidates = [
@@ -38,11 +39,15 @@ const focal = Number(values.focal ?? "0.5");
 if (!Number.isFinite(focal) || focal < 0.35 || focal > 0.65) {
   throw new Error("--focal must be between 0.35 and 0.65");
 }
+const audioVolume = Number(values["audio-volume"] ?? "0.22");
+if (!Number.isFinite(audioVolume) || audioVolume < 0 || audioVolume > 1) {
+  throw new Error("--audio-volume must be between 0 and 1");
+}
 
 const filter = [
-  "[0:v]scale=1280:2276:force_original_aspect_ratio=increase",
-  "crop=1280:2276",
-  `zoompan=z='min(zoom+0.00022,1.065)':x='iw/2-(iw/zoom/2)':y='ih*${focal}-(ih/zoom/2)':d=240:s=1080x1920:fps=30`,
+  "[0:v]scale=1080:1920:force_original_aspect_ratio=increase",
+  `crop=1080:1920:x='(iw-ow)/2':y='max(0,min(ih-oh,ih*${focal}-oh/2))'`,
+  "fps=30",
   "eq=brightness=-0.055:saturation=0.92",
   "drawbox=x=0:y=0:w=iw:h=ih:color=black@0.16:t=fill",
   `drawtext=fontfile='${displayFont}':text='${drawText(values.title)}':fontcolor=white:fontsize=70:x=(w-text_w)/2:y=260:enable='between(t,0.65,3.15)'`,
@@ -55,12 +60,17 @@ const filter = [
   "setparams=range=limited[v]",
 ].join(",");
 
+const filterComplex = `${filter};[1:a]atrim=duration=8,aformat=sample_rates=48000:channel_layouts=stereo,afade=t=in:st=0:d=0.2,afade=t=out:st=7.5:d=0.5,volume=${audioVolume}[a]`;
+const audioInput = values.audio
+  ? ["-stream_loop", "-1", "-i", values.audio]
+  : ["-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=48000"];
+
 execFileSync("ffmpeg", [
   "-y", "-hide_banner", "-loglevel", "error",
   "-loop", "1", "-i", values.input,
-  "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=48000",
-  "-filter_complex", filter,
-  "-map", "[v]", "-map", "1:a", "-t", "8", "-r", "30",
+  ...audioInput,
+  "-filter_complex", filterComplex,
+  "-map", "[v]", "-map", "[a]", "-t", "8", "-r", "30",
   "-c:v", "libx264", "-profile:v", "high", "-level", "4.1", "-preset", "slow", "-crf", "18",
   "-movflags", "+faststart", "-color_range", "tv", "-c:a", "aac", "-b:a", "128k", "-shortest", values.output,
 ], { stdio: "inherit" });
