@@ -18,6 +18,12 @@ Reject a Reel without scoring when it contains synthetic motion or distorted obj
 
 Review the Reel both muted and with audio. Text must carry the idea when muted. Reject any shaky or stepped synthetic camera movement. Prefer locked framing unless real footage supports natural motion.
 
+## ZARI recurring creative system
+
+Every awareness Reel should earn attention in the first second, then place the recurring `RUG CHECK.` voice and text between 40% and 60% of the runtime. Use the approved 0.25-second left wipe at that moment until performance data supports a change. The signature must feel intentional, remain legible when muted, and never obscure the rug or the maker's hands at the key reveal.
+
+For A/B tests, change one creative variable at a time. Hold the music, runtime, transition, signature-hook timing, CTA and posting window constant while testing the opening premise. Judge the first round on 3-second hold rate and average watch time; use completion, replays, saves and profile visits as supporting signals. Test music only after a winning visual edit is identified.
+
 Music must use one of two recorded routes:
 
 - **Automated:** a commercially cleared track from Meta Sound Collection or another documented royalty-free license is mixed into the MP4 before publishing.

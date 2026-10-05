@@ -57,7 +57,7 @@
     {
       "provider": "pexels",
       "id": "37477419",
-      "photographer": "Céline",
+      "photographer": "C\u00e9line",
       "sourceUrl": "https://www.pexels.com/photo/sunlit-traditional-interior-with-rugs-and-curtains-37477419/",
       "query": "sunlit rug interior editorial",
       "week": "2026-09-28",
@@ -75,7 +75,7 @@
     {
       "provider": "pexels",
       "id": "16275030",
-      "photographer": "Elif Gökçe",
+      "photographer": "Elif G\u00f6k\u00e7e",
       "sourceUrl": "https://www.pexels.com/photo/woman-hand-touching-carpet-16275030/",
       "query": "hand touching rug texture close up",
       "week": "2026-10-05",
@@ -97,7 +97,9 @@
       "sourceUrl": "https://www.pexels.com/photo/elegant-vintage-interior-with-colorful-oriental-rug-33474224/",
       "query": "vintage interior statement rug vertical",
       "week": "2026-10-05-reel-drafts",
-      "filename": "reel-01-start-with-scale.mp4"
+      "filename": "reel-01-start-with-scale.mp4",
+      "status": "rejected",
+      "rejectionReason": "Still-image Reel format rejected in favor of real-motion footage and a recurring signature hook."
     },
     {
       "provider": "pexels",
@@ -106,7 +108,9 @@
       "sourceUrl": "https://www.pexels.com/photo/cozy-room-with-vintage-lamp-and-rug-4712156/",
       "query": "rug material editorial sunlight vertical",
       "week": "2026-10-05-reel-drafts",
-      "filename": "reel-02-read-the-surface.mp4"
+      "filename": "reel-02-read-the-surface.mp4",
+      "status": "rejected",
+      "rejectionReason": "Still-image Reel format rejected in favor of real-motion footage and a recurring signature hook."
     },
     {
       "provider": "pexels",
@@ -115,25 +119,29 @@
       "sourceUrl": "https://www.pexels.com/photo/persian-rug-in-a-dark-room-25745079/",
       "query": "persian rug light shadow vertical",
       "week": "2026-10-05-reel-drafts",
-      "filename": "reel-03-let-light-move.mp4"
+      "filename": "reel-03-let-light-move.mp4",
+      "status": "rejected",
+      "rejectionReason": "Still-image Reel format rejected in favor of real-motion footage and a recurring signature hook."
     },
     {
       "provider": "pexels",
       "id": "37400306",
-      "photographer": "Mesut Yalçın",
+      "photographer": "Mesut Yal\u00e7\u0131n",
       "sourceUrl": "https://www.pexels.com/video/expert-craftsman-weaving-detailed-rug-37400306/",
       "query": "vertical close-up hands weaving detailed rug",
       "week": "2026-10-05-reel-drafts",
-      "filename": "reel-04-before-the-room.mp4"
+      "filename": "reel-a-time-in-the-weave.mp4; reel-c-read-the-edge.mp4",
+      "status": "draft"
     },
     {
       "provider": "pexels",
       "id": "34504257",
-      "photographer": "Rumeysa Nur Çelik",
+      "photographer": "Rumeysa Nur \u00c7elik",
       "sourceUrl": "https://www.pexels.com/video/traditional-rug-weaving-in-isparta-34504257/",
       "query": "vertical traditional rug weaving colorful yarn",
       "week": "2026-10-05-reel-drafts",
-      "filename": "reel-04-before-the-room.mp4"
+      "filename": "reel-a-time-in-the-weave.mp4; reel-b-every-line-remembers.mp4",
+      "status": "draft"
     },
     {
       "provider": "pexels",
@@ -142,7 +150,8 @@
       "sourceUrl": "https://www.pexels.com/video/a-weaving-loom-with-a-red-and-green-blanket-28352114/",
       "query": "vertical handwoven rug loom detail",
       "week": "2026-10-05-reel-drafts",
-      "filename": "reel-04-before-the-room.mp4"
+      "filename": "reel-b-every-line-remembers.mp4; reel-c-read-the-edge.mp4",
+      "status": "draft"
     },
     {
       "provider": "pixabay",
@@ -151,9 +160,10 @@
       "sourceUrl": "https://pixabay.com/music/india-indian-295889/",
       "query": "licensed Punjabi Indian instrumental",
       "week": "2026-10-05-reel-drafts",
-      "filename": "reel-04-before-the-room.mp4",
+      "filename": "reel-a-time-in-the-weave.mp4; reel-b-every-line-remembers.mp4; reel-c-read-the-edge.mp4",
       "license": "Pixabay Content License",
-      "contentIdRegistered": true
+      "contentIdRegistered": true,
+      "status": "draft"
     }
   ]
 }
