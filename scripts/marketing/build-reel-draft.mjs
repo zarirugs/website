@@ -48,6 +48,10 @@ const motion = values.motion ?? "smooth-push";
 if (!["still", "smooth-push"].includes(motion)) {
   throw new Error("--motion must be still or smooth-push");
 }
+const motionAmount = Number(values["motion-amount"] ?? "0.16");
+if (!Number.isFinite(motionAmount) || motionAmount < 0.08 || motionAmount > 0.25) {
+  throw new Error("--motion-amount must be between 0.08 and 0.25");
+}
 
 const titleAlpha = "if(lt(t,0.65),0,if(lt(t,1.05),(t-0.65)/0.4,if(lt(t,2.75),1,if(lt(t,3.15),(3.15-t)/0.4,0))))";
 const subtitleAlpha = "if(lt(t,3.15),0,if(lt(t,3.55),(t-3.15)/0.4,if(lt(t,5.7),1,if(lt(t,6.1),(6.1-t)/0.4,0))))";
@@ -57,7 +61,7 @@ const motionFilter = motion === "smooth-push"
   ? [
       "scale=2880:3840:force_original_aspect_ratio=increase",
       "crop=2880:3840",
-      "zoompan=z='1+0.07*(0.5-0.5*cos(PI*on/239))':x='iw/2-iw/(2*zoom)':y='(ih-ih/zoom)*0.82':d=240:s=2160x3840:fps=30",
+      `zoompan=z='1+${motionAmount}*(1-(1-on/239)*(1-on/239))':x='iw/2-iw/(2*zoom)':y='(ih-ih/zoom)*0.92':d=240:s=2160x3840:fps=30`,
       "scale=1080:1920:flags=lanczos",
     ]
   : [
