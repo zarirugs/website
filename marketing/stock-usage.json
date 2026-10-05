@@ -116,6 +116,44 @@
       "query": "persian rug light shadow vertical",
       "week": "2026-10-05-reel-drafts",
       "filename": "reel-03-let-light-move.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "37400306",
+      "photographer": "Mesut Yalçın",
+      "sourceUrl": "https://www.pexels.com/video/expert-craftsman-weaving-detailed-rug-37400306/",
+      "query": "vertical close-up hands weaving detailed rug",
+      "week": "2026-10-05-reel-drafts",
+      "filename": "reel-04-before-the-room.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "34504257",
+      "photographer": "Rumeysa Nur Çelik",
+      "sourceUrl": "https://www.pexels.com/video/traditional-rug-weaving-in-isparta-34504257/",
+      "query": "vertical traditional rug weaving colorful yarn",
+      "week": "2026-10-05-reel-drafts",
+      "filename": "reel-04-before-the-room.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "28352114",
+      "photographer": "ARGA",
+      "sourceUrl": "https://www.pexels.com/video/a-weaving-loom-with-a-red-and-green-blanket-28352114/",
+      "query": "vertical handwoven rug loom detail",
+      "week": "2026-10-05-reel-drafts",
+      "filename": "reel-04-before-the-room.mp4"
+    },
+    {
+      "provider": "pixabay",
+      "id": "295889",
+      "photographer": "Kulakovka",
+      "sourceUrl": "https://pixabay.com/music/india-indian-295889/",
+      "query": "licensed Punjabi Indian instrumental",
+      "week": "2026-10-05-reel-drafts",
+      "filename": "reel-04-before-the-room.mp4",
+      "license": "Pixabay Content License",
+      "contentIdRegistered": true
     }
   ]
 }
