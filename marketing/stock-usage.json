@@ -98,8 +98,7 @@
       "query": "vintage interior statement rug vertical",
       "week": "2026-10-05-reel-drafts",
       "filename": "reel-01-start-with-scale.mp4",
-      "status": "rejected",
-      "rejectionReason": "Still-image Reel format rejected in favor of real-motion footage and a recurring signature hook."
+      "status": "draft"
     },
     {
       "provider": "pexels",
@@ -131,7 +130,8 @@
       "query": "vertical close-up hands weaving detailed rug",
       "week": "2026-10-05-reel-drafts",
       "filename": "reel-a-time-in-the-weave.mp4; reel-c-read-the-edge.mp4",
-      "status": "draft"
+      "status": "rejected",
+      "rejectionReason": "Direction changed back to a carpet-first slow push-in with editorial text."
     },
     {
       "provider": "pexels",
@@ -141,7 +141,8 @@
       "query": "vertical traditional rug weaving colorful yarn",
       "week": "2026-10-05-reel-drafts",
       "filename": "reel-a-time-in-the-weave.mp4; reel-b-every-line-remembers.mp4",
-      "status": "draft"
+      "status": "rejected",
+      "rejectionReason": "Direction changed back to a carpet-first slow push-in with editorial text."
     },
     {
       "provider": "pexels",
@@ -151,7 +152,8 @@
       "query": "vertical handwoven rug loom detail",
       "week": "2026-10-05-reel-drafts",
       "filename": "reel-b-every-line-remembers.mp4; reel-c-read-the-edge.mp4",
-      "status": "draft"
+      "status": "rejected",
+      "rejectionReason": "Direction changed back to a carpet-first slow push-in with editorial text."
     },
     {
       "provider": "pixabay",
@@ -160,7 +162,7 @@
       "sourceUrl": "https://pixabay.com/music/india-indian-295889/",
       "query": "licensed Punjabi Indian instrumental",
       "week": "2026-10-05-reel-drafts",
-      "filename": "reel-a-time-in-the-weave.mp4; reel-b-every-line-remembers.mp4; reel-c-read-the-edge.mp4",
+      "filename": "reel-01-start-with-scale.mp4",
       "license": "Pixabay Content License",
       "contentIdRegistered": true,
       "status": "draft"
