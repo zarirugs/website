@@ -44,15 +44,35 @@ if (!Number.isFinite(audioVolume) || audioVolume < 0 || audioVolume > 1) {
   throw new Error("--audio-volume must be between 0 and 1");
 }
 
+const motion = values.motion ?? "smooth-push";
+if (!["still", "smooth-push"].includes(motion)) {
+  throw new Error("--motion must be still or smooth-push");
+}
+
+const titleAlpha = "if(lt(t,0.65),0,if(lt(t,1.05),(t-0.65)/0.4,if(lt(t,2.75),1,if(lt(t,3.15),(3.15-t)/0.4,0))))";
+const subtitleAlpha = "if(lt(t,3.15),0,if(lt(t,3.55),(t-3.15)/0.4,if(lt(t,5.7),1,if(lt(t,6.1),(6.1-t)/0.4,0))))";
+const brandAlpha = "if(lt(t,6.1),0,if(lt(t,6.5),(t-6.1)/0.4,1))";
+
+const motionFilter = motion === "smooth-push"
+  ? [
+      "scale=2880:3840:force_original_aspect_ratio=increase",
+      "crop=2880:3840",
+      "zoompan=z='1+0.07*(0.5-0.5*cos(PI*on/239))':x='iw/2-iw/(2*zoom)':y='(ih-ih/zoom)*0.82':d=240:s=2160x3840:fps=30",
+      "scale=1080:1920:flags=lanczos",
+    ]
+  : [
+      "scale=1080:1920:force_original_aspect_ratio=increase",
+      `crop=1080:1920:x='(iw-ow)/2':y='max(0,min(ih-oh,ih*${focal}-oh/2))'`,
+      "fps=30",
+    ];
+
 const filter = [
-  "[0:v]scale=1080:1920:force_original_aspect_ratio=increase",
-  `crop=1080:1920:x='(iw-ow)/2':y='max(0,min(ih-oh,ih*${focal}-oh/2))'`,
-  "fps=30",
+  `[0:v]${motionFilter.join(",")}`,
   "eq=brightness=-0.055:saturation=0.92",
   "drawbox=x=0:y=0:w=iw:h=ih:color=black@0.16:t=fill",
-  `drawtext=fontfile='${displayFont}':text='${drawText(values.title)}':fontcolor=white:fontsize=70:x=(w-text_w)/2:y=260:enable='between(t,0.65,3.15)'`,
-  `drawtext=fontfile='${bodyFont}':text='${drawText(values.subtitle)}':fontcolor=white:fontsize=34:x=(w-text_w)/2:y=1510:enable='between(t,3.15,6.1)'`,
-  `drawtext=fontfile='${displayFont}':text='Z A R I':fontcolor=white:fontsize=72:x=(w-text_w)/2:y=1550:enable='between(t,6.1,8)'`,
+  `drawtext=fontfile='${displayFont}':text='${drawText(values.title)}':fontcolor=white:fontsize=70:x=(w-text_w)/2:y=260:alpha='${titleAlpha}'`,
+  `drawtext=fontfile='${bodyFont}':text='${drawText(values.subtitle)}':fontcolor=white:fontsize=34:x=(w-text_w)/2:y=1510:alpha='${subtitleAlpha}'`,
+  `drawtext=fontfile='${displayFont}':text='Z A R I':fontcolor=white:fontsize=72:x=(w-text_w)/2:y=1550:alpha='${brandAlpha}'`,
   "fade=t=in:st=0:d=0.45",
   "fade=t=out:st=7.45:d=0.55",
   "scale=in_range=full:out_range=tv",

@@ -3,4 +3,5 @@ date,sample_id,hook,brand_relevance,authenticity,pacing,technical,total,user_dec
 2026-10-05,reel-a-time-in-the-weave,5,5,4,5,5,24,rejected,Direction changed back to a carpet-first slow push-in with editorial text.,Indian by Kulakovka,0.25s left wipe,RUG CHECK at 4.65s,Not published
 2026-10-05,reel-b-every-line-remembers,5,5,4,5,5,24,rejected,Direction changed back to a carpet-first slow push-in with editorial text.,Indian by Kulakovka,0.25s left wipe,RUG CHECK at 4.65s,Not published
 2026-10-05,reel-c-read-the-edge,5,5,4,5,5,24,rejected,Direction changed back to a carpet-first slow push-in with editorial text.,Indian by Kulakovka,0.25s left wipe,RUG CHECK at 4.65s,Not published
-2026-10-05,reel-01-start-with-scale,5,5,5,4,5,24,draft,,Indian by Kulakovka,single slow push-in,text-led: START WITH SCALE,Awaiting review
+2026-10-05,reel-01-start-with-scale-v1,5,5,5,4,5,24,rejected,"remove this bouncy movement to carpet",Indian by Kulakovka,single slow push-in,text-led: START WITH SCALE,Replaced after direct review feedback
+2026-10-05,reel-01-start-with-scale-v2,5,5,5,5,5,25,draft,,Indian by Kulakovka,smooth eased push-in,text-led: START WITH SCALE,Awaiting review

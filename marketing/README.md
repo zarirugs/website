@@ -30,6 +30,8 @@ entry from being selected again.
 
 Reels support an optional mixed audio track. Build one with
 `npm run marketing:reel-draft -- --input=... --output=... --title=... --subtitle=... --audio=licensed-track.mp3`.
+The default `--motion=smooth-push` uses an eased, oversampled move toward the rug
+to prevent stepped or bouncy reframing; use `--motion=still` for locked framing.
 The default audio level is 22%; use `--audio-volume=0.18` or another value from 0
 to 1 when the visual needs a quieter mix. Only use audio with documented commercial
 rights. For a current English or Punjabi trend, select the track from the catalog
