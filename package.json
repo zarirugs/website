@@ -11,6 +11,7 @@
     "marketing:validate": "node scripts/marketing/validate-queue.mjs",
     "marketing:due": "DRY_RUN=1 node scripts/marketing/publish-instagram.mjs",
     "marketing:source-stock": "node scripts/marketing/source-stock-week.mjs",
+    "marketing:luxury-reel": "node scripts/marketing/build-luxury-reel.mjs",
     "build:cloudflare": "npx @opennextjs/cloudflare build",
     "preview:cloudflare": "npx @opennextjs/cloudflare preview",
     "deploy:cloudflare": "npx @opennextjs/cloudflare deploy"
