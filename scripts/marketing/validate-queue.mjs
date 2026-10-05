@@ -51,6 +51,21 @@ export function readAndValidateQueue() {
     if (path.extname(url.pathname).toLowerCase() !== expectedExtension) {
       errors.push(`${label}: ${post.mediaType} media must use ${expectedExtension}`);
     }
+
+    if (post.publishingMode === "instagram-native-music") {
+      if (post.mediaType !== "REELS") errors.push(`${label}: native music mode is valid only for REELS`);
+      if (!post.instagramAudio?.title || !post.instagramAudio?.artist || !post.instagramAudio?.excerpt) {
+        errors.push(`${label}: native music mode requires title, artist and excerpt`);
+      }
+      try {
+        const audioUrl = new URL(post.instagramAudio?.url);
+        if (audioUrl.hostname !== "www.instagram.com" || !audioUrl.pathname.startsWith("/reels/audio/")) {
+          errors.push(`${label}: instagramAudio.url must be an Instagram Reels audio URL`);
+        }
+      } catch {
+        errors.push(`${label}: native music mode requires a valid instagramAudio.url`);
+      }
+    }
   }
 
   if (errors.length) throw new Error(errors.map((error) => `- ${error}`).join("\n"));

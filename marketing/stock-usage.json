@@ -89,6 +89,135 @@
       "query": "sunlit patterned rug editorial interior",
       "week": "2026-10-05",
       "filename": "06-light-finds-pattern.jpg"
+    },
+    {
+      "provider": "pexels",
+      "id": "7390122",
+      "photographer": "Polina Tankilevitch",
+      "sourceUrl": "https://www.pexels.com/video/woman-wearing-black-heels-7390122/",
+      "query": "heels on Persian rug fashion editorial video",
+      "week": "2026-10-05",
+      "filename": "reel-02-room-begins-underfoot.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "3015514",
+      "photographer": "Taryn Elliott",
+      "sourceUrl": "https://www.pexels.com/video/walking-on-a-carpet-with-sandals-on-3015514/",
+      "query": "walking on Moroccan rug slow motion video",
+      "week": "2026-10-05",
+      "filename": "reel-02-room-begins-underfoot.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "3064217",
+      "photographer": "Taryn Elliott",
+      "sourceUrl": "https://www.pexels.com/video/carpets-in-different-designs-and-sizes-on-display-3064217/",
+      "query": "vintage carpet room cinematic pan video",
+      "week": "2026-10-05",
+      "filename": "reel-02-room-begins-underfoot.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "5973147",
+      "photographer": "Grisha Grishkoff",
+      "sourceUrl": "https://www.pexels.com/video/close-up-shot-of-a-carpet-5973147/",
+      "query": "carpet fringe macro cinematic video",
+      "week": "2026-10-05",
+      "filename": "reel-03-material-remembers.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "4788152",
+      "photographer": "Ketut Subiyanto",
+      "sourceUrl": "https://www.pexels.com/video/a-woman-s-hand-touching-a-fabric-4788152/",
+      "query": "hand touching textured fabric cinematic video",
+      "week": "2026-10-05",
+      "filename": "reel-03-material-remembers.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "4465895",
+      "photographer": "Luna Lovegood",
+      "sourceUrl": "https://www.pexels.com/video/a-person-feeling-fabric-samples-4465895/",
+      "query": "hand feeling textile samples video",
+      "week": "2026-10-05",
+      "filename": "reel-03-material-remembers.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "26569044",
+      "photographer": "K",
+      "sourceUrl": "https://www.pexels.com/video/a-person-s-hand-is-touching-a-piece-of-fabric-26569044/",
+      "query": "hand weaving green fibers macro video",
+      "week": "2026-10-05",
+      "filename": "reel-03-material-remembers.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "7689269",
+      "photographer": "KoolShooters",
+      "sourceUrl": "https://www.pexels.com/video/couple-reading-a-book-7689269/",
+      "query": "fashion on patterned carpet vertical video",
+      "week": "2026-10-05",
+      "filename": "reel-04-made-in-rhythm.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "30449368",
+      "photographer": "Hafize Balcı",
+      "sourceUrl": "https://www.pexels.com/video/skillful-hands-weaving-textile-on-loom-30449368/",
+      "query": "sunlit loom hands vertical video",
+      "week": "2026-10-05",
+      "filename": "reel-04-made-in-rhythm.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "15902228",
+      "photographer": "khanhhoangminh",
+      "sourceUrl": "https://www.pexels.com/video/a-man-is-working-on-a-woven-rug-15902228/",
+      "query": "hands working woven rug video",
+      "week": "2026-10-05",
+      "filename": "reel-04-made-in-rhythm.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "6842637",
+      "photographer": "Teona Swift",
+      "sourceUrl": "https://www.pexels.com/video/arts-and-crafts-on-the-table-6842637/",
+      "query": "sunlit textile craft studio vertical video",
+      "week": "2026-10-05",
+      "filename": "reel-04-made-in-rhythm.mp4"
+    },
+    {
+      "provider": "instagram-native",
+      "id": "3669454193355086",
+      "title": "Timeless (Instrumental) [feat. Playboi Carti]",
+      "artist": "The Weeknd",
+      "sourceUrl": "https://www.instagram.com/reels/audio/3669454193355086/",
+      "week": "2026-10-05",
+      "filename": "reel-02-room-begins-underfoot.mp4",
+      "rights": "Add only through the ZARI account Instagram music picker when available; not embedded in repository media"
+    },
+    {
+      "provider": "instagram-native",
+      "id": "4207179866261956",
+      "title": "Apocalypse",
+      "artist": "Cigarettes After Sex",
+      "sourceUrl": "https://www.instagram.com/reels/audio/4207179866261956/",
+      "week": "2026-10-05",
+      "filename": "reel-03-material-remembers.mp4",
+      "rights": "Add only through the ZARI account Instagram music picker when available; not embedded in repository media"
+    },
+    {
+      "provider": "instagram-native",
+      "id": "1356058133096592",
+      "title": "Aarzu (with Asim Azhar)",
+      "artist": "Asim Azhar, Noor, Khan, Madhurxo",
+      "sourceUrl": "https://www.instagram.com/reels/audio/1356058133096592/",
+      "week": "2026-10-05",
+      "filename": "reel-04-made-in-rhythm.mp4",
+      "rights": "Add only through the ZARI account Instagram music picker when available; not embedded in repository media"
     }
   ]
 }

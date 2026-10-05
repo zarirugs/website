@@ -27,7 +27,7 @@
     {
       "id": "04-size-the-room",
       "status": "approved",
-      "publishAt": "2026-10-06T14:00:00.000Z",
+      "publishAt": "2026-10-07T14:00:00.000Z",
       "mediaType": "IMAGE",
       "mediaUrl": "https://zarirugs.com/marketing/instagram/04-size-the-room.jpg",
       "caption": "Before colour, choose scale.\n\nIn a living room, the rug should hold the conversation area together. Let at least the front legs of the sofa and chairs meet it; if every piece floats outside, the rug is usually too small.\n\nSave this rule before you measure your room.\n\n#ZariRugs #RugGuide #InteriorDesign #ConsideredHomes"
@@ -47,6 +47,54 @@
       "mediaType": "IMAGE",
       "mediaUrl": "https://zarirugs.com/marketing/instagram/06-light-finds-pattern.jpg",
       "caption": "Let one pattern lead the room.\n\nWhen the rug carries the strongest motif, quieter furniture gives it space to work. Natural light then changes the contrast from morning to evening without adding more objects.\n\nWould you choose the rug first or last?\n\n#ZariRugs #RugStyling #InteriorDesign #PatternAtHome"
+    },
+    {
+      "id": "07-room-begins-underfoot",
+      "status": "approved",
+      "publishAt": "2026-10-05T15:30:00.000Z",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/drafts/reel-02-room-begins-underfoot.mp4",
+      "caption": "A room does not begin at the walls. It begins underfoot—where colour, movement, and memory meet. ZARI.\n\n#ZariRugs #InteriorFilm #RugDesign #TimelessInteriors",
+      "publishingMode": "instagram-native-music",
+      "instagramAudio": {
+        "title": "Timeless (Instrumental) [feat. Playboi Carti]",
+        "artist": "The Weeknd",
+        "bpm": 120,
+        "excerpt": "first 8.0 seconds from the selected Instagram audio segment, starting on a full downbeat",
+        "url": "https://www.instagram.com/reels/audio/3669454193355086/"
+      }
+    },
+    {
+      "id": "08-material-remembers",
+      "status": "approved",
+      "publishAt": "2026-10-06T14:00:00.000Z",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/drafts/reel-03-material-remembers.mp4",
+      "caption": "Before pattern becomes visible, material speaks through weight, texture, and touch. The hand remembers what the eye has only just discovered.\n\n#ZariRugs #MaterialStudy #TextileDesign #CraftedInteriors",
+      "publishingMode": "instagram-native-music",
+      "instagramAudio": {
+        "title": "Apocalypse",
+        "artist": "Cigarettes After Sex",
+        "bpm": 94,
+        "excerpt": "first 8.94 seconds from the selected Instagram audio segment, starting on a full downbeat",
+        "url": "https://www.instagram.com/reels/audio/4207179866261956/"
+      }
+    },
+    {
+      "id": "09-made-in-rhythm",
+      "status": "approved",
+      "publishAt": "2026-10-09T14:00:00.000Z",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/drafts/reel-04-made-in-rhythm.mp4",
+      "caption": "Pattern is not placed. It is built—gesture by gesture, line by line, until movement becomes form. ZARI.\n\n#ZariRugs #TextileCraft #DesignInMotion #MadeByHand",
+      "publishingMode": "instagram-native-music",
+      "instagramAudio": {
+        "title": "Aarzu (with Asim Azhar)",
+        "artist": "Asim Azhar, Noor, Khan, Madhurxo",
+        "bpm": 105,
+        "excerpt": "first 9.14 seconds from the selected Instagram audio segment, starting on a full downbeat",
+        "url": "https://www.instagram.com/reels/audio/1356058133096592/"
+      }
     }
   ]
 }

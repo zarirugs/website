@@ -2,8 +2,8 @@ name: Publish approved Instagram content
 
 on:
   schedule:
-    # 19:30 India time on Tuesday, Thursday and Saturday.
-    - cron: "0 14 * * 2,4,6"
+    # 19:30 India time from Monday through Saturday. Sunday is review day.
+    - cron: "0 14 * * 1-6"
   workflow_dispatch:
     inputs:
       connection_only:
