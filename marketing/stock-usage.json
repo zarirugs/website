@@ -118,16 +118,6 @@
       "filename": "reel-02-room-begins-underfoot.mp4"
     },
     {
-      "provider": "original",
-      "id": "zari-luxury-pulse-001",
-      "creator": "ZARI / in-repository procedural composition",
-      "sourceUrl": "scripts/marketing/build-luxury-reel.mjs",
-      "query": "original 120 BPM luxury electronic pulse",
-      "week": "2026-10-05",
-      "filename": "reel-02-room-begins-underfoot.mp4",
-      "rights": "Original composition; no third-party samples"
-    },
-    {
       "provider": "pexels",
       "id": "5973147",
       "photographer": "Grisha Grishkoff",
@@ -200,24 +190,34 @@
       "filename": "reel-04-made-in-rhythm.mp4"
     },
     {
-      "provider": "original",
-      "id": "zari-material-memory-001",
-      "creator": "ZARI / in-repository procedural composition",
-      "sourceUrl": "scripts/marketing/build-weekly-reels.mjs",
-      "query": "original 100 BPM tactile ambient pulse",
+      "provider": "instagram-native",
+      "id": "3669454193355086",
+      "title": "Timeless (Instrumental) [feat. Playboi Carti]",
+      "artist": "The Weeknd",
+      "sourceUrl": "https://www.instagram.com/reels/audio/3669454193355086/",
       "week": "2026-10-12",
-      "filename": "reel-03-material-remembers.mp4",
-      "rights": "Original composition; no third-party samples"
+      "filename": "reel-02-room-begins-underfoot.mp4",
+      "rights": "Add only through the ZARI account Instagram music picker when available; not embedded in repository media"
     },
     {
-      "provider": "original",
-      "id": "zari-made-in-rhythm-001",
-      "creator": "ZARI / in-repository procedural composition",
-      "sourceUrl": "scripts/marketing/build-weekly-reels.mjs",
-      "query": "original 128 BPM percussive electronic score",
+      "provider": "instagram-native",
+      "id": "4207179866261956",
+      "title": "Apocalypse",
+      "artist": "Cigarettes After Sex",
+      "sourceUrl": "https://www.instagram.com/reels/audio/4207179866261956/",
+      "week": "2026-10-12",
+      "filename": "reel-03-material-remembers.mp4",
+      "rights": "Add only through the ZARI account Instagram music picker when available; not embedded in repository media"
+    },
+    {
+      "provider": "instagram-native",
+      "id": "1356058133096592",
+      "title": "Aarzu (with Asim Azhar)",
+      "artist": "Asim Azhar, Noor, Khan, Madhurxo",
+      "sourceUrl": "https://www.instagram.com/reels/audio/1356058133096592/",
       "week": "2026-10-12",
       "filename": "reel-04-made-in-rhythm.mp4",
-      "rights": "Original composition; no third-party samples"
+      "rights": "Add only through the ZARI account Instagram music picker when available; not embedded in repository media"
     }
   ]
 }

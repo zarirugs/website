@@ -23,9 +23,9 @@ dates; it does not publish them immediately.
 
 **Style:** luxury fashion film · **Length:** 8.0 seconds · **Score:** 24/25
 
-**Music:** ZARI Luxury Pulse 001 · full eight-second excerpt · original
-instrumental electronic score · generated in-repository with no third-party
-samples.
+**Music:** [Timeless (Instrumental) — The Weeknd feat. Playboi Carti](https://www.instagram.com/reels/audio/3669454193355086/) · 8.0-second
+Instagram excerpt beginning on a full downbeat · instrumental/dark hip-hop · add
+natively from the ZARI account music picker only when available.
 
 **Caption:** A room does not begin at the walls. It begins underfoot—where
 colour, movement, and memory meet. ZARI.
@@ -34,11 +34,11 @@ colour, movement, and memory meet. ZARI.
 
 [![Material remembers preview](../../public/marketing/instagram/drafts/reel-03-material-remembers-preview.gif)](https://raw.githubusercontent.com/zarirugs/website/codex/instagram-reel-luxury-cuts/public/marketing/instagram/drafts/reel-03-material-remembers.mp4)
 
-**Style:** tactile material study · **Length:** 8.4 seconds · **Score:** 24/25
+**Style:** tactile material study · **Length:** 8.94 seconds · **Score:** 24/25
 
-**Music:** ZARI Material Memory 001 · full 8.4-second excerpt · original ambient
-electronic pulse at 100 BPM · generated in-repository with no third-party
-samples.
+**Music:** [Apocalypse — Cigarettes After Sex](https://www.instagram.com/reels/audio/4207179866261956/) · 8.94-second Instagram excerpt beginning on a full downbeat ·
+English/dream pop · add natively from the ZARI account music picker only when
+available. The cut is timed to 94 BPM.
 
 **Caption:** Before pattern becomes visible, material speaks through weight,
 texture, and touch. The hand remembers what the eye has only just discovered.
@@ -47,11 +47,11 @@ texture, and touch. The hand remembers what the eye has only just discovered.
 
 [![Made in rhythm preview](../../public/marketing/instagram/drafts/reel-04-made-in-rhythm-preview.gif)](https://raw.githubusercontent.com/zarirugs/website/codex/instagram-reel-luxury-cuts/public/marketing/instagram/drafts/reel-04-made-in-rhythm.mp4)
 
-**Style:** fashion and craft rhythm · **Length:** 7.5 seconds · **Score:** 24/25
+**Style:** fashion and craft rhythm · **Length:** 9.14 seconds · **Score:** 24/25
 
-**Music:** ZARI Made in Rhythm 001 · full 7.5-second excerpt · original
-percussive electronic score at 128 BPM · generated in-repository with no
-third-party samples.
+**Music:** [Aarzu — Asim Azhar, Noor, Khan, Madhurxo](https://www.instagram.com/reels/audio/1356058133096592/) · 9.14-second Instagram excerpt beginning on a full downbeat ·
+Urdu/Hindi pop · add natively from the ZARI account music picker only when
+available. The cut is timed to 105 BPM.
 
 **Caption:** Pattern is not placed. It is built—gesture by gesture, line by line,
 until movement becomes form. ZARI.
@@ -59,7 +59,7 @@ until movement becomes form. ZARI.
 ## Clean test design
 
 All three posts keep the 9:16 format, short runtime, minimal end typography,
-original instrumental audio, 19:30 posting time, and brand-first caption style.
+native Instagram music, 19:30 posting time, and brand-first caption style.
 The principal variable is the creative premise. Compare 3-second hold rate and
 average watch time first; use completion, replays, saves, shares, and profile
 visits as supporting signals.
@@ -67,3 +67,9 @@ visits as supporting signals.
 Comment `APPROVE WEEK 2026-10-12` to approve the complete Reel pack. Individual
 commands such as `REJECT REEL 3 — reason` replace only that Reel. Approval never
 merges or publishes automatically.
+
+The repository masters contain no commercial recording. These three entries are
+excluded from automated Graph API publishing and must be scheduled in Instagram
+after confirming that each track is available to the ZARI account. If a track is
+unavailable, choose a current audio from the account's native Trending list and
+retime the cut before scheduling.

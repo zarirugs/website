@@ -30,6 +30,11 @@ It publishes only entries in `queue.json` whose status is `approved` and whose
 `publishAt` time has passed. Published IDs receive a Git tag, preventing the same
 entry from being selected again.
 
+Reels marked `publishingMode: "instagram-native-music"` are excluded from the
+Graph API publisher. Confirm the named track in the ZARI account's Instagram
+music picker and schedule those Reels manually in Instagram; the repository MP4
+contains no commercial recording.
+
 ## Once-a-week approval flow
 
 1. Every Sunday, the weekly cycle records only verified results from the week,

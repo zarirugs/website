@@ -29,11 +29,15 @@ function selectPost(posts) {
   if (manualPostId) {
     const selected = approved.find((post) => post.id === manualPostId);
     if (!selected) throw new Error(`Approved post not found: ${manualPostId}`);
+    if (selected.publishingMode === "instagram-native-music") {
+      throw new Error(`${manualPostId} requires native Instagram music and must be scheduled in the Instagram app`);
+    }
     return isPublished(selected) ? null : selected;
   }
 
   const now = Date.now();
   return approved
+    .filter((post) => post.publishingMode !== "instagram-native-music")
     .filter((post) => Date.parse(post.publishAt) <= now)
     .sort((a, b) => Date.parse(a.publishAt) - Date.parse(b.publishAt))
     .find((post) => !isPublished(post));

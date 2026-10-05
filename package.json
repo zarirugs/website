@@ -13,6 +13,7 @@
     "marketing:source-stock": "node scripts/marketing/source-stock-week.mjs",
     "marketing:luxury-reel": "node scripts/marketing/build-luxury-reel.mjs",
     "marketing:weekly-reels": "node scripts/marketing/build-weekly-reels.mjs",
+    "marketing:native-music-reels": "node scripts/marketing/prepare-native-music-reels.mjs",
     "build:cloudflare": "npx @opennextjs/cloudflare build",
     "preview:cloudflare": "npx @opennextjs/cloudflare preview",
     "deploy:cloudflare": "npx @opennextjs/cloudflare deploy"
