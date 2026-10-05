@@ -17,39 +17,35 @@ The account should earn a follow through three things:
 
 - Tuesday: brand story or founder perspective.
 - Thursday: useful, saveable interior or rug education.
-- Saturday: craft, mood, or behind-the-scenes content.
+- Saturday: craft, mood, behind-the-scenes content, or one short Reel experiment.
 - Stories: three to five informal updates per week, including one poll or question.
 - Community: 20 minutes each weekday leaving thoughtful comments and replying to every genuine interaction.
 
-The scheduled publisher runs at 19:30 India time on Tuesday, Thursday, and Saturday.
+The scheduled publisher runs at 19:30 India time on Tuesday, Thursday, and
+Saturday. The queue supports both still images and Reels; begin with no more than
+one Reel per week so its performance can be compared with still posts.
 It publishes only entries in `queue.json` whose status is `approved` and whose
 `publishAt` time has passed. Published IDs receive a Git tag, preventing the same
 entry from being selected again.
 
 ## Once-a-week approval flow
 
-1. Every Sunday at 11:00 India time, GitHub searches Pexels for a fresh pool of
-   photographs, rejects low-resolution and previously used results, crops the
-   selected files to 1080 × 1350, rotates the caption set, and prepares an isolated
-   `codex/instagram-week-YYYY-MM-DD` branch. Website photography is not used as a
-   recurring content source.
-2. Pushing that branch makes GitHub open one weekly review pull request. Its review
-   page shows the three visuals, full captions, calls to action, and publish times.
-3. Review the pack once. To reject one image, comment `REJECT 1 — reason`,
-   `REJECT 2 — reason`, or `REJECT 3 — reason` on the PR. Only that image is held
-   and replaced; the others retain their accepted state. Merge only when all three
-   are accepted.
-4. Only content merged into `main` can be selected by the publisher. The scheduled
-   workflow then publishes at 19:30 India time on Tuesday, Thursday, and Saturday.
+1. At 12:30 India time each Sunday, the Codex marketing review records the previous
+   week's verified results and prepares an isolated
+   `codex/instagram-week-YYYY-MM-DD` branch.
+2. The pack contains three posts and may include one Reel. Still images must pass
+   `image-review-rubric.md`; Reels must pass `video-review-rubric.md` and play
+   clearly without sound.
+3. One approval pull request shows every visual, caption, score and publish time.
+   Reject an item with a clear comment such as `REJECT 2 — reason` or
+   `REJECT REEL 1 — reason`; only that item is replaced.
+4. Merge only after all three posts are accepted. Only content merged into `main`
+   can be selected by the Tuesday, Thursday and Saturday publisher.
 
-At 12:30 India time each Sunday, the Codex weekly marketing review runs after the
-stock workflow. It records the previous week's verified results, applies
-`image-review-rubric.md` to every candidate and the three-image sequence, replaces
-weak selections, adjusts queries and captions from the evidence, and leaves the
-PR unmerged for approval. The next review includes what to repeat, what to stop,
-and what the coming week is testing. It also appends the week's image scores,
-accept/reject decisions, reasons, and later performance to
-`image-score-history.csv`, so selection standards improve from evidence.
+The review records what to repeat, stop and test, then appends selection scores,
+rejection reasons and later performance so the visual standard improves from
+observed results. Start with no more than one Reel per week and compare its reach,
+plays, retention, saves and profile visits with the still posts.
 
 The content supply does not depend on the website library. Each week should use,
 in order: new original founder/workshop media when available, newly licensed
@@ -77,11 +73,6 @@ script records the photo ID, photographer, source page, search query, week, and
 local filename privately in `stock-usage.json`. Pexels attribution is optional,
 so sources do not appear in the public caption or the approval page. Search themes
 and caption rotations live in `stock-sourcing.json`.
-
-The repository owner must also enable **Settings → Actions → General → Workflow
-permissions → Allow GitHub Actions to create and approve pull requests**. This
-allows the Sunday workflow to open the approval PR; merging still remains a human
-decision.
 
 The stock workflow intentionally uses Pexels for materialized post files.
 Unsplash's API requires direct CDN hotlinking, attribution to both the photographer

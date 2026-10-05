@@ -89,6 +89,33 @@
       "query": "sunlit patterned rug editorial interior",
       "week": "2026-10-05",
       "filename": "06-light-finds-pattern.jpg"
+    },
+    {
+      "provider": "pexels",
+      "id": "33474224",
+      "photographer": "Chinara Garayeva",
+      "sourceUrl": "https://www.pexels.com/photo/elegant-vintage-interior-with-colorful-oriental-rug-33474224/",
+      "query": "vintage interior statement rug vertical",
+      "week": "2026-10-05-reel-drafts",
+      "filename": "reel-01-start-with-scale.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "4712156",
+      "photographer": "Inga Seliverstova",
+      "sourceUrl": "https://www.pexels.com/photo/cozy-room-with-vintage-lamp-and-rug-4712156/",
+      "query": "rug material editorial sunlight vertical",
+      "week": "2026-10-05-reel-drafts",
+      "filename": "reel-02-read-the-surface.mp4"
+    },
+    {
+      "provider": "pexels",
+      "id": "25745079",
+      "photographer": "Esra Erdem",
+      "sourceUrl": "https://www.pexels.com/photo/persian-rug-in-a-dark-room-25745079/",
+      "query": "persian rug light shadow vertical",
+      "week": "2026-10-05-reel-drafts",
+      "filename": "reel-03-let-light-move.mp4"
     }
   ]
 }
