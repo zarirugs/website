@@ -10,6 +10,7 @@
 .productImages ol { display: grid; gap: .75rem; padding: 0; list-style: none; }
 .productImages li { display: grid; gap: .5rem; padding: .6rem; background: #fff; font-size: .8rem; }
 .productImages > label { margin-top: .8rem; }
+.coverChoiceCard { display: grid; align-content: start; gap: .55rem; min-width: 0; padding-bottom: .8rem; background: white; }.coverChoiceCard .coverChoice { width: 100%; }.deleteCoverImage { justify-self: start; margin: 0 .85rem; padding: .2rem 0; border: 0; background: transparent; color: #8c3e34; font-size: .68rem; font-weight: 700; text-decoration: underline; text-underline-offset: .2em; cursor: pointer; }.deleteCoverImage:disabled { opacity: .55; cursor: wait; }.deleteCoverImage:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 .galleryPreview { height: 100px; background-size: contain; background-position: center; background-repeat: no-repeat; }
 .productImages button { padding: .4rem .65rem; border: 1px solid var(--line); background: #fff; font-size: .75rem; }
 .productImages button:disabled { opacity: .4; }
