@@ -220,46 +220,28 @@
       "rights": "Add only through the ZARI account Instagram music picker when available; not embedded in repository media"
     },
     {
-      "provider": "pexels",
-      "id": "5838826",
-      "photographer": "Osie Studio",
-      "sourceUrl": "https://www.pexels.com/photo/a-brown-rug-on-the-wooden-floor-5838826/",
-      "query": "warm neutral rug daylight editorial",
+      "provider": "The Metropolitan Museum of Art via Wikimedia Commons",
+      "id": "448422",
+      "title": "Carpet (18th century), accession 30.95.149",
+      "photographer": "The Metropolitan Museum of Art",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carpet_MET_DP220797.jpg",
+      "query": "CC0 public-domain archival carpet image",
       "week": "2026-10-26",
-      "filename": "10-29-rug-in-the-light.jpg",
-      "license": "Pexels License"
+      "filename": "10-29-rug-in-the-light.jpg; 10-30-a-room-grounded.mp4",
+      "license": "CC0 1.0 Universal Public Domain Dedication",
+      "rights": "Public-domain dedication; imagery used as a historical reference, not a ZARI product"
     },
     {
-      "provider": "pexels",
-      "id": "7210872",
-      "photographer": "Blue Bird",
-      "sourceUrl": "https://www.pexels.com/video/couple-rolling-a-carpet-7210872/",
-      "query": "couple unrolling carpet vertical video",
-      "week": "2026-10-26",
-      "filename": "10-30-a-room-grounded.mp4",
-      "license": "Pexels License"
-    },
-    {
-      "provider": "pexels",
-      "id": "35197098",
-      "photographer": "Cc Liu",
-      "sourceUrl": "https://www.pexels.com/photo/detailed-close-up-of-red-and-beige-textile-texture-35197098/",
-      "query": "rust red ivory textile macro close up",
+      "provider": "The Metropolitan Museum of Art via Wikimedia Commons",
+      "id": "447510",
+      "title": "Mamluk Carpet, early 16th century, accession 22.100.52",
+      "photographer": "The Metropolitan Museum of Art",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mamluk_Carpet_MET_DP168735.jpg",
+      "query": "CC0 public-domain archival carpet pattern image",
       "week": "2026-10-26",
       "filename": "10-31-rust-and-ivory-study.jpg",
-      "license": "Pexels License"
-    },
-    {
-      "provider": "pixabay",
-      "id": "295889",
-      "artist": "Kulakovka",
-      "title": "Indian",
-      "sourceUrl": "https://pixabay.com/music/india-indian-295889/",
-      "week": "2026-10-26",
-      "filename": "10-30-a-room-grounded.mp4",
-      "license": "Pixabay Content License",
-      "contentIdRegistered": true,
-      "status": "approved"
+      "license": "CC0 1.0 Universal Public Domain Dedication",
+      "rights": "Public-domain dedication; imagery used as a historical reference, not a ZARI product"
     }
   ]
 }
