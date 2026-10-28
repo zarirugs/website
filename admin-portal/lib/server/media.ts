@@ -14,13 +14,39 @@ export interface R2Bucket {
   delete(key: string): Promise<void>;
 }
 
-type RuntimeEnvironment = { ZARI_MEDIA?: R2Bucket };
+interface ImageTransformResult {
+  response(): Promise<Response>;
+}
+
+interface ImageTransformHandle {
+  transform(options: { width: number; height: number; fit: "scale-down" }): ImageTransformHandle;
+  output(options: { format: "image/webp"; quality: number; anim: true }): ImageTransformResult;
+}
+
+interface ImagesBinding {
+  input(image: ReadableStream): ImageTransformHandle;
+}
+
+type RuntimeEnvironment = { ZARI_MEDIA?: R2Bucket; IMAGES?: ImagesBinding };
 
 export async function getMediaBucket() {
   const { env } = await getCloudflareContext({ async: true });
   const bucket = (env as RuntimeEnvironment).ZARI_MEDIA;
   if (!bucket) throw new Error("ZARI_MEDIA is not configured for the admin Worker.");
   return bucket;
+}
+
+export async function compressUploadedImage(file: File) {
+  const { env } = await getCloudflareContext({ async: true });
+  const images = (env as RuntimeEnvironment).IMAGES;
+  if (!images) throw new Error("IMAGES is not configured for the admin Worker.");
+
+  const response = await (await images.input(file.stream())
+    .transform({ width: 2400, height: 2400, fit: "scale-down" })
+    .output({ format: "image/webp", quality: 82, anim: true })).response();
+  if (!response.ok || !response.body) throw new Error("The uploaded image could not be compressed.");
+
+  return response.arrayBuffer();
 }
 
 export function publicMediaPath(id: string, sourceType: MediaSourceType, imageUrl: string | null) {
