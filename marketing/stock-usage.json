@@ -231,17 +231,6 @@
     },
     {
       "provider": "pexels",
-      "id": "16436235",
-      "photographer": "Canan Dönmez",
-      "sourceUrl": "https://www.pexels.com/video/close-up-of-female-hands-weaving-with-a-traditional-wooden-loom-16436235/",
-      "query": "close up loom hands colorful woven threads video",
-      "week": "2026-10-26",
-      "filename": "10-30-weaving-in-progress.mp4",
-      "license": "Pexels License (free to use)",
-      "rights": "Third-party editorial footage; caption describes generic loom work and does not claim this is a ZARI workshop"
-    },
-    {
-      "provider": "pexels",
       "id": "25745079",
       "photographer": "Esra Erdem",
       "sourceUrl": "https://www.pexels.com/photo/persian-rug-in-a-dark-room-25745079/",
@@ -249,6 +238,17 @@
       "week": "2026-10-26",
       "filename": "10-31-pattern-in-shadow.jpg",
       "license": "Pexels License (free to use)"
+    },
+    {
+      "provider": "pexels",
+      "id": "7210872",
+      "photographer": "Blue Bird",
+      "sourceUrl": "https://www.pexels.com/video/couple-rolling-a-carpet-7210872/",
+      "query": "couple unrolling rug at home, native vertical video",
+      "week": "2026-10-26",
+      "filename": "10-30-pattern-underfoot.mp4",
+      "license": "Pexels License (free to use)",
+      "rights": "Third-party stock footage; caption does not claim the rug is a ZARI product"
     }
   ]
 }
