@@ -122,6 +122,14 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
     );
   }
 
+  function deleteCoverImage(asset: MediaAsset) {
+    if (asset.sourceType !== "upload" || !window.confirm(`Delete “${asset.name}” from the ${category?.name ?? "category"} image library? Images currently used as a cover or product image must be replaced first.`)) return;
+    void run(
+      () => json(`/api/media/${encodeURIComponent(asset.id)}`, { method: "DELETE" }),
+      "Image deleted from the library.",
+    );
+  }
+
   function uploadCover(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!category || !coverFile) return;
@@ -259,7 +267,10 @@ export default function CategoryManager({ categoryId, initialAdmin }: { category
         </form>}
         <div className={styles.coverChoices}>
           <button className={`${styles.coverChoice}${!category.mediaAssetId ? ` ${styles.selectedCover}` : ""}`} type="button" disabled={saving} onClick={() => chooseCover(null)}><div className={styles.originalCover}>Original cover</div><span>Use original image</span></button>
-          {media.map((asset) => <button className={`${styles.coverChoice}${asset.id === category.mediaAssetId ? ` ${styles.selectedCover}` : ""}`} type="button" key={asset.id} disabled={saving} onClick={() => chooseCover(asset.id)}><div className={styles.choicePreview} style={{ backgroundColor: asset.backgroundColor ?? "#d8d0c1", backgroundImage: asset.previewUrl ? `url(${asset.previewUrl})` : undefined }} role="img" aria-label={asset.altText ?? asset.name} /><span>{asset.name}</span><small>{asset.id === category.mediaAssetId ? "Current cover" : "Use as cover"}</small></button>)}
+          {media.map((asset) => <div className={styles.coverChoiceCard} key={asset.id}>
+            <button className={`${styles.coverChoice}${asset.id === category.mediaAssetId ? ` ${styles.selectedCover}` : ""}`} type="button" disabled={saving} onClick={() => chooseCover(asset.id)}><div className={styles.choicePreview} style={{ backgroundColor: asset.backgroundColor ?? "#d8d0c1", backgroundImage: asset.previewUrl ? `url(${asset.previewUrl})` : undefined }} role="img" aria-label={asset.altText ?? asset.name} /><span>{asset.name}</span><small>{asset.id === category.mediaAssetId ? "Current cover" : "Use as cover"}</small></button>
+            {asset.sourceType === "upload" && <button className={styles.deleteCoverImage} type="button" disabled={saving} onClick={() => deleteCoverImage(asset)}>Delete image</button>}
+          </div>)}
         </div>
         {media.length === 0 && <p className={styles.empty}>No images have been added to {category.name} yet. Use “Add image” to upload the first one.</p>}
       </section>}
