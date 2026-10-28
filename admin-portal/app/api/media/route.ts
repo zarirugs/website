@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { authenticatedAdminContext } from "@/lib/server/guard";
 import { databaseErrorResponse, errorResponse, optionalText, requiredText, validImageUrl } from "@/lib/server/http";
-import { getMediaBucket, publicMediaPath, validColor, type MediaSourceType } from "@/lib/server/media";
+import { compressUploadedImage, getMediaBucket, publicMediaPath, validColor, type MediaSourceType } from "@/lib/server/media";
 
 type MediaRow = {
   id: string;
@@ -86,10 +86,10 @@ export async function POST(request: Request) {
           ? "Upload an MP4 video no larger than 50 MB."
           : "Upload a JPG, PNG, WebP, AVIF, or GIF no larger than 10 MB.");
       }
-      const extension = file.type.split("/")[1] ?? "image";
-      objectKey = `media/${id}.${extension}`;
-      await (await getMediaBucket()).put(objectKey, await file.arrayBuffer(), {
-        httpMetadata: { contentType: file.type, cacheControl: "public, max-age=31536000, immutable" },
+      objectKey = `media/${id}.webp`;
+      const compressedImage = await compressUploadedImage(file);
+      await (await getMediaBucket()).put(objectKey, compressedImage, {
+        httpMetadata: { contentType: "image/webp", cacheControl: "public, max-age=31536000, immutable" },
       });
     } else if (sourceType === "url") {
       imageUrl = validImageUrl(form.get("imageUrl"));
