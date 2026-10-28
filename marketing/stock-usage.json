@@ -220,28 +220,35 @@
       "rights": "Add only through the ZARI account Instagram music picker when available; not embedded in repository media"
     },
     {
-      "provider": "The Metropolitan Museum of Art via Wikimedia Commons",
-      "id": "448422",
-      "title": "Carpet (18th century), accession 30.95.149",
-      "photographer": "The Metropolitan Museum of Art",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carpet_MET_DP220797.jpg",
-      "query": "CC0 public-domain archival carpet image",
+      "provider": "pexels",
+      "id": "35930285",
+      "photographer": "Esra Erdem",
+      "sourceUrl": "https://www.pexels.com/photo/elegant-interior-with-sunlit-persian-rug-35930285/",
+      "query": "moody warm interior patterned rug sunlight chairs",
       "week": "2026-10-26",
-      "filename": "10-29-rug-in-the-light.jpg; 10-30-a-room-grounded.mp4",
-      "license": "CC0 1.0 Universal Public Domain Dedication",
-      "rights": "Public-domain dedication; imagery used as a historical reference, not a ZARI product"
+      "filename": "10-29-pattern-in-the-light.jpg",
+      "license": "Pexels License (free to use)"
     },
     {
-      "provider": "The Metropolitan Museum of Art via Wikimedia Commons",
-      "id": "447510",
-      "title": "Mamluk Carpet, early 16th century, accession 22.100.52",
-      "photographer": "The Metropolitan Museum of Art",
-      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mamluk_Carpet_MET_DP168735.jpg",
-      "query": "CC0 public-domain archival carpet pattern image",
+      "provider": "pexels",
+      "id": "16436235",
+      "photographer": "Canan Dönmez",
+      "sourceUrl": "https://www.pexels.com/video/close-up-of-female-hands-weaving-with-a-traditional-wooden-loom-16436235/",
+      "query": "close up loom hands colorful woven threads video",
       "week": "2026-10-26",
-      "filename": "10-31-rust-and-ivory-study.jpg",
-      "license": "CC0 1.0 Universal Public Domain Dedication",
-      "rights": "Public-domain dedication; imagery used as a historical reference, not a ZARI product"
+      "filename": "10-30-weaving-in-progress.mp4",
+      "license": "Pexels License (free to use)",
+      "rights": "Third-party editorial footage; caption describes generic loom work and does not claim this is a ZARI workshop"
+    },
+    {
+      "provider": "pexels",
+      "id": "25745079",
+      "photographer": "Esra Erdem",
+      "sourceUrl": "https://www.pexels.com/photo/persian-rug-in-a-dark-room-25745079/",
+      "query": "dark room sunlight shadows Persian rug",
+      "week": "2026-10-26",
+      "filename": "10-31-pattern-in-shadow.jpg",
+      "license": "Pexels License (free to use)"
     }
   ]
 }
