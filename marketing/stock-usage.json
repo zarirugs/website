@@ -218,6 +218,37 @@
       "week": "2026-10-05",
       "filename": "reel-04-made-in-rhythm.mp4",
       "rights": "Add only through the ZARI account Instagram music picker when available; not embedded in repository media"
+    },
+    {
+      "provider": "pexels",
+      "id": "35930285",
+      "photographer": "Esra Erdem",
+      "sourceUrl": "https://www.pexels.com/photo/elegant-interior-with-sunlit-persian-rug-35930285/",
+      "query": "moody warm interior patterned rug sunlight chairs",
+      "week": "2026-10-26",
+      "filename": "10-29-pattern-in-the-light.jpg",
+      "license": "Pexels License (free to use)"
+    },
+    {
+      "provider": "pexels",
+      "id": "25745079",
+      "photographer": "Esra Erdem",
+      "sourceUrl": "https://www.pexels.com/photo/persian-rug-in-a-dark-room-25745079/",
+      "query": "dark room sunlight shadows Persian rug",
+      "week": "2026-10-26",
+      "filename": "10-31-pattern-in-shadow.jpg",
+      "license": "Pexels License (free to use)"
+    },
+    {
+      "provider": "pexels",
+      "id": "5823678",
+      "photographer": "Charlotte May",
+      "sourceUrl": "https://www.pexels.com/video/house-interior-design-5823678/",
+      "query": "warm vintage interior reveal with red patterned rug, native vertical video",
+      "week": "2026-10-26",
+      "filename": "10-30-pattern-underfoot.mp4",
+      "license": "Pexels License (free to use)",
+      "rights": "Third-party editorial interior footage; caption does not claim the room or rug is a ZARI product"
     }
   ]
 }
