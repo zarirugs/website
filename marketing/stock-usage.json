@@ -249,6 +249,56 @@
       "filename": "10-30-pattern-underfoot.mp4",
       "license": "Pexels License (free to use)",
       "rights": "Third-party editorial interior footage; caption does not claim the room or rug is a ZARI product"
+    },
+    {
+      "provider": "pexels",
+      "id": "37400306",
+      "photographer": "Mesut Yalçın",
+      "sourceUrl": "https://www.pexels.com/video/expert-craftsman-weaving-detailed-rug-37400306/",
+      "query": "close moving detail of a maker weaving a rug; used only as clearly disclosed editorial stock",
+      "week": "2026-11-02",
+      "filename": "2026-11-02-line-by-line.mp4",
+      "license": "Pexels license; third-party editorial footage, not ZARI product or workshop"
+    },
+    {
+      "provider": "pexels",
+      "id": "7210872",
+      "photographer": "Blue Bird",
+      "sourceUrl": "https://www.pexels.com/video/couple-rolling-a-carpet-7210872/",
+      "query": "human-led rug reveal for carpet-first interior edit",
+      "week": "2026-11-02",
+      "filename": "2026-11-03-a-room-rebalanced.mp4",
+      "license": "Pexels license; third-party rug and room, not ZARI product"
+    },
+    {
+      "provider": "pexels",
+      "id": "32144168",
+      "photographer": "Fatih Doğrul",
+      "sourceUrl": "https://www.pexels.com/video/elegant-vintage-living-room-with-classic-decor-32144168/",
+      "query": "slow camera glide over a patterned vintage interior rug",
+      "week": "2026-11-02",
+      "filename": "2026-11-06-pattern-in-stillness.mp4",
+      "license": "Pexels license; third-party interior and rug, not ZARI product"
+    },
+    {
+      "provider": "pexels",
+      "id": "37400308",
+      "photographer": "Pexels contributor; name not retained in the local source file",
+      "sourceUrl": "https://www.pexels.com/video/37400308/",
+      "query": "craftsperson at a loom; community frame explicitly disclosed as editorial stock",
+      "week": "2026-11-02",
+      "filename": "2026-11-07-where-eye-pauses.jpg",
+      "license": "Pexels license; third-party craft frame, not ZARI maker or workshop"
+    },
+    {
+      "provider": "instagram-native",
+      "id": "2255709927836768",
+      "title": "November Rain",
+      "artist": "Guns N' Roses",
+      "sourceUrl": "https://www.instagram.com/reels/audio/2255709927836768/",
+      "week": "2026-11-02",
+      "filename": "three silent music-ready Reels (Nov 2, 3, 6)",
+      "rights": "Native Instagram library only; account availability/commercial use unverified until checked in @zarirugs composer; no commercial recording downloaded or embedded."
     }
   ]
 }
