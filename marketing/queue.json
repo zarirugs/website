@@ -121,91 +121,134 @@
       "caption": "Last light settles along the border. In shadow, the reds deepen and the pattern seems to move.\n\n#ZariRugs #RugDetails #InteriorMood #PatternAtHome"
     },
     {
-      "id": "2026-11-02-line-by-line",
-      "status": "approved",
-      "publishAt": "2026-11-02T14:00:00.000Z",
-      "mediaType": "REELS",
-      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-02-line-by-line.mp4",
-      "caption": "A pattern, repeated by hand. Editorial footage; this is not a ZARI product, maker, or workshop. What caught your eye first?\n\n#ZariRugs #RugDesign #TextileDetails",
-      "publishingMode": "instagram-native-music",
-      "instagramAudio": {
-        "title": "November Rain",
-        "artist": "Guns N' Roses",
-        "bpm": "approximately 80; public tempo references vary around 78–84 BPM; match the exact Instagram segment before scheduling",
-        "excerpt": "9 seconds from the Instagram audio page, beginning at the guitar-led rise selected in the native composer. The exact account-side start marker is unverified; after selection, align cut cues at 0.0, 1.5, 3.0, 4.5, 6.0 and 7.5 seconds, then retime by ear.",
-        "url": "https://www.instagram.com/reels/audio/2255709927836768/",
-        "languageStyle": "English-language classic-rock ballad; guitar-led cinematic rise",
-        "rightsRoute": "Add only through the @zarirugs native Instagram music picker after confirming that this exact sound is available for commercial use by the account. Never download or embed the commercial recording. If unavailable, choose one current sound from the account’s Trending list and retime the edit.",
-        "verificationStatus": "Account availability and exact excerpt start must be confirmed in Instagram before manual scheduling."
-      },
-      "creativeHypothesis": "A close craft detail cut every two beats may hold attention better than a static-text opening; this is a directional style test because the source footage also differs."
-    },
-    {
-      "id": "2026-11-03-a-room-rebalanced",
-      "status": "approved",
-      "publishAt": "2026-11-03T14:00:00.000Z",
-      "mediaType": "REELS",
-      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-03-a-room-rebalanced.mp4",
-      "caption": "One movement, then the room finds its center. Editorial footage; the people, rug, and room are not ZARI’s. What caught your eye first?\n\n#ZariRugs #InteriorMood #RugStyling",
-      "publishingMode": "instagram-native-music",
-      "instagramAudio": {
-        "title": "November Rain",
-        "artist": "Guns N' Roses",
-        "bpm": "approximately 80; public tempo references vary around 78–84 BPM; match the exact Instagram segment before scheduling",
-        "excerpt": "9 seconds from the Instagram audio page, beginning at the guitar-led rise selected in the native composer. The exact account-side start marker is unverified; after selection, align cut cues at 0.0, 1.5, 3.0, 4.5, 6.0 and 7.5 seconds, then retime by ear.",
-        "url": "https://www.instagram.com/reels/audio/2255709927836768/",
-        "languageStyle": "English-language classic-rock ballad; guitar-led cinematic rise",
-        "rightsRoute": "Add only through the @zarirugs native Instagram music picker after confirming that this exact sound is available for commercial use by the account. Never download or embed the commercial recording. If unavailable, choose one current sound from the account’s Trending list and retime the edit.",
-        "verificationStatus": "Account availability and exact excerpt start must be confirmed in Instagram before manual scheduling."
-      },
-      "creativeHypothesis": "A physical rug reveal cut on longer four-beat phrases may earn a stronger 3-second hold than the tighter craft rhythm; this is a directional style test because the source footage also differs."
-    },
-    {
-      "id": "2026-11-04-field-border-finish",
+      "id": "2026-11-04-01-threshold",
       "status": "approved",
       "publishAt": "2026-11-04T14:00:00.000Z",
-      "mediaType": "IMAGE",
-      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-04-field-border-finish.jpg",
-      "caption": "FIELD / BORDER / FINISH\n\nThree details that give a carpet pattern its shape. Save this small design glossary for your next room study.\n\n#ZariRugs #TextileDesign #RugDetails",
-      "creativeHypothesis": "A restrained illustrated glossary may earn saves from design-minded viewers without turning the feed into a product pitch."
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-room-series/01-threshold.mp4",
+      "caption": "A room can feel different in a single moment. Which detail caught your eye?",
+      "source": {
+        "platform": "Pexels",
+        "url": "https://www.pexels.com/video/a-panning-shot-of-a-living-room-6356433/",
+        "usage": "Third-party editorial room footage; not a ZARI product or customer home. Download terms checked in source list; retain this provenance."
+      }
     },
     {
-      "id": "2026-11-05-heritage-001-study",
+      "id": "2026-11-05-02-salon",
       "status": "approved",
       "publishAt": "2026-11-05T14:00:00.000Z",
-      "mediaType": "IMAGE",
-      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-05-heritage-001-study.jpg",
-      "caption": "Heritage 001, read through border, field, and surface. An intentional return to the original ZARI catalog story, with the rug itself in view. Which detail should we bring closer next: the border or the central motif?\n\n#ZariRugs #RugDesign #ConsideredInteriors",
-      "creativeHypothesis": "A direct, truthful product detail may generate more qualified profile visits than editorial stock interiors; assess against verified Insights."
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-room-series/02-salon.mp4",
+      "caption": "A little old-world calm for your feed. Save this room for later.",
+      "source": {
+        "platform": "Pexels",
+        "url": "https://www.pexels.com/video/luxurious-classical-living-room-interior-design-40187579/",
+        "usage": "Third-party editorial room footage; not a ZARI product or customer home. Download terms checked in source list; retain this provenance."
+      }
     },
     {
-      "id": "2026-11-06-pattern-in-stillness",
+      "id": "2026-11-06-03-sunlit-plan",
       "status": "approved",
       "publishAt": "2026-11-06T14:00:00.000Z",
       "mediaType": "REELS",
-      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-06-pattern-in-stillness.mp4",
-      "caption": "One slow camera move across a patterned room. Editorial footage; neither the rug nor the room is a ZARI product. What caught your eye first?\n\n#ZariRugs #InteriorFilm #PatternAtHome",
-      "publishingMode": "instagram-native-music",
-      "instagramAudio": {
-        "title": "November Rain",
-        "artist": "Guns N' Roses",
-        "bpm": "approximately 80; public tempo references vary around 78–84 BPM; match the exact Instagram segment before scheduling",
-        "excerpt": "9 seconds from the Instagram audio page, beginning at the guitar-led rise selected in the native composer. The exact account-side start marker is unverified; after selection, align cut cues at 0.0, 1.5, 3.0, 4.5, 6.0 and 7.5 seconds, then retime by ear.",
-        "url": "https://www.instagram.com/reels/audio/2255709927836768/",
-        "languageStyle": "English-language classic-rock ballad; guitar-led cinematic rise",
-        "rightsRoute": "Add only through the @zarirugs native Instagram music picker after confirming that this exact sound is available for commercial use by the account. Never download or embed the commercial recording. If unavailable, choose one current sound from the account’s Trending list and retime the edit.",
-        "verificationStatus": "Account availability and exact excerpt start must be confirmed in Instagram before manual scheduling."
-      },
-      "creativeHypothesis": "A continuous, real camera glide with no internal cuts may sustain average watch time better than a cut-led reveal; this is a directional style test because the source footage also differs."
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-room-series/03-sunlit-plan.mp4",
+      "caption": "Let the light do the styling. Which corner would you keep?",
+      "source": {
+        "platform": "Pexels",
+        "url": "https://www.pexels.com/video/elegant-modern-living-room-with-natural-light-37479012/",
+        "usage": "Third-party editorial room footage; not a ZARI product or customer home. Download terms checked in source list; retain this provenance."
+      }
     },
     {
-      "id": "2026-11-07-where-eye-pauses",
+      "id": "2026-11-07-04-the-doorway",
       "status": "approved",
       "publishAt": "2026-11-07T14:00:00.000Z",
-      "mediaType": "IMAGE",
-      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-07-where-eye-pauses.jpg",
-      "caption": "A study in line, colour, and repetition. This editorial Pexels frame shows a separate maker’s work, not ZARI’s workshop. Where does your eye pause first: colour, line, or rhythm?\n\n#ZariRugs #TextileCraft #PatternStudy",
-      "creativeHypothesis": "A precise, non-sales question over a clearly disclosed craft image may invite more meaningful comments than a generic engagement prompt."
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-room-series/04-the-doorway.mp4",
+      "caption": "Would you walk into this room and stay a while?",
+      "source": {
+        "platform": "Pexels",
+        "url": "https://www.pexels.com/video/video-of-a-living-room-5824192/",
+        "usage": "Third-party editorial room footage; not a ZARI product or customer home. Download terms checked in source list; retain this provenance."
+      }
+    },
+    {
+      "id": "2026-11-08-05-open-plan",
+      "status": "approved",
+      "publishAt": "2026-11-08T14:00:00.000Z",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-room-series/05-open-plan.mp4",
+      "caption": "Open space, warm wood, and a slower kind of evening. Save this mood.",
+      "source": {
+        "platform": "Pexels",
+        "url": "https://www.pexels.com/video/modern-minimalist-interior-with-natural-light-40074718/",
+        "usage": "Third-party editorial room footage; not a ZARI product or customer home. Download terms checked in source list; retain this provenance."
+      }
+    },
+    {
+      "id": "2026-11-09-06-quiet-light",
+      "status": "approved",
+      "publishAt": "2026-11-09T14:00:00.000Z",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-room-series/06-quiet-light.mp4",
+      "caption": "When the light becomes part of the design. Morning or evening?",
+      "source": {
+        "platform": "Pexels",
+        "url": "https://www.pexels.com/video/modern-interior-with-art-and-natural-light-29586731/",
+        "usage": "Third-party editorial room footage; not a ZARI product or customer home. Download terms checked in source list; retain this provenance."
+      }
+    },
+    {
+      "id": "2026-11-10-07-morning-room",
+      "status": "approved",
+      "publishAt": "2026-11-10T14:00:00.000Z",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-room-series/07-morning-room.mp4",
+      "caption": "A slow morning, in a room made for it. What would you add?",
+      "source": {
+        "platform": "Pexels",
+        "url": "https://www.pexels.com/video/modern-minimalist-living-room-design-36516349/",
+        "usage": "Third-party editorial room footage; not a ZARI product or customer home. Download terms checked in source list; retain this provenance."
+      }
+    },
+    {
+      "id": "2026-11-11-08-green-room",
+      "status": "approved",
+      "publishAt": "2026-11-11T14:00:00.000Z",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-room-series/08-green-room.mp4",
+      "caption": "A little green makes a room feel alive. Which plant-filled corner is your favourite?",
+      "source": {
+        "platform": "Pexels",
+        "url": "https://www.pexels.com/video/living-room-full-of-house-plants-7235796/",
+        "usage": "Third-party editorial room footage; not a ZARI product or customer home. Download terms checked in source list; retain this provenance."
+      }
+    },
+    {
+      "id": "2026-11-12-09-hotel-warmth",
+      "status": "approved",
+      "publishAt": "2026-11-12T14:00:00.000Z",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-room-series/09-hotel-warmth.mp4",
+      "caption": "Check in, switch off. Save this feeling for your next reset.",
+      "source": {
+        "platform": "Coverr",
+        "url": "https://coverr.co/videos/hotel-room-tour-thlihgx1i6",
+        "usage": "Third-party editorial room footage; not a ZARI product or customer home. Download terms checked in source list; retain this provenance."
+      }
+    },
+    {
+      "id": "2026-11-13-10-graphic-calm",
+      "status": "approved",
+      "publishAt": "2026-11-13T14:00:00.000Z",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-room-series/10-graphic-calm.mp4",
+      "caption": "Less noise, more room to breathe. Which room should we reveal next?",
+      "source": {
+        "platform": "Mixkit",
+        "url": "https://mixkit.co/free-stock-video/hotel-room-with-modern-minimalist-style-4488/",
+        "usage": "Third-party editorial room footage; not a ZARI product or customer home. Download terms checked in source list; retain this provenance."
+      }
     }
   ]
 }
