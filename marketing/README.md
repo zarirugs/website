@@ -25,10 +25,12 @@ The account should earn a follow through three things:
 - Stories: three to five informal updates per week, including one poll or question.
 - Community: 20 minutes each weekday leaving thoughtful comments and replying to every genuine interaction.
 
-The scheduled publisher runs at 19:30 India time from Monday through Saturday.
-It publishes only entries in `queue.json` whose status is `approved` and whose
-`publishAt` time has passed. Published IDs receive a Git tag, preventing the same
-entry from being selected again.
+The scheduled publisher checks the queue daily at 19:30 India time. It publishes
+only entries in `queue.json` whose status is `approved` and whose `publishAt`
+time has passed. The usual weekly rhythm leaves Sunday empty; an explicitly
+approved campaign may schedule a Sunday post, as this 10-Reel run does.
+Published IDs receive a Git tag, preventing the same entry from being selected
+again.
 
 Reels marked `publishingMode: "instagram-native-music"` are excluded from the
 Graph API publisher. Confirm the named track in the ZARI account's Instagram
