@@ -15,22 +15,21 @@ The account should earn a follow through three things:
 
 ## Weekly rhythm
 
-- Monday: luxury Reel led by carpet, space, or fashion movement.
-- Tuesday: a second Reel testing a distinct material or visual premise.
-- Wednesday: editorial still or carousel with one clear idea.
-- Thursday: founder, interior, or craft story.
-- Friday: a third Reel with a distinct rhythm or narrative treatment.
-- Saturday: saveable carousel, community prompt, or behind-the-scenes post.
-- Sunday: no publishing. Review verified results and prepare the next weekly approval PR.
+- Every day: one single-image feed post at 12:45 IST and one Reel at 19:45 IST.
+- Vary the visual premise across the week: rug detail, room styling, colour,
+  proportion, craft context, moving room reveals, and editorial atmosphere.
+- Sunday: review verified results and prepare the next weekly approval PR while
+  the normal image and Reel slots continue to publish.
 - Stories: three to five informal updates per week, including one poll or question.
 - Community: 20 minutes each weekday leaving thoughtful comments and replying to every genuine interaction.
 
-The scheduled publisher checks the queue daily at 19:30 India time. It publishes
-only entries in `queue.json` whose status is `approved` and whose `publishAt`
-time has passed. The usual weekly rhythm leaves Sunday empty; an explicitly
-approved campaign may schedule a Sunday post, as this 10-Reel run does.
-Published IDs receive a Git tag, preventing the same entry from being selected
-again.
+The scheduled publisher has two daily slots: one IMAGE at 12:45 IST and one REELS
+post at 19:45 IST. Each slot has a one-hour retry. A run is restricted to its
+media type and India-local date, so a missed image run cannot consume the Reel
+slot, and a retry cannot publish a second post after the first has been tagged.
+The normal weekly cycle prepares both formats for every day. Merge its PR to
+approve; only entries in `queue.json` with `status: "approved"` can publish.
+Published IDs receive a Git tag to prevent duplicate publication.
 
 Reels marked `publishingMode: "instagram-native-music"` are excluded from the
 Graph API publisher. Confirm the named track in the ZARI account's Instagram
@@ -45,23 +44,20 @@ contains no commercial recording.
    `codex/instagram-week-YYYY-MM-DD` branch. Website photography is not used as a
    recurring content source.
 2. Pushing that branch opens one weekly review pull request. Its review page shows
-   all six publishing slots, including Reels on Monday, Tuesday, and Friday, with
-   previews, captions, music rights, scores, and publish times.
-3. Review the pack once. To reject one image, comment `REJECT 1 — reason`,
-   `REJECT 2 — reason`, or `REJECT 3 — reason` on the PR. Only that image is held
-   and replaced; the others retain their accepted state. Merge only when all three
-   are accepted.
+   all 14 daily image and Reel slots with previews, captions, source details,
+   music rights, scores, and publish times.
+3. Review the complete pack once. Reject any slot by naming its day and format in
+   a PR comment. Do not merge until each image and Reel passes its rubric.
 4. Only content merged into `main` can be selected by the publisher. The scheduled
-   workflow then publishes at 19:30 India time on Tuesday, Thursday, and Saturday.
+   workflow publishes one image at 12:45 IST and one Reel at 19:45 IST daily.
 
-At 12:30 India time each Sunday, the Codex weekly marketing review runs after the
-stock workflow. It records the previous week's verified results, applies
-`image-review-rubric.md` to every candidate and the three-image sequence, replaces
-weak selections, adjusts queries and captions from the evidence, and leaves the
-PR unmerged for approval. The next review includes what to repeat, what to stop,
-and what the coming week is testing. It also appends the week's image scores,
-accept/reject decisions, reasons, and later performance to
-`image-score-history.csv`, so selection standards improve from evidence.
+At 12:30 India time each Sunday, the Codex weekly marketing review records the
+previous week's verified results, applies the image and Reel rubrics to every
+candidate, replaces weak selections, adjusts concepts and captions from the
+evidence, and leaves the PR unmerged for approval. The review includes what to
+repeat, what to stop, and what the coming week is testing. It also records image
+and Reel scores, accept/reject decisions, reasons, and later performance so
+selection standards improve from evidence.
 
 The content supply does not depend on the website library. Each week should use,
 in order: new original founder/workshop media when available, newly licensed

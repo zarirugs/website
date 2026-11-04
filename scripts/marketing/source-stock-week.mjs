@@ -94,6 +94,8 @@ if (!apiKey) throw new Error("PEXELS_API_KEY is required");
 const config = readJson(configPath);
 if (config.provider !== "pexels") throw new Error(`Unsupported stock provider: ${config.provider}`);
 const usage = readJson(usagePath);
+const existingQueue = readJson(queuePath);
+if (!Array.isArray(existingQueue.posts)) throw new Error("marketing/queue.json must contain a posts array");
 const usedIds = new Set(usage.assets.map((asset) => `${asset.provider}:${asset.id}`));
 const monday = mondayFrom(argument("--week"));
 const week = dateOnly(monday);
@@ -117,18 +119,20 @@ for (const [index, slot] of config.posts.entries()) {
 
   const publishAt = new Date(monday);
   publishAt.setUTCDate(publishAt.getUTCDate() + slot.dayOffset);
-  publishAt.setUTCHours(14, 0, 0, 0);
+  publishAt.setUTCHours(7, 15, 0, 0);
   const caption = slot.captions[rotation % slot.captions.length];
   const mediaUrl = `https://zarirugs.com/marketing/instagram/${filename}`;
   posts.push({ id, status: "approved", publishAt: publishAt.toISOString(), mediaType: "IMAGE", mediaUrl, caption });
 
   const branchPreview = `https://raw.githubusercontent.com/zarirugs/website/codex/instagram-week-${week}/public/marketing/instagram/${filename}`;
-  reviewSections.push(`## ${publishAt.toLocaleDateString("en-IN", { weekday: "long", timeZone: "UTC" })} — 19:30 IST\n\n![${slot.title}](${branchPreview})\n\n**Image score:** pending Codex visual review\n\n**Caption**\n\n${caption.split("\n").map((line) => `> ${line}`).join("\n")}`);
+  reviewSections.push(`## ${publishAt.toLocaleDateString("en-IN", { weekday: "long", timeZone: "UTC" })} — 12:45 IST image\n\n![${slot.title}](${branchPreview})\n\n**Image score:** pending visual review\n\n**Caption**\n\n${caption.split("\n").map((line) => `> ${line}`).join("\n")}`);
   usage.assets.push({ provider: "pexels", id: String(photo.id), photographer: photo.photographer, sourceUrl: photo.url, query, week, filename });
 }
 
-fs.writeFileSync(queuePath, `${JSON.stringify({ posts }, null, 2)}\n`);
+const generatedIds = new Set(posts.map((post) => post.id));
+const preservedPosts = existingQueue.posts.filter((post) => !generatedIds.has(post.id));
+fs.writeFileSync(queuePath, `${JSON.stringify({ posts: [...preservedPosts, ...posts] }, null, 2)}\n`);
 fs.writeFileSync(usagePath, `${JSON.stringify(usage, null, 2)}\n`);
-const review = `# Instagram week of ${week}\n\nMerge this pull request after all three images are accepted. Reject one image by commenting \`REJECT 1 — reason\`, \`REJECT 2 — reason\`, or \`REJECT 3 — reason\`; only that image will be replaced. The photographs were sourced through the Pexels API, resized to 1080 × 1350, and checked against the private usage ledger.\n\n${reviewSections.join("\n\n")}\n\n## Approval checklist\n\n- [ ] Every image scored at least 21/25.\n- [ ] Aesthetic strength and authenticity are at least 4/5 for every image.\n- [ ] The complete sequence scored at least 4/5.\n- [ ] The people, setting and craft are represented appropriately.\n- [ ] Captions sound like ZARI.\n- [ ] Dates and times are correct.\n\n**Merge = approve the complete weekly pack.**\n`;
+const review = `# Instagram image posts for the week of ${week}\n\nThis pack contains one image post per day at 12:45 IST. It merges into the existing queue without deleting any Reel or previously approved post. Review all images before merging. The photographs were sourced through the Pexels API, resized to 1080 × 1350, and recorded in the private usage ledger.\n\n${reviewSections.join("\n\n")}\n\n## Approval checklist\n\n- [ ] Every image scored at least 21/25.\n- [ ] Aesthetic strength and authenticity are at least 4/5.\n- [ ] The complete sequence scored at least 4/5.\n- [ ] The people, setting and craft are represented appropriately.\n- [ ] Captions sound like ZARI.\n- [ ] Dates and times are correct.\n\n**Merge = approve these image posts; existing Reel schedules are preserved.**\n`;
 fs.writeFileSync(path.join(reviewDirectory, `${week}.md`), review);
 console.log(`Prepared ${posts.length} Pexels-backed posts for the week of ${week}.`);
