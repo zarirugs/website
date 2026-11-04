@@ -1,9 +1,12 @@
-name: Publish approved Instagram content
+name: Publish approved Instagram image and Reel
 
 on:
   schedule:
-    # 19:30 India time daily; the queue controls whether a post is due.
-    - cron: "0 14 * * *"
+    # Images: 12:45 IST, with a 13:45 IST retry. Reels: 19:45 IST,
+    # with a 20:45 IST retry. Off-hour minutes reduce GitHub cron congestion;
+    # each run is locked to one media type and the current India date.
+    - cron: "15 7,8 * * *"
+    - cron: "15 14,15 * * *"
   workflow_dispatch:
     inputs:
       connection_only:
@@ -15,6 +18,13 @@ on:
         description: "Approved post ID to publish now (optional)"
         required: false
         type: string
+      media_type:
+        description: "When no post ID is given, publish today's IMAGE or REELS slot"
+        required: false
+        type: choice
+        options:
+          - IMAGE
+          - REELS
 
 permissions:
   contents: write
@@ -25,7 +35,7 @@ concurrency:
 
 jobs:
   publish:
-    name: Publish next approved post
+    name: Publish one approved daily slot
     runs-on: ubuntu-latest
 
     steps:
@@ -42,11 +52,17 @@ jobs:
       - name: Validate content queue
         run: node scripts/marketing/validate-queue.mjs
 
-      - name: Publish one post
+      - name: Resolve India publication date
+        id: schedule
+        run: echo "date=$(TZ=Asia/Kolkata date +%F)" >> "$GITHUB_OUTPUT"
+
+      - name: Publish selected image or Reel slot
         env:
           INSTAGRAM_ACCOUNT_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_GRAPH_VERSION: ${{ vars.INSTAGRAM_GRAPH_VERSION }}
           CONNECTION_ONLY: ${{ inputs.connection_only }}
           POST_ID: ${{ inputs.post_id }}
+          PUBLISH_MEDIA_TYPE: ${{ github.event_name == 'schedule' && (github.event.schedule == '15 7,8 * * *' && 'IMAGE' || 'REELS') || inputs.media_type }}
+          PUBLISH_DATE: ${{ steps.schedule.outputs.date }}
         run: node scripts/marketing/publish-instagram.mjs
