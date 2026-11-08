@@ -186,16 +186,15 @@
       }
     },
     {
-      "id": "2026-11-09-06-quiet-light",
+      "id": "2026-11-09-made-to-live-with",
       "status": "approved",
       "publishAt": "2026-11-09T14:00:00.000Z",
       "mediaType": "REELS",
-      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-room-series/06-quiet-light.mp4",
-      "caption": "When the light becomes part of the design. Morning or evening?",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-09-made-to-live-with.mp4",
+      "caption": "An imagined room for a slower kind of living.\n\nPattern underfoot. Light moving across the room. A feeling made to live with.\n\nVisual styling concept, not a current ZARI product or customer home.\n\n#ZariRugs #TimelessInteriors #RugStyling #MadeToLiveWith",
       "source": {
-        "platform": "Pexels",
-        "url": "https://www.pexels.com/video/modern-interior-with-art-and-natural-light-29586731/",
-        "usage": "Third-party editorial room footage; not a ZARI product or customer home. Download terms checked in source list; retain this provenance."
+        "platform": "Google Flow, Pexels, and user-provided audio",
+        "usage": "Flow-generated camera-move opening; editorial Pexels clips; audio embedded from the user-provided MP4. Confirm music publishing rights before merging this PR."
       }
     },
     {
