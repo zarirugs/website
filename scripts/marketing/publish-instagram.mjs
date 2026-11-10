@@ -7,6 +7,8 @@ const apiBase = `https://graph.instagram.com/${apiVersion}`;
 const manualPostId = process.env.POST_ID?.trim();
 const dryRun = process.env.DRY_RUN === "1";
 const connectionOnly = ["1", "true"].includes(process.env.CONNECTION_ONLY?.toLowerCase());
+const requestedMediaType = process.env.PUBLISH_MEDIA_TYPE?.trim().toUpperCase();
+const scheduledDate = process.env.PUBLISH_DATE?.trim();
 
 function tagFor(post) {
   return `instagram-post/${post.id}`;
@@ -21,6 +23,17 @@ function isPublished(post) {
   } catch {
     return false;
   }
+}
+
+function indiaDate(isoDate) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Kolkata",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date(isoDate));
+  const fields = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+  return `${fields.year}-${fields.month}-${fields.day}`;
 }
 
 function selectPost(posts) {
@@ -39,6 +52,8 @@ function selectPost(posts) {
   return approved
     .filter((post) => post.publishingMode !== "instagram-native-music")
     .filter((post) => Date.parse(post.publishAt) <= now)
+    .filter((post) => !requestedMediaType || post.mediaType === requestedMediaType)
+    .filter((post) => !scheduledDate || indiaDate(post.publishAt) === scheduledDate)
     .sort((a, b) => Date.parse(a.publishAt) - Date.parse(b.publishAt))
     .find((post) => !isPublished(post));
 }
@@ -119,7 +134,10 @@ const posts = readAndValidateQueue();
 const post = selectPost(posts);
 
 if (!post) {
-  console.log("No unpublished approved Instagram post is due.");
+  const slot = [requestedMediaType, scheduledDate].filter(Boolean).join(" on ");
+  console.log(slot
+    ? `No unpublished approved ${slot} Instagram post is due.`
+    : "No unpublished approved Instagram post is due.");
   process.exit(0);
 }
 

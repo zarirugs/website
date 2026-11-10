@@ -2,54 +2,101 @@
   "provider": "pexels",
   "posts": [
     {
-      "slug": "brand-world",
-      "title": "The ZARI world",
+      "slug": "room-as-composition",
+      "title": "Room as composition",
+      "dayOffset": 0,
+      "queries": [
+        "editorial living room rug natural light",
+        "modern interior rug architectural photography",
+        "design magazine living room carpet"
+      ],
+      "captions": [
+        "A room settles when one element gives everything else a place.\n\nFor you, is that the rug, the light, or the furniture?\n\n#ZariRugs #InteriorDesign #RugStyling #ConsideredInteriors",
+        "The quietest detail can set the whole room's direction.\n\nWhat would you notice first here?\n\n#ZariRugs #InteriorMood #RugDesign #HomeInspiration"
+      ]
+    },
+    {
+      "slug": "colour-in-balance",
+      "title": "Colour in balance",
       "dayOffset": 1,
       "queries": [
-        "fashion editorial patterned rug interior",
-        "architectural interior textile floor portrait",
-        "woman seated on rug editorial photography",
-        "Indian interior carpet editorial",
-        "textile still life natural light"
+        "colourful rug neutral living room editorial",
+        "bold patterned carpet interior design",
+        "designer room rug colour composition"
       ],
       "captions": [
-        "A room changes when the floor becomes part of the architecture.\n\nZARI is building a world around rugs, craft and considered interiors. Follow the first collection as it takes shape.\n\n#ZariRugs #InteriorDesignIndia #RugDesign #IndianCraft",
-        "The rug is not the finishing touch. It is where the room begins.\n\nFollow @zarirugs as we build our first collection around material, proportion and Indian craftsmanship.\n\n#ZariRugs #HandmadeRugs #TimelessInteriors #DesignIndia",
-        "Objects give a room character. A rug gives it ground.\n\nWe are documenting the making of ZARI before the first collection arrives.\n\n#ZariRugs #InteriorInspiration #RugArt #IndianDesign"
+        "One confident colour can make a neutral room feel complete.\n\nWould you build the room around the rug or add it last?\n\n#ZariRugs #ColourAndPattern #RugStyling #InteriorDesign",
+        "Pattern brings energy. A little restraint around it lets the room breathe.\n\nSave this balance for your next room refresh.\n\n#ZariRugs #PatternAtHome #InteriorInspiration #RugDesign"
       ]
     },
     {
-      "slug": "made-by-hand",
-      "title": "Made by hand",
+      "slug": "light-on-texture",
+      "title": "Light on texture",
+      "dayOffset": 2,
+      "queries": [
+        "woven rug texture daylight interior editorial",
+        "carpet detail sunlight photography",
+        "natural fiber rug close up daylight"
+      ],
+      "captions": [
+        "Texture changes as the light moves. Look once from across the room, then again up close.\n\nWhich view do you prefer?\n\n#ZariRugs #TextileDetail #MaterialStudy #InteriorMood",
+        "A surface can feel different from morning to evening.\n\nWhen does your home get its best light?\n\n#ZariRugs #NaturalLight #RugDetails #ConsideredHomes"
+      ]
+    },
+    {
+      "slug": "a-pattern-with-space",
+      "title": "A pattern with space",
       "dayOffset": 3,
       "queries": [
-        "India artisan handloom weaving",
-        "rug weaving hands loom",
-        "traditional carpet weaving workshop",
-        "wool yarn craft hands",
-        "textile artisan documentary"
+        "patterned rug minimal living room interior",
+        "traditional rug contemporary room editorial",
+        "geometric carpet quiet interior design"
       ],
       "captions": [
-        "Before pattern comes repetition: knot after knot, row after row.\n\nThe first ZARI collection begins with respect for the hands and time behind a rug.\n\n#ZariRugs #MadeByHand #IndianCraftsmanship #RugMaking",
-        "The surface is only the final chapter. The work begins at the loom.\n\nFollow the materials, decisions and craft behind our first collection.\n\n#ZariRugs #AtTheLoom #HandKnottedRugs #CraftedInIndia",
-        "Time is one of the materials in every handmade rug.\n\nWe are building ZARI slowly, with craft at the centre.\n\n#ZariRugs #SlowCraft #RugWeaving #IndianDesign"
+        "A strong pattern needs room around it. Let one surface lead, then keep the rest considered.\n\nWould you add more colour or leave it here?\n\n#ZariRugs #PatternAndSpace #InteriorDesign #RugStyling",
+        "The eye needs somewhere to pause. Pattern and quiet can share the same room.\n\n#ZariRugs #DesignDetails #ConsideredInteriors #TextileDesign"
       ]
     },
     {
-      "slug": "look-closer",
-      "title": "Look closer",
-      "dayOffset": 5,
+      "slug": "the-border-detail",
+      "title": "The border detail",
+      "dayOffset": 4,
       "queries": [
-        "handmade rug detail macro",
-        "carpet texture close up natural fiber",
-        "rolled rugs textile detail",
-        "wool yarn material study",
-        "woven textile edge detail"
+        "rug border detail interior photography",
+        "carpet edge pattern macro editorial",
+        "woven rug detail natural light"
       ],
       "captions": [
-        "Look closer. Pile, edge, colour and the small irregularities that make a handmade surface feel alive.\n\nWhich details do you notice first in a rug?\n\n#ZariRugs #TextileDetail #RugDesign #MaterialStudy",
-        "Texture changes with every step and every shift of light.\n\nThese are the material questions shaping our first collection.\n\n#ZariRugs #Materiality #HandmadeRugs #InteriorDetails",
-        "A rug rewards attention at every distance: composition from across the room, texture up close.\n\nFollow @zarirugs for the making of our first collection.\n\n#ZariRugs #RugArt #TextileDesign #CraftedInteriors"
+        "The border is easy to miss at first glance. Then it gives the whole composition its frame.\n\nBorder or centre: where did your eye land?\n\n#ZariRugs #RugDetails #PatternStudy #InteriorDesign",
+        "Look close, then step back. The small detail often explains the whole.\n\n#ZariRugs #TextileDesign #RugArt #MaterialStudy"
+      ]
+    },
+    {
+      "slug": "ground-the-room",
+      "title": "Ground the room",
+      "dayOffset": 5,
+      "queries": [
+        "sofa front legs on rug living room editorial",
+        "large area rug seating arrangement design",
+        "living room carpet furniture layout photography"
+      ],
+      "captions": [
+        "When the front legs of the seating meet the rug, the conversation area feels connected.\n\nSave this layout idea for later.\n\n#ZariRugs #RugGuide #LivingRoomDesign #InteriorTips",
+        "A rug can bring separate pieces into one conversation. Scale makes the difference.\n\n#ZariRugs #InteriorLayout #RugStyling #DesignNotes"
+      ]
+    },
+    {
+      "slug": "quiet-corner",
+      "title": "A quieter corner",
+      "dayOffset": 6,
+      "queries": [
+        "quiet reading corner rug natural light interior",
+        "small room rug chair plant editorial photography",
+        "minimal reading nook carpet interior"
+      ],
+      "captions": [
+        "A chair, a little light, and a place to pause. What would you add to this corner?\n\n#ZariRugs #SlowInteriors #ReadingCorner #InteriorMood",
+        "Not every room needs more. Sometimes it needs one place to stay a little longer.\n\n#ZariRugs #ConsideredHomes #InteriorInspiration #QuietSpaces"
       ]
     }
   ]
