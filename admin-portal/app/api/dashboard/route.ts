@@ -10,22 +10,35 @@ export async function GET(request: Request) {
     const context = await authenticatedAdminContext(request);
     if (!context) return errorResponse("Unauthorised.", 401);
 
-    const [orders, awaitingPayment, lowStock, products] = await context.database.batch<CountRow>([
-      context.database.prepare("SELECT COUNT(*) AS count FROM orders WHERE COALESCE(workflow_status, 'new') NOT IN ('delivered', 'cancelled')"),
-      context.database.prepare("SELECT COUNT(*) AS count FROM orders WHERE COALESCE(workflow_status, 'new') = 'payment_pending'"),
-      context.database.prepare("SELECT COUNT(*) AS count FROM inventory_items WHERE stock <= reorder_level AND is_active = 1"),
-      context.database.prepare("SELECT COUNT(*) AS count FROM product_catalog WHERE is_visible = 1"),
-    ]);
+    const [orders, awaitingPayment, lowStock, products] =
+      await context.database.batch<CountRow>([
+        context.database.prepare(
+          "SELECT COUNT(*) AS count FROM orders WHERE COALESCE(workflow_status, 'new') NOT IN ('delivered', 'cancelled')",
+        ),
+        context.database.prepare(
+          "SELECT COUNT(*) AS count FROM orders WHERE COALESCE(workflow_status, 'new') = 'payment_pending'",
+        ),
+        context.database.prepare(
+          "SELECT COUNT(*) AS count FROM inventory_items WHERE stock <= reorder_level AND is_active = 1",
+        ),
+        context.database.prepare(`SELECT COUNT(*) AS count FROM product_catalog
+        JOIN inventory_items ON inventory_items.sku = product_catalog.sku
+        JOIN categories ON categories.id = product_catalog.category_id
+        WHERE product_catalog.is_visible = 1 AND inventory_items.is_active = 1 AND categories.is_active = 1`),
+      ]);
 
-    return NextResponse.json({
-      admin: context.admin,
-      metrics: {
-        openOrders: orders.results[0]?.count ?? 0,
-        awaitingPayment: awaitingPayment.results[0]?.count ?? 0,
-        lowStock: lowStock.results[0]?.count ?? 0,
-        visibleProducts: products.results[0]?.count ?? 0,
+    return NextResponse.json(
+      {
+        admin: context.admin,
+        metrics: {
+          openOrders: orders.results[0]?.count ?? 0,
+          awaitingPayment: awaitingPayment.results[0]?.count ?? 0,
+          lowStock: lowStock.results[0]?.count ?? 0,
+          visibleProducts: products.results[0]?.count ?? 0,
+        },
       },
-    }, { headers: { "Cache-Control": "no-store" } });
+      { headers: { "Cache-Control": "no-store" } },
+    );
   } catch (error) {
     return databaseErrorResponse(error);
   }
