@@ -1,8 +1,20 @@
 import { NextResponse } from "next/server";
 
 import { authenticatedAdminContext } from "@/lib/server/guard";
-import { databaseErrorResponse, errorResponse, optionalText, requiredText, validImageUrl } from "@/lib/server/http";
-import { compressUploadedImage, getMediaBucket, publicMediaPath, validColor, type MediaSourceType } from "@/lib/server/media";
+import {
+  databaseErrorResponse,
+  errorResponse,
+  optionalText,
+  requiredText,
+  validImageUrl,
+} from "@/lib/server/http";
+import {
+  compressUploadedImage,
+  getMediaBucket,
+  publicMediaPath,
+  validColor,
+  type MediaSourceType,
+} from "@/lib/server/media";
 
 type MediaRow = {
   id: string;
@@ -15,15 +27,25 @@ type MediaRow = {
   created_at: string;
   updated_at: string;
 };
-type SlotRow = { slot_key: string; label: string; description: string; media_asset_id: string | null };
+type SlotRow = {
+  slot_key: string;
+  label: string;
+  description: string;
+  media_asset_id: string | null;
+};
 
 function mediaResponse(asset: MediaRow) {
   return {
-    id: asset.id, name: asset.name, altText: asset.alt_text, sourceType: asset.source_type,
-    imageUrl: asset.image_url, backgroundColor: asset.background_color,
+    id: asset.id,
+    name: asset.name,
+    altText: asset.alt_text,
+    sourceType: asset.source_type,
+    imageUrl: asset.image_url,
+    backgroundColor: asset.background_color,
     mediaKind: asset.media_kind,
     previewUrl: publicMediaPath(asset.id, asset.source_type, asset.image_url),
-    createdAt: asset.created_at, updatedAt: asset.updated_at,
+    createdAt: asset.created_at,
+    updatedAt: asset.updated_at,
   };
 }
 
@@ -31,17 +53,44 @@ export async function GET(request: Request) {
   try {
     const context = await authenticatedAdminContext(request);
     if (!context) return errorResponse("Unauthorised.", 401);
-    const categoryId = optionalText(new URL(request.url).searchParams.get("categoryId"), 100);
-    if (categoryId && !await context.database.prepare("SELECT id FROM categories WHERE id = ?").bind(categoryId).first()) {
+    const categoryId = optionalText(
+      new URL(request.url).searchParams.get("categoryId"),
+      100,
+    );
+    if (
+      categoryId &&
+      !(await context.database
+        .prepare("SELECT id FROM categories WHERE id = ?")
+        .bind(categoryId)
+        .first())
+    ) {
       return errorResponse("Category not found.", 404);
     }
     const assets = categoryId
-      ? await context.database.prepare("SELECT id, name, alt_text, source_type, image_url, background_color, media_kind, created_at, updated_at FROM media_assets WHERE category_id = ? ORDER BY updated_at DESC, name ASC").bind(categoryId).all<MediaRow>()
-      : await context.database.prepare("SELECT id, name, alt_text, source_type, image_url, background_color, media_kind, created_at, updated_at FROM media_assets WHERE category_id IS NULL ORDER BY updated_at DESC, name ASC").all<MediaRow>();
+      ? await context.database
+          .prepare(
+            "SELECT id, name, alt_text, source_type, image_url, background_color, media_kind, created_at, updated_at FROM media_assets WHERE category_id = ? ORDER BY updated_at DESC, name ASC",
+          )
+          .bind(categoryId)
+          .all<MediaRow>()
+      : await context.database
+          .prepare(
+            "SELECT id, name, alt_text, source_type, image_url, background_color, media_kind, created_at, updated_at FROM media_assets WHERE category_id IS NULL ORDER BY updated_at DESC, name ASC",
+          )
+          .all<MediaRow>();
     const slots = categoryId
       ? []
-      : (await context.database.prepare("SELECT slot_key, label, description, media_asset_id FROM site_media_slots ORDER BY slot_key ASC").all<SlotRow>()).results;
-    return NextResponse.json({ media: assets.results.map(mediaResponse), slots }, { headers: { "Cache-Control": "no-store" } });
+      : (
+          await context.database
+            .prepare(
+              "SELECT slot_key, label, description, media_asset_id FROM site_media_slots ORDER BY slot_key ASC",
+            )
+            .all<SlotRow>()
+        ).results;
+    return NextResponse.json(
+      { media: assets.results.map(mediaResponse), slots },
+      { headers: { "Cache-Control": "no-store" } },
+    );
   } catch (error) {
     return databaseErrorResponse(error);
   }
@@ -58,16 +107,29 @@ export async function POST(request: Request) {
     const sourceType = form.get("sourceType");
     const requestedMediaKind = form.get("mediaKind") ?? "image";
     const mediaKind = sourceType === "color" ? "image" : requestedMediaKind;
-    if (!name || (sourceType !== "upload" && sourceType !== "url" && sourceType !== "color")) {
+    if (
+      !name ||
+      (sourceType !== "upload" &&
+        sourceType !== "url" &&
+        sourceType !== "color")
+    ) {
       return errorResponse("Enter a name and choose a media source.");
     }
     if (mediaKind !== "image" && mediaKind !== "video") {
       return errorResponse("Choose whether this item is an image or video.");
     }
     if (categoryId && mediaKind === "video") {
-      return errorResponse("Videos can currently be used only for the homepage hero.");
+      return errorResponse(
+        "Videos can currently be used only for the homepage hero.",
+      );
     }
-    if (categoryId && !await context.database.prepare("SELECT id FROM categories WHERE id = ?").bind(categoryId).first()) {
+    if (
+      categoryId &&
+      !(await context.database
+        .prepare("SELECT id FROM categories WHERE id = ?")
+        .bind(categoryId)
+        .first())
+    ) {
       return errorResponse("Category not found.", 404);
     }
 
@@ -78,32 +140,79 @@ export async function POST(request: Request) {
 
     if (sourceType === "upload") {
       const file = form.get("file");
-      const acceptedImages = new Set(["image/jpeg", "image/png", "image/webp", "image/avif", "image/gif"]);
-      const isAccepted = file instanceof File && (mediaKind === "video" ? file.type === "video/mp4" : acceptedImages.has(file.type));
-      const maximumSize = mediaKind === "video" ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
-      if (!(file instanceof File) || !isAccepted || file.size < 1 || file.size > maximumSize) {
-        return errorResponse(mediaKind === "video"
-          ? "Upload an MP4 video no larger than 50 MB."
-          : "Upload a JPG, PNG, WebP, AVIF, or GIF no larger than 10 MB.");
+      const acceptedImages = new Set([
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/avif",
+        "image/gif",
+      ]);
+      const isAccepted =
+        file instanceof File &&
+        (mediaKind === "video"
+          ? file.type === "video/mp4"
+          : acceptedImages.has(file.type));
+      const maximumSize =
+        mediaKind === "video" ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+      if (
+        !(file instanceof File) ||
+        !isAccepted ||
+        file.size < 1 ||
+        file.size > maximumSize
+      ) {
+        return errorResponse(
+          mediaKind === "video"
+            ? "Upload an MP4 video no larger than 50 MB."
+            : "Upload a JPG, PNG, WebP, AVIF, or GIF no larger than 10 MB.",
+        );
       }
-      objectKey = `media/${id}.webp`;
-      const compressedImage = await compressUploadedImage(file);
-      await (await getMediaBucket()).put(objectKey, compressedImage, {
-        httpMetadata: { contentType: "image/webp", cacheControl: "public, max-age=31536000, immutable" },
+      objectKey = `media/${id}.${mediaKind === "video" ? "mp4" : "webp"}`;
+      // Videos must retain their bytes and MIME type; only images use Images.
+      const content =
+        mediaKind === "video"
+          ? file.stream()
+          : await compressUploadedImage(file);
+      await (
+        await getMediaBucket()
+      ).put(objectKey, content, {
+        httpMetadata: {
+          contentType: mediaKind === "video" ? "video/mp4" : "image/webp",
+          cacheControl: "public, max-age=31536000, immutable",
+        },
       });
     } else if (sourceType === "url") {
       imageUrl = validImageUrl(form.get("imageUrl"));
-      if (!imageUrl) return errorResponse("Enter a valid image URL beginning with http:// or https://.");
+      if (!imageUrl)
+        return errorResponse(
+          "Enter a valid image URL beginning with http:// or https://.",
+        );
     } else {
       backgroundColor = validColor(form.get("backgroundColor"));
-      if (!backgroundColor) return errorResponse("Enter a valid hex colour, for example #A67C52.");
+      if (!backgroundColor)
+        return errorResponse("Enter a valid hex colour, for example #A67C52.");
     }
 
-    await context.database.prepare(
-      `INSERT INTO media_assets (id, name, alt_text, source_type, image_url, object_key, background_color, category_id, media_kind)
+    await context.database
+      .prepare(
+        `INSERT INTO media_assets (id, name, alt_text, source_type, image_url, object_key, background_color, category_id, media_kind)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    ).bind(id, name, altText, sourceType, imageUrl, objectKey, backgroundColor, categoryId, mediaKind).run();
-    return NextResponse.json({ created: true, id }, { status: 201, headers: { "Cache-Control": "no-store" } });
+      )
+      .bind(
+        id,
+        name,
+        altText,
+        sourceType,
+        imageUrl,
+        objectKey,
+        backgroundColor,
+        categoryId,
+        mediaKind,
+      )
+      .run();
+    return NextResponse.json(
+      { created: true, id },
+      { status: 201, headers: { "Cache-Control": "no-store" } },
+    );
   } catch (error) {
     return databaseErrorResponse(error);
   }

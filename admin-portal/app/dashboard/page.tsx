@@ -7,12 +7,29 @@ import { getDatabase } from "@/lib/server/database";
 
 export const metadata = { title: "Operations | ZARI" };
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ view?: string }>;
+}) {
+  const { view } = await searchParams;
+  const activeView =
+    view === "categories" || view === "media" || view === "orders"
+      ? view
+      : "overview";
   const requestHeaders = await headers();
   const admin = await getAuthenticatedAdmin(
-    new Request("https://admin.zarirugs.com", { headers: { cookie: requestHeaders.get("cookie") ?? "" } }),
+    new Request("https://admin.zarirugs.com", {
+      headers: { cookie: requestHeaders.get("cookie") ?? "" },
+    }),
     await getDatabase(),
   );
   if (!admin) redirect("/login");
-  return <OperationsDashboard initialAdmin={admin} />;
+  return (
+    <OperationsDashboard
+      key={activeView}
+      initialAdmin={admin}
+      view={activeView}
+    />
+  );
 }

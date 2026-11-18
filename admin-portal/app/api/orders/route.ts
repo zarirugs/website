@@ -18,7 +18,12 @@ type OrderRow = {
   updated_at: string;
 };
 
-type ItemRow = { order_id: number; sku: string; item_name: string; quantity: number };
+type ItemRow = {
+  order_id: number;
+  sku: string;
+  item_name: string;
+  quantity: number;
+};
 
 export async function GET(request: Request) {
   try {
@@ -27,12 +32,13 @@ export async function GET(request: Request) {
     const [orderResult, itemResult] = await context.database.batch([
       context.database.prepare(
         `SELECT id, order_number, customer_name, customer_email, customer_phone, delivery_address, notes,
-          workflow_status, status, created_at, updated_at FROM orders ORDER BY created_at DESC LIMIT 100`,
+          workflow_status, status, created_at, updated_at FROM orders ORDER BY created_at DESC, id DESC LIMIT 100`,
       ),
       context.database.prepare(
         `SELECT order_items.order_id, order_items.sku, order_items.item_name, order_items.quantity
          FROM order_items JOIN orders ON orders.id = order_items.order_id
-         ORDER BY orders.created_at DESC, order_items.id ASC LIMIT 500`,
+         WHERE order_items.order_id IN (SELECT id FROM orders ORDER BY created_at DESC, id DESC LIMIT 100)
+         ORDER BY orders.created_at DESC, orders.id DESC, order_items.id ASC`,
       ),
     ]);
     const itemsByOrder = new Map<number, ItemRow[]>();
@@ -52,9 +58,16 @@ export async function GET(request: Request) {
       stage: order.workflow_status ?? "new",
       createdAt: order.created_at,
       updatedAt: order.updated_at,
-      items: (itemsByOrder.get(order.id) ?? []).map((item) => ({ sku: item.sku, name: item.item_name, quantity: item.quantity })),
+      items: (itemsByOrder.get(order.id) ?? []).map((item) => ({
+        sku: item.sku,
+        name: item.item_name,
+        quantity: item.quantity,
+      })),
     }));
-    return NextResponse.json({ orders, stages: orderStages }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json(
+      { orders, stages: orderStages },
+      { headers: { "Cache-Control": "no-store" } },
+    );
   } catch (error) {
     return databaseErrorResponse(error);
   }

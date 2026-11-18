@@ -1,0 +1,212 @@
+.shell {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  min-height: 100vh;
+}
+.skipLink {
+  position: fixed;
+  top: 0.75rem;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  transform: translateY(-180%);
+  background: var(--ink);
+  color: white;
+}
+.skipLink:focus {
+  transform: translateY(0);
+}
+.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  padding: 2.5rem 1.5rem 1.5rem;
+  border-right: 1px solid var(--line);
+  background: var(--subtle);
+}
+.brand {
+  display: block;
+  padding: 0 0.75rem;
+  font-family: var(--font-wordmark), Georgia, serif;
+  font-size: 2.15rem;
+  letter-spacing: 0.16em;
+}
+.brand span {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.navLabel {
+  margin: 3rem 0.75rem 1rem;
+  color: var(--muted);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.nav {
+  display: grid;
+  gap: 0.4rem;
+}
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 48px;
+  padding: 0.75rem;
+  border: 1px solid transparent;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+.nav a span {
+  color: var(--gold);
+  font-size: 0.625rem;
+  font-variant-numeric: tabular-nums;
+}
+.nav a:hover {
+  color: var(--ink);
+  background: white;
+}
+.nav .current {
+  border-color: var(--line);
+  background: white;
+  color: var(--ink);
+}
+.sidebarFoot {
+  margin-top: auto;
+  padding-top: 2rem;
+}
+.storefront {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  margin: 0 0.75rem 1rem;
+  color: var(--gold);
+  font-size: 0.75rem;
+}
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 0.75rem 0.5rem;
+  border-top: 1px solid var(--line);
+}
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--gold);
+  font-size: 0.875rem;
+}
+.identity p {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.75rem;
+}
+.identity p span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.signOut {
+  min-height: 44px;
+  margin-left: 3.75rem;
+  border: 0;
+  padding: 0.5rem 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.signOut:hover {
+  color: var(--ink);
+}
+.workspace {
+  width: 100%;
+  min-width: 0;
+  max-width: 100rem;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 3vw, 3.5rem);
+}
+.footer {
+  margin-top: 5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}
+@media (max-width: 1000px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.25rem;
+    height: auto;
+    padding: 1.25rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    padding: 0;
+    font-size: 1.7rem;
+  }
+  .brand span {
+    font-size: 0.5625rem;
+  }
+  .navLabel,
+  .avatar,
+  .identity,
+  .storefront {
+    display: none;
+  }
+  .nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .nav a {
+    flex: 1;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+  .sidebarFoot {
+    margin: 0;
+    padding: 0;
+  }
+  .signOut {
+    margin: 0;
+  }
+}
+@media (max-width: 420px) {
+  .nav a span {
+    display: none;
+  }
+  .nav a {
+    flex-basis: 40%;
+  }
+}

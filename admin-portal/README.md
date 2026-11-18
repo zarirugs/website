@@ -44,3 +44,13 @@ npx wrangler secret delete ADMIN_BOOTSTRAP_TOKEN --config wrangler.jsonc
 ```
 
 `wrangler.jsonc` declares `admin.zarirugs.com` as a Cloudflare Custom Domain. The `zarirugs.com` zone must be active in the same Cloudflare account, and the hostname must not already have a CNAME record.
+
+## Interface and quality checks
+
+The portal reuses `../styles/tokens.css` and locally bundled Inter, Cormorant Garamond and Prata fonts to match the storefront. Shared workspace controls and feedback live in `components/workspace.module.css`, `AdminShell.tsx` and `Feedback.tsx`; authentication shares `AuthFrame.tsx`.
+
+The dashboard supports `/dashboard` and `?view=categories`, `?view=media`, `?view=orders`. Category/product editing remains under `/dashboard/categories/[id]`.
+
+Run `npm run lint`, `npm run typecheck`, `npm test` and `npm run build:cloudflare` from this directory. Tests use in-memory SQLite and mocked storage, with no production credentials. Node.js 24 is used by CI.
+
+See [the quality review](docs/portal-quality-review.md) for findings, validation and desktop/mobile screenshots.

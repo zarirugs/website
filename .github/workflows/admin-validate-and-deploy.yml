@@ -41,6 +41,10 @@ jobs:
         run: npm run typecheck
         working-directory: admin-portal
 
+      - name: Regression tests
+        run: npm test
+        working-directory: admin-portal
+
       - name: Build for Cloudflare
         run: npm run build:cloudflare
         working-directory: admin-portal
