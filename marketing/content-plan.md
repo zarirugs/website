@@ -30,22 +30,22 @@ origin, and reason to follow.
 | 11 | Collaboration | Designer's view on anchoring a room | Audience crossover | One relevant designer partner |
 | 12 | Founder update | What the first followers shaped | Reward early audience | Founder photograph or video |
 
-## Ongoing Monday–Saturday cadence
+## Ongoing four-post cadence
 
-Sunday is the learning and production day, with no feed publication. The Sunday
-run records verified metrics, compares the strongest and weakest posts, reviews
-image and video scores plus exact rejection reasons, and opens one approval PR
-for the following week.
+Prepare two educational/informative posts and two trend-led posts per week.
+Posting approval in chat schedules the accepted content using
+`posting-policy.json`. Review results weekly and use the findings to choose
+the next topics.
 
-| Day | Default format | Role |
+| Day | Default content | Target time |
 | --- | --- | --- |
-| Monday | Reel | Luxury world-building and reach |
-| Tuesday | Reel | Test a second creative premise |
-| Wednesday | Still or carousel | A single editorial or saveable idea |
-| Thursday | Founder, interior, or craft post | Context and trust |
-| Friday | Reel | Test a third visual rhythm or narrative |
-| Saturday | Carousel, community, or behind-the-scenes | Saves, replies, and participation |
-| Sunday | No publish | Measure, learn, and create next week's approval PR |
+| Monday | Educational/informative | 19:30 IST |
+| Wednesday | Trend-led | 19:30 IST |
+| Friday | Educational/informative | 19:30 IST |
+| Saturday | Trend-led | 19:30 IST |
+
+A full week moves further approvals into the next available week. The publisher
+also counts actual Instagram feed posts before publishing.
 
 ## Distribution target
 

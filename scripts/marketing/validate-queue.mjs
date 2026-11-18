@@ -1,14 +1,15 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { scheduleErrors } from "./posting-schedule.mjs";
 
 const root = process.cwd();
 const queuePath = path.join(root, "marketing", "queue.json");
 const allowedStatuses = new Set(["draft", "approved"]);
 const allowedMediaTypes = new Set(["IMAGE", "REELS"]);
 
-export function readAndValidateQueue() {
-  const queue = JSON.parse(fs.readFileSync(queuePath, "utf8"));
+export function readAndValidateQueue(filePath = queuePath) {
+  const queue = JSON.parse(fs.readFileSync(filePath, "utf8"));
   const errors = [];
   const ids = new Set();
 
@@ -28,6 +29,18 @@ export function readAndValidateQueue() {
     if (!allowedStatuses.has(post.status)) errors.push(`${label}: invalid status`);
     if (!allowedMediaTypes.has(post.mediaType)) errors.push(`${label}: invalid mediaType`);
     if (Number.isNaN(Date.parse(post.publishAt))) errors.push(`${label}: invalid publishAt`);
+    if (post.contentCategory && !["education", "trend"].includes(post.contentCategory)) {
+      errors.push(`${label}: contentCategory must be education or trend`);
+    }
+    if (post.approval) {
+      if (post.approval.method !== "chat" || !post.approval.text?.trim() ||
+          Number.isNaN(Date.parse(post.approval.recordedAt))) {
+        errors.push(`${label}: invalid chat approval receipt`);
+      }
+      if (!/^[a-f0-9]{64}$/.test(post.mediaSha256 ?? "")) {
+        errors.push(`${label}: approved media must have a SHA-256 hash`);
+      }
+    }
     if (typeof post.caption !== "string" || post.caption.length < 20 || post.caption.length > 2200) {
       errors.push(`${label}: caption must be between 20 and 2,200 characters`);
     }
@@ -46,6 +59,9 @@ export function readAndValidateQueue() {
 
     const publicPath = path.join(root, "public", decodeURIComponent(url.pathname));
     if (!fs.existsSync(publicPath)) errors.push(`${label}: local media file is missing at public${url.pathname}`);
+    else if (fs.statSync(publicPath).size > 25 * 1024 * 1024) {
+      errors.push(`${label}: media exceeds Cloudflare's 25 MiB asset limit; encode a smaller file before deployment`);
+    }
 
     const expectedExtension = post.mediaType === "IMAGE" ? ".jpg" : ".mp4";
     if (path.extname(url.pathname).toLowerCase() !== expectedExtension) {
@@ -68,6 +84,7 @@ export function readAndValidateQueue() {
     }
   }
 
+  errors.push(...scheduleErrors(queue.posts));
   if (errors.length) throw new Error(errors.map((error) => `- ${error}`).join("\n"));
   return queue.posts;
 }

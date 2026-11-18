@@ -13,70 +13,76 @@ The account should earn a follow through three things:
 2. A transparent look at building ZARI and working with Bhadohi's rug tradition.
 3. Useful guidance about rugs, rooms, materials, and care.
 
-## Weekly rhythm
+## Weekly publishing policy
 
-- Monday: luxury Reel led by carpet, space, or fashion movement.
-- Tuesday: a second Reel testing a distinct material or visual premise.
-- Wednesday: editorial still or carousel with one clear idea.
-- Thursday: founder, interior, or craft story.
-- Friday: a third Reel with a distinct rhythm or narrative treatment.
-- Saturday: saveable carousel, community prompt, or behind-the-scenes post.
-- Sunday: no publishing. Review verified results and prepare the next weekly approval PR.
-- Stories: three to five informal updates per week, including one poll or question.
-- Community: 20 minutes each weekday leaving thoughtful comments and replying to every genuine interaction.
+Schedule up to four feed posts per Monday–Sunday week in Asia/Kolkata. The
+default slots are Monday, Wednesday, Friday, and Saturday at 19:30 IST, with
+two educational/informative posts and two trend-led posts. The queue allocator
+uses the next available slot and moves overflow into a later week. It creates
+a reservation only for accepted content.
 
-The scheduled publisher checks the queue daily at 19:30 India time. It publishes
-only entries in `queue.json` whose status is `approved` and whose `publishAt`
-time has passed. The usual weekly rhythm leaves Sunday empty; an explicitly
-approved campaign may schedule a Sunday post, as this 10-Reel run does.
-Published IDs receive a Git tag, preventing the same entry from being selected
-again.
+The policy lives in `posting-policy.json`. All feed formats share the four-post
+cap. The publisher checks the live Instagram feed before publishing, including
+posts made outside GitHub, and maintains one automated post per India date.
 
-Reels marked `publishingMode: "instagram-native-music"` are excluded from the
-Graph API publisher. Confirm the named track in the ZARI account's Instagram
-music picker and schedule those Reels manually in Instagram; the repository MP4
-contains no commercial recording.
+## Approve once in chat
 
-## Once-a-week approval flow
+When the user says **“this is good to post”** for an identified post, that is
+final approval to schedule and publish it. The scheduling agent records the
+approved media, caption, category, approval wording, and media hash in the queue.
+It releases the accepted post to main within the existing repository checks.
+A separate human PR review is unnecessary for that accepted content.
 
-1. Every Sunday, the weekly cycle records only verified results from the week,
-   identifies the strongest and weakest posts, and turns those findings into a
-   Monday–Saturday plan. It prepares fresh media and an isolated
-   `codex/instagram-week-YYYY-MM-DD` branch. Website photography is not used as a
-   recurring content source.
-2. Pushing that branch opens one weekly review pull request. Its review page shows
-   all six publishing slots, including Reels on Monday, Tuesday, and Friday, with
-   previews, captions, music rights, scores, and publish times.
-3. Review the pack once. To reject one image, comment `REJECT 1 — reason`,
-   `REJECT 2 — reason`, or `REJECT 3 — reason` on the PR. Only that image is held
-   and replaced; the others retain their accepted state. Merge only when all three
-   are accepted.
-4. Only content merged into `main` can be selected by the publisher. The scheduled
-   workflow then publishes at 19:30 India time on Tuesday, Thursday, and Saturday.
+Use a candidate JSON containing `id`, `mediaType`, `mediaUrl`, `caption`, and
+`contentCategory` (`education` or `trend`). The approved media must exist under
+`public/marketing/instagram/` and its public URL must use `https://zarirugs.com`.
 
-At 12:30 India time each Sunday, the Codex weekly marketing review runs after the
-stock workflow. It records the previous week's verified results, applies
-`image-review-rubric.md` to every candidate and the three-image sequence, replaces
-weak selections, adjusts queries and captions from the evidence, and leaves the
-PR unmerged for approval. The next review includes what to repeat, what to stop,
-and what the coming week is testing. It also appends the week's image scores,
-accept/reject decisions, reasons, and later performance to
-`image-score-history.csv`, so selection standards improve from evidence.
+```sh
+npm run marketing:schedule -- --post /path/to/candidate.json --approval "this is good to post" --dry-run
+npm run marketing:schedule -- --post /path/to/candidate.json --approval "this is good to post"
+npm run marketing:test
+npm run marketing:validate
+```
 
-The content supply does not depend on the website library. Each week should use,
-in order: new original founder/workshop media when available, newly licensed
-photography with recorded provenance, and at most one generated editorial image
-when neither source can express the idea. Generated work must be recorded as such,
-must not depict a claimed ZARI product or real artisan, and must pass the same
-visual review. A failed review blocks the pack instead of silently recycling an
-old image.
+The helper preserves the queue and treats repeated scheduling of the same
+accepted future post as the same reservation. Fetch current main and publication
+tags before allocating. If a push loses a race, recompute the slot from the new
+queue before releasing it.
 
-Posts in a weekly review branch use `status: "approved"` because merging the branch
-is the approval action. Posts still being developed outside a weekly review branch
-must remain `draft`.
+## Publishing and recovery
 
-A specific approved post can be published sooner with the publishing workflow's
-`post_id` input.
+GitHub Actions checks for due content every half-hour. The timestamp in the queue
+is the target time. Actual publication depends on Actions availability and media
+processing. Relevant main pushes run a read-only connection/feed check.
+
+Only approved, due content can publish. Manual selection also follows the due
+time, daily spacing, and weekly limit. A container checkpoint is pushed before
+the final publish request so a retry can inspect the same container. Publication
+tags continue to prevent reusing a published post ID.
+
+The policy takes effect on 18 November 2026. Older queued entries remain available
+for historical review and explicit rescheduling. The first failed legacy video
+returned HTTP 404 because an oversized asset had blocked deployment.
+
+Before publication, the public media URL must respond with the expected media
+type and the approved bytes. Finish deployment and verify that URL when handing
+off a scheduled post. Queue validation rejects media larger than Cloudflare's
+25 MiB per-file hosting limit before deployment.
+
+Reels marked `publishingMode: "instagram-native-music"` use Instagram's native
+music/scheduling interface. Their queue reservation counts toward weekly
+capacity, and the live feed check also sees posts published outside GitHub.
+
+## Draft supply and review
+
+The stock preparation workflow supplies draft candidates and retains existing
+queue entries. Its preview PR lets the user inspect those candidates. Each
+accepted post is then scheduled through chat approval. Review only the affected
+post when the user requests a correction.
+
+Use new original founder/workshop media where available, then freshly licensed
+photography with recorded provenance or clearly identified original illustrations.
+Track image identities and quality review in the production records.
 
 Never commit access tokens. Add these GitHub Actions secrets to the repository:
 
@@ -92,8 +98,7 @@ and caption rotations live in `stock-sourcing.json`.
 
 The repository owner must also enable **Settings → Actions → General → Workflow
 permissions → Allow GitHub Actions to create and approve pull requests**. This
-allows the Sunday workflow to open the approval PR; merging still remains a human
-decision.
+allows the stock workflow to open a preview PR. Posting approval is recorded in chat.
 
 The stock workflow intentionally uses Pexels for materialized post files.
 Unsplash's API requires direct CDN hotlinking, attribution to both the photographer
@@ -109,10 +114,9 @@ Meta requires a later supported version.
 
 ## What remains human
 
-Founder voice, final factual review, and one weekly approval stay human. Stock
-search, reuse prevention, cropping, credits, caption rotation, formatting,
-validation, review-PR creation, scheduling, API publishing, duplicate prevention,
-and the recurring content cycle are automated.
+The user accepts each finished post in chat. Sourcing, review preparation, queue
+allocation, deployment checks, and API publication follow the production and
+scheduling workflows. The chat approval authorizes the identified release.
 
 Track the weekly numbers in `metrics.csv`. Follower count matters for the first
 milestone, but saves, shares, profile visits, replies, and qualified conversations

@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   prepare:
-    name: Source photos and open approval PR
+    name: Source draft photos and open preview PR
     runs-on: ubuntu-latest
 
     steps:
@@ -71,7 +71,7 @@ jobs:
           git commit -m "content: prepare Instagram week of ${WEEK}"
           git push --force-with-lease origin "codex/instagram-week-${WEEK}"
 
-      - name: Open or update approval PR
+      - name: Open or update preview PR
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}

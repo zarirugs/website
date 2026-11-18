@@ -2,8 +2,17 @@ name: Publish approved Instagram content
 
 on:
   schedule:
-    # 19:30 India time daily; the queue controls whether a post is due.
+    # Target 19:30 India time, with periodic recovery checks below.
     - cron: "0 14 * * *"
+    # Retry due queue entries every half-hour, away from the busy hour boundary.
+    - cron: "7,37 * * * *"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/instagram-publish.yml"
+      - "scripts/marketing/*"
+      - "marketing/posting-policy.json"
+      - "marketing/queue.json"
   workflow_dispatch:
     inputs:
       connection_only:
@@ -12,7 +21,7 @@ on:
         default: false
         type: boolean
       post_id:
-        description: "Approved post ID to publish now (optional)"
+        description: "Approved post ID to check (due time and weekly limit apply)"
         required: false
         type: string
 
@@ -47,6 +56,6 @@ jobs:
           INSTAGRAM_ACCOUNT_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_GRAPH_VERSION: ${{ vars.INSTAGRAM_GRAPH_VERSION }}
-          CONNECTION_ONLY: ${{ inputs.connection_only }}
+          CONNECTION_ONLY: ${{ github.event_name == 'push' || inputs.connection_only }}
           POST_ID: ${{ inputs.post_id }}
         run: node scripts/marketing/publish-instagram.mjs

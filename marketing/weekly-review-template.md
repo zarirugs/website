@@ -1,75 +1,32 @@
 # Instagram week of YYYY-MM-DD
 
-Merge this pull request to approve the Monday–Saturday plan. Nothing in this
-branch can publish before it is merged to `main`.
+Prepare four candidates using the current posting policy. The user's approval
+of an identified post in chat authorizes its scheduling and publication.
+Record each post's final queue time after allocation.
 
-Reject one slot with `REJECT MONDAY — reason`, `REJECT REEL 1 — reason`, or an
-equivalent plain-language comment. Only that slot is replaced. Merge after all
-six are accepted.
+## Last week's results
 
-## Last week's signal
+- Follows per 1,000 reached and the measurement window
+- Saves, shares, retention, and profile visits where available
+- The strongest observed result and the next experiment
 
-- Followers: VALUE (CHANGE)
-- Best-performing post: VALUE
-- What we learned: VALUE
+## Monday education — 19:30 IST
 
-## Monday Reel — 19:30 IST
+Preview, viewer takeaway, caption, source/audio notes, and review findings.
 
-REEL PREVIEW, MUSIC, RIGHTS, SCORE, AND CAPTION
+## Wednesday trend — 19:30 IST
 
-## Tuesday Reel — 19:30 IST
+Preview, current reference evidence, original adaptation, caption, and review findings.
 
-![Tuesday post](RAW_GITHUB_ASSET_URL)
+## Friday education — 19:30 IST
 
-**Purpose:** VALUE
+Preview, viewer takeaway, caption, source/audio notes, and review findings.
 
-**Image score:** VALUE/25 — Aesthetic VALUE · Brand VALUE · Authenticity VALUE · Story VALUE · Technical VALUE
+## Saturday trend — 19:30 IST
 
-**Caption**
+Preview, current reference evidence, original adaptation, caption, and review findings.
 
-> FULL CAPTION
+## Release record
 
-## Wednesday — 19:30 IST
-
-VISUAL, SCORE, AND CAPTION
-
-## Thursday — 19:30 IST
-
-![Thursday post](RAW_GITHUB_ASSET_URL)
-
-**Purpose:** VALUE
-
-**Image score:** VALUE/25 — Aesthetic VALUE · Brand VALUE · Authenticity VALUE · Story VALUE · Technical VALUE
-
-**Caption**
-
-> FULL CAPTION
-
-## Friday Reel — 19:30 IST
-
-REEL PREVIEW, MUSIC, RIGHTS, SCORE, AND CAPTION
-
-## Saturday — 19:30 IST
-
-![Saturday post](RAW_GITHUB_ASSET_URL)
-
-**Purpose:** VALUE
-
-**Image score:** VALUE/25 — Aesthetic VALUE · Brand VALUE · Authenticity VALUE · Story VALUE · Technical VALUE
-
-**Caption**
-
-> FULL CAPTION
-
-## Approval checklist
-
-- [ ] Visuals match the ZARI identity.
-- [ ] Claims and place names are accurate.
-- [ ] Captions sound like ZARI.
-- [ ] Dates and times are correct.
-- [ ] Each post has one clear purpose.
-- [ ] Every image scored at least 21/25 and at least 4 for aesthetic strength and authenticity.
-- [ ] Every Reel scored at least 21/25, shows its music rights route, and changes one primary test variable.
-- [ ] The complete six-post sequence scored 4/5 or better.
-
-**Merge = approve the complete weekly pack.**
+| Post ID | User approval | Scheduled time in IST | Media/deployment check | Publish result |
+| --- | --- | --- | --- | --- |

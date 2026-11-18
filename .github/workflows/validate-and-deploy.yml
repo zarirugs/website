@@ -35,6 +35,11 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Test Instagram scheduling and validate queue
+        run: |
+          npm run marketing:test
+          npm run marketing:validate
+
       - name: Type-check
         run: npm run typecheck
 

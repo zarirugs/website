@@ -9,6 +9,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "marketing:validate": "node scripts/marketing/validate-queue.mjs",
+    "marketing:schedule": "node scripts/marketing/schedule-instagram.mjs",
+    "marketing:test": "node --test scripts/marketing/*.test.mjs",
     "marketing:due": "DRY_RUN=1 node scripts/marketing/publish-instagram.mjs",
     "marketing:source-stock": "node scripts/marketing/source-stock-week.mjs",
     "marketing:luxury-reel": "node scripts/marketing/build-luxury-reel.mjs",
