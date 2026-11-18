@@ -92,9 +92,9 @@ export async function POST(request: Request) {
     const orderNumber = `ZARI-${Date.now().toString(36).toUpperCase()}-${crypto.randomUUID().slice(0, 6).toUpperCase()}`;
     const statements = [
       database.prepare(
-        `INSERT INTO orders (order_number, customer_id, customer_name, customer_email, customer_phone, delivery_address, notes)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      ).bind(orderNumber, customer?.id ?? null, customerName, customerEmail, customerPhone, deliveryAddress, notes),
+        `INSERT INTO orders (order_number, customer_id, customer_link_source, customer_name, customer_email, customer_phone, delivery_address, notes)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      ).bind(orderNumber, customer?.id ?? null, customer ? "authenticated" : "guest", customerName, customerEmail, customerPhone, deliveryAddress, notes),
       ...items.map((item, index) => database.prepare(
         `INSERT INTO order_items (order_id, sku, item_name, quantity)
          VALUES ((SELECT id FROM orders WHERE order_number = ?), ?, ?, ?)`,

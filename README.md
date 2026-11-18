@@ -48,7 +48,9 @@ The current cart holds selected pieces and validates available stock. Payment, c
 
 ## Customer account dashboard
 
-The account page now keeps a signed-in customer’s order history, saved pieces, delivery addresses, profile name, and concierge contact options together. Orders created while the customer is signed in are linked to that customer automatically; existing requests are linked by their matching account email when the migration is applied.
+The account page keeps a signed-in customer's order history, saved pieces, delivery addresses, profile name, and concierge contact options together. New requests created while signed in are linked using the authenticated customer ID. An email match does not grant access to guest requests.
+
+Migration `0015_order_account_ownership.sql` marks existing orders as `legacy`: the older email-based backfill did not preserve reliable ownership provenance. These orders and their current links remain intact and available to the private operations dashboard, but are withheld from customer self-service. Customers can contact the concierge with their reference for earlier or guest requests. Only new links recorded by an authenticated session appear automatically. Email verification and a verified claim flow must be implemented before restoring automatic access to guest or legacy requests; registration alone is not proof of email ownership.
 
 Apply the dashboard migration before deploying this release:
 
