@@ -43,6 +43,9 @@ jobs:
       - name: Type-check
         run: npm run typecheck
 
+      - name: Test storefront
+        run: npm run test:store
+
       - name: Build for Cloudflare
         run: npm run build:cloudflare
 

@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "test:store": "node --test tests/shop-catalog.test.mjs && vitest run",
     "marketing:validate": "node scripts/marketing/validate-queue.mjs",
     "marketing:schedule": "node scripts/marketing/schedule-instagram.mjs",
     "marketing:test": "node --test scripts/marketing/*.test.mjs",
@@ -34,15 +35,19 @@
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.20.2",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^22.20.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "jsdom": "^29.1.1",
     "sharp": "0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5",
+    "vite": "^7.3.8",
+    "vitest": "^5.1.1",
     "wrangler": "^4.118.0"
   }
 }

@@ -77,7 +77,11 @@ export default function CartPage() {
             {error && <p role="alert" className="mt-5 text-sm text-red-700">{error}</p>}
             <section className="mt-6 flex flex-col justify-between gap-4 border-t border-neutral-300 pt-6 sm:flex-row sm:items-center">
               <p className="text-sm text-neutral-600">{cart.itemCount} {cart.itemCount === 1 ? "piece" : "pieces"} selected</p>
-              <Link href="/#order" className="bg-neutral-950 px-6 py-4 text-center text-[10px] uppercase tracking-[0.18em] text-white">Continue to order request</Link>
+              {busySku ? (
+                <span aria-live="polite" className="px-6 py-4 text-center text-xs text-neutral-500">Updating your selection…</span>
+              ) : (
+                <Link href="/order-request" className="bg-neutral-950 px-6 py-4 text-center text-[10px] uppercase tracking-[0.18em] text-white">Review order request</Link>
+              )}
             </section>
           </>
           )}
