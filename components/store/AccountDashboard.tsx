@@ -282,7 +282,10 @@ export default function AccountDashboard({ user, cart, refresh, updateCart }: Da
         ) : (
           <div className={styles.emptyState}>
             <Package size={20} aria-hidden="true" />
-            <div><h3>No orders yet</h3><p>When you reserve a piece while signed in, its status and details will appear here.</p></div>
+            <div>
+              <h3>No requests to display</h3>
+              <p>Requests placed while signed in appear here. For an earlier or guest request, <a href={`mailto:${site.email}`} className={styles.textAction}>contact our concierge</a> with your reference.</p>
+            </div>
           </div>
         )}
       </section>

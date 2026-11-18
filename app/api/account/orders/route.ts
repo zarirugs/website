@@ -22,7 +22,9 @@ type OrderItemRow = {
   quantity: number;
 };
 
-const customerOrderClause = "(orders.customer_id = ? OR (orders.customer_id IS NULL AND orders.customer_email = ? COLLATE NOCASE))";
+// Registration does not verify email ownership. Only a link recorded from an
+// authenticated session may expose order details; email and legacy links cannot.
+const customerOrderClause = "orders.customer_id = ? AND orders.customer_link_source = 'authenticated'";
 
 export async function GET(request: Request) {
   try {
@@ -35,13 +37,13 @@ export async function GET(request: Request) {
           orders.created_at, orders.updated_at
          FROM orders WHERE ${customerOrderClause}
          ORDER BY orders.created_at DESC LIMIT 100`,
-      ).bind(customer.id, customer.email),
+      ).bind(customer.id),
       database.prepare(
         `SELECT order_items.order_id, order_items.sku, order_items.item_name, order_items.quantity
          FROM order_items JOIN orders ON orders.id = order_items.order_id
          WHERE ${customerOrderClause}
          ORDER BY orders.created_at DESC, order_items.id ASC LIMIT 500`,
-      ).bind(customer.id, customer.email),
+      ).bind(customer.id),
     ]);
 
     const itemsByOrder = new Map<number, CustomerOrderItem[]>();
