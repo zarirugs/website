@@ -276,6 +276,26 @@
         "text": "good to post this",
         "recordedAt": "2026-11-19T03:43:58.483Z"
       }
+    },
+    {
+      "id": "2026-11-19-our-rug",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-19-our-rug.mp4",
+      "caption": "You bought the rug. They updated the ownership papers. 🐾\n\nSend this to someone whose pet owns the house.\n\nAI-created visual story. Illustrative rug and room.\n\n#ZARIRugs #CatParents #PetHumour #HomeWithPets",
+      "contentCategory": "trend",
+      "source": {
+        "platform": "Original built-in ImageGen illustrations; local code animation, original synthesized score and sound effects",
+        "usage": "Original illustrative entertainment story, not actual ZARI product photography or a customer testimonial. User approved the exact delivered export. No external footage, samples, trend music or cloned voice. AI imagery disclosed in video and caption.",
+        "coverUrl": "https://zarirugs.com/marketing/instagram/2026-11-19-our-rug-cover.jpg"
+      },
+      "mediaSha256": "e74273e4e478ebd06cc3cafbbe51acd8ad23c0acf0fd9691861343b54fe551e5",
+      "status": "approved",
+      "publishAt": "2026-11-21T14:00:00.000Z",
+      "approval": {
+        "method": "chat",
+        "text": "good to post this",
+        "recordedAt": "2026-11-19T05:17:38.547Z"
+      }
     }
   ]
 }
