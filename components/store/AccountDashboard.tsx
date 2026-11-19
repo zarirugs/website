@@ -127,7 +127,8 @@ export default function AccountDashboard({ user, cart, refresh, updateCart }: Da
 
   async function saveAddress(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     setBusyAction("address");
     setNotice("");
     setError("");
@@ -151,7 +152,7 @@ export default function AccountDashboard({ user, cart, refresh, updateCart }: Da
         }),
         "Unable to save this address.",
       );
-      event.currentTarget.reset();
+      formElement.reset();
       setShowAddressForm(false);
       setNotice("Your delivery address has been saved.");
       await loadDashboard();

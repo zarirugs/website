@@ -1,3 +1,5 @@
+import { site } from "@/lib/data/site";
+import { jsonLd } from "@/lib/store/seo";
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, Prata } from "next/font/google";
 import { StoreProvider } from "@/components/store";
@@ -23,8 +25,11 @@ const wordmark = Prata({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
+  openGraph: { type: "website", siteName: "ZARI", locale: "en_IN", title: "ZARI Rugs | Hand-knotted rugs from Bhadohi", description: site.description, images: [{ url: "/api/media/media-default-hero?w=1200", alt: "ZARI rugs" }] },
+  twitter: { card: "summary_large_image" },
   title: {
-    default: "Zari Rugs | India",
+    default: "ZARI Rugs | Hand-knotted rugs from Bhadohi",
     template: "%s | ZARI",
   },
   description:
@@ -39,9 +44,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${display.variable} ${body.variable} ${wordmark.variable}`}
     >
-      <body><StoreProvider>{children}</StoreProvider></body>
+      <body><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd({ "@context": "https://schema.org", "@type": "Organization", name: site.name, url: site.url, email: site.email, sameAs: Object.values(site.social), address: { "@type": "PostalAddress", addressLocality: site.address.city, addressRegion: site.address.state, addressCountry: "IN" } }) }} /><StoreProvider>{children}</StoreProvider></body>
     </html>
   );
 }

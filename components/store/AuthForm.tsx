@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { useStore } from "./StoreProvider";
+import { safeReturnPath } from "@/lib/store/guest-cart";
 import styles from "./AuthForm.module.css";
 
 export default function AuthForm({ mode }: { mode: "login" | "register" }) {
   const isRegistering = mode === "register";
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnPath = safeReturnPath(searchParams.get("next"));
   const { refresh } = useStore();
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -20,6 +23,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
     setSubmitting(true);
     setError("");
     const fields = new FormData(event.currentTarget);
+    try {
     const response = await fetch(`/api/auth/${mode === "login" ? "login" : "register"}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -30,7 +34,6 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
       }),
     });
     const result = await response.json().catch(() => ({})) as { error?: string };
-    setSubmitting(false);
 
     if (!response.ok) {
       setError(result.error ?? "We could not complete your request.");
@@ -38,8 +41,10 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
     }
 
     await refresh();
-    router.push("/");
+    router.push(returnPath);
     router.refresh();
+    } catch { setError("We could not complete your request. Check your connection and try again."); }
+    finally { setSubmitting(false); }
   }
 
   return (
@@ -89,7 +94,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
             </form>
             <p className={styles.switchPrompt}>
               {isRegistering ? "Already have an account?" : "New to ZARI?"}{" "}
-              <Link href={isRegistering ? "/login" : "/register"} className={styles.switchLink}>{isRegistering ? "Sign in" : "Create an account"}</Link>
+              <Link href={`${isRegistering ? "/login" : "/register"}?next=${encodeURIComponent(returnPath)}`} className={styles.switchLink}>{isRegistering ? "Sign in" : "Create an account"}</Link>
             </p>
           </div>
         </section>

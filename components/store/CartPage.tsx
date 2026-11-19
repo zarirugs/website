@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { trackStoreEvent } from "@/lib/store/analytics";
 
 import Container from "@/components/layout/Container";
 import { Eyebrow, Heading, Text } from "@/components/typography";
 import { useStore } from "./StoreProvider";
 
 export default function CartPage() {
-  const { cart, ready, updateCart, user } = useStore();
+  const { cart, ready, updateCart, error: storeError, refresh } = useStore();
   const [error, setError] = useState("");
   const [busySku, setBusySku] = useState("");
 
@@ -34,12 +35,8 @@ export default function CartPage() {
             <Heading as="h1" size="xl" className="mt-4">Shopping bag</Heading>
           </header>
 
-          {!ready ? <p className="mt-10 text-sm text-neutral-500">Loading your cart…</p> : !user ? (
-          <section className="mt-10 max-w-2xl border border-black/5 bg-white p-8 shadow-sm md:p-10">
-            <Heading as="h2" size="md">Sign in to save your pieces</Heading>
-            <Text size="sm" className="mt-4">Your ZARI account keeps your cart secure and ready for your next visit.</Text>
-            <Link href="/login" className="mt-7 inline-flex bg-neutral-950 px-6 py-4 text-[10px] uppercase tracking-[0.18em] text-white">Sign in</Link>
-          </section>
+          {!ready ? <p className="mt-10 text-sm text-neutral-500">Loading your cart…</p> : storeError ? (
+          <section className="mt-10"><p role="alert">{storeError}</p><button onClick={() => void refresh()} className="mt-4 underline">Try again</button></section>
         ) : cart.items.length === 0 ? (
           <section className="mt-10 grid min-h-[22rem] max-w-2xl place-items-center border border-black/5 bg-white px-8 py-12 text-center shadow-[0_16px_50px_rgba(0,0,0,0.05)]">
             <div className="max-w-sm">
@@ -74,13 +71,14 @@ export default function CartPage() {
                 </article>
               ))}
             </section>
+            {cart.items.some((item) => item.quantity > item.availableStock) && <p role="alert" className="mt-5 text-sm text-amber-800">Availability has changed. Reduce or remove unavailable quantities before sending your request.</p>}
             {error && <p role="alert" className="mt-5 text-sm text-red-700">{error}</p>}
             <section className="mt-6 flex flex-col justify-between gap-4 border-t border-neutral-300 pt-6 sm:flex-row sm:items-center">
               <p className="text-sm text-neutral-600">{cart.itemCount} {cart.itemCount === 1 ? "piece" : "pieces"} selected</p>
               {busySku ? (
                 <span aria-live="polite" className="px-6 py-4 text-center text-xs text-neutral-500">Updating your selection…</span>
               ) : (
-                <Link href="/order-request" className="bg-neutral-950 px-6 py-4 text-center text-[10px] uppercase tracking-[0.18em] text-white">Review order request</Link>
+                <Link onClick={() => trackStoreEvent("enquiry_started")} href="/order-request" className="bg-neutral-950 px-6 py-4 text-center text-[10px] uppercase tracking-[0.18em] text-white">Review order request</Link>
               )}
             </section>
           </>

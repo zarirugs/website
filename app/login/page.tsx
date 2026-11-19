@@ -1,7 +1,8 @@
+import { Suspense } from "react";
 import { AuthForm } from "@/components/store";
 
-export const metadata = { title: "Sign in" };
+export const metadata = { robots: { index: false, follow: false }, title: "Sign in" };
 
 export default function LoginPage() {
-  return <AuthForm mode="login" />;
+  return <Suspense fallback={<p>Loading sign in…</p>}><AuthForm mode="login" /></Suspense>;
 }

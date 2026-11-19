@@ -1,4 +1,5 @@
 "use client";
+import { trackStoreEvent } from "@/lib/store/analytics";
 
 import Link from "next/link";
 import { type FormEvent, type ReactNode, useRef, useState } from "react";
@@ -95,6 +96,7 @@ function EnquiryForm({ items, source, children }: { items: CartItem[]; source: E
         return;
       }
 
+      trackStoreEvent("enquiry_submitted");
       setStatus({
         kind: "success",
         message: `Your order request has been received. Our concierge will confirm availability shortly. Reference: ${result.orderNumber}.`,
@@ -173,14 +175,14 @@ function EnquiryForm({ items, source, children }: { items: CartItem[]; source: E
 }
 
 function BagEnquiry() {
-  const { cart, ready, user } = useStore();
-  if (!ready || !user || cart.items.length === 0) {
+  const { cart, ready, error, refresh } = useStore();
+  if (!ready || error || cart.items.length === 0) {
     return (
       <div className={styles.form}>
         <p role="status" className={styles.wideField}>
-          {!ready ? "Loading your selection…" : !user ? "Sign in to review the pieces in your bag." : "Your bag is empty. Choose a piece before sending an order request."}
+          {!ready ? "Loading your selection…" : error || "Your bag is empty. Choose a piece before sending an order request."}
         </p>
-        {ready && <Link href={user ? "/shop" : "/login"} className={styles.textLink}>{user ? "Explore shop" : "Sign in"}</Link>}
+        {ready && (error ? <button onClick={() => void refresh()} className={styles.textLink}>Try again</button> : <Link href="/shop" className={styles.textLink}>Explore shop</Link>)}
       </div>
     );
   }

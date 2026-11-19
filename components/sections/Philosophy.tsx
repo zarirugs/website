@@ -10,7 +10,7 @@ export default function Philosophy() {
     <Section id="craftsmanship" className={styles.section}>
       <Container>
         <FadeIn>
-          <div className={styles.header}>
+          <div id="about" className={styles.header} style={{ scrollMarginTop: "7rem" }}>
             <div className={styles.intro}>
               <Eyebrow className="mb-6">Our Ethos</Eyebrow>
               <Heading as="h2" size="wide" className={styles.title}>

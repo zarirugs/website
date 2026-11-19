@@ -1,3 +1,4 @@
+import { allowPublicRequest, isSameOrigin } from "@/lib/server/public-request";
 import { NextResponse } from "next/server";
 
 import { orderStatuses, type OrderStatus, type PublicOrderItem } from "@/lib/inventory/types";
@@ -54,6 +55,7 @@ function normalizeItems(value: unknown): PublicOrderItem[] | null {
 
 export async function POST(request: Request) {
   try {
+    if (!isSameOrigin(request)) return errorResponse("Invalid request origin.", 403);
     const body = await request.json() as Record<string, unknown>;
     const honeypot = optionalText(body.website, 200);
     if (honeypot) return NextResponse.json({ received: true }, { status: 202 });
@@ -70,6 +72,7 @@ export async function POST(request: Request) {
     }
 
     const database = await getDatabase();
+    if (!(await allowPublicRequest(database, request, "orders", 10))) return errorResponse("Please wait a minute before trying again.", 429);
     const customer = await getAuthenticatedCustomer(request, database);
     const customerName = customer?.fullName ?? submittedName;
     const customerEmail = customer?.email ?? submittedEmail;

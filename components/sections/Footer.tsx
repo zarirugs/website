@@ -1,3 +1,4 @@
+import NewsletterForm from "./NewsletterForm";
 import Link from "next/link";
 import { site } from "@/lib/data/site";
 import Container from "@/components/layout/Container";
@@ -30,8 +31,10 @@ export default function Footer() {
             </h4>
             <ul className="flex flex-col gap-4 text-sm font-light">
               <li><Link href="/shop" className="hover:text-white transition-colors">Shop</Link></li>
-              <li><Link href="#craftsmanship" className="hover:text-white transition-colors">Craftsmanship</Link></li>
-              <li><Link href="#order" className="hover:text-white transition-colors">Order a piece</Link></li>
+              <li><Link href="/#craftsmanship" className="hover:text-white transition-colors">Craftsmanship</Link></li>
+              <li><Link href="/privacy" className="hover:text-white transition-colors">Your information</Link></li>
+              <li><Link href="/buying-guide" className="hover:text-white transition-colors">Sizing & care guide</Link></li>
+              <li><Link href="/#order" className="hover:text-white transition-colors">Order a piece</Link></li>
             </ul>
           </div>
 
@@ -57,16 +60,7 @@ export default function Footer() {
             <p className="text-sm font-light mb-6 leading-loose">
               Subscribe to receive updates on bespoke projects.
             </p>
-            <form className="relative flex items-center border-b border-neutral-700 pb-3 group focus-within:border-neutral-400 transition-colors">
-              <input
-                type="email"
-                placeholder="Email Address"
-                className="bg-transparent w-full text-sm text-white placeholder:text-neutral-600 outline-none font-light"
-              />
-              <button type="submit" className="absolute right-0 text-[10px] uppercase tracking-[0.15em] text-neutral-500 group-hover:text-white">
-                Join
-              </button>
-            </form>
+            <NewsletterForm />
           </div>
 
         </div>

@@ -1,3 +1,4 @@
+import { allowPublicRequest, isSameOrigin } from "@/lib/server/public-request";
 import { NextResponse } from "next/server";
 
 import { createPasswordRecord, createSession, customerFromRow, findCustomerByEmail, sessionCookie } from "@/lib/server/auth";
@@ -8,6 +9,7 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: Request) {
   try {
+    if (!isSameOrigin(request)) return errorResponse("Invalid request origin.", 403);
     const body: unknown = await request.json();
     if (!body || typeof body !== "object") return errorResponse("Enter your account details.");
     const values = body as Record<string, unknown>;
@@ -20,6 +22,7 @@ export async function POST(request: Request) {
     }
 
     const database = await getDatabase();
+    if (!(await allowPublicRequest(database, request, "register", 5))) return errorResponse("Please wait a minute before trying again.", 429);
     if (await findCustomerByEmail(database, email)) {
       return errorResponse("An account already exists for this email. Sign in instead.", 409);
     }

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { getDatabase } from "@/lib/server/database";
 import { publicMediaUrl, type MediaAssetRow } from "@/lib/server/media";
 
@@ -13,7 +14,7 @@ export type SiteMedia = {
   sourceType: MediaAssetRow["source_type"];
 };
 
-export async function getSiteMedia() {
+export const getSiteMedia = cache(async () => {
   const database = await getDatabase();
   const result = await database.prepare(
     `SELECT site_media_slots.slot_key, site_media_slots.label, site_media_slots.description,
@@ -33,4 +34,4 @@ export async function getSiteMedia() {
     mediaKind: slot.media_kind,
     sourceType: slot.source_type,
   }])) as Record<string, SiteMedia>;
-}
+});

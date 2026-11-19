@@ -1,35 +1,18 @@
 "use client";
 
-import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, ChevronDown, Plus, Search, SlidersHorizontal, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Plus, Search, SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useCatalog } from "@/lib/store/use-catalog";
 import { emptyFilters, filterOptions, formatPrice, productMatches, sortProducts, type ShopFilters, type ShopProduct, type ShopSort } from "@/lib/store/shop-catalog";
 import { site } from "@/lib/data/site";
+import Link from "next/link";
+import RugImage from "./RugImage";
+import ProductActions from "./ProductActions";
+import ProductGallery from "./ProductGallery";
+import { productPath } from "@/lib/store/catalog";
+import { trackStoreEvent } from "@/lib/store/analytics";
 import styles from "./ShopCatalogue.module.css";
-
-function RugImage({ src, alt, eager = false, fit = "cover" }: { src: string; alt: string; eager?: boolean; fit?: "cover" | "contain" }) {
-  const [failed, setFailed] = useState(false);
-  // Local R2 has no published photography; use the same public brand assets in development.
-  const imageSrc = process.env.NODE_ENV === "development" && src.startsWith("/api/media/media-default-") ? `${site.url}${src}` : src;
-  // Catalog images may come from the administrator's own media hosts.
-  // eslint-disable-next-line @next/next/no-img-element
-  return failed || !src ? <div className={styles.imageUnavailable}>Photograph coming soon</div> : <img src={imageSrc} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" style={{ objectFit: fit }} onError={() => setFailed(true)} />;
-}
-
-function ProductGallery({ product }: { product: ShopProduct }) {
-  const photos = product.images?.length ? product.images : product.image ? [{ id: product.sku, url: product.image, alt: product.name }] : [];
-  const [index, setIndex] = useState(0);
-  const photo = photos[index];
-  function move(direction: number) { setIndex((current) => (current + direction + photos.length) % photos.length); }
-  return <div className={styles.productGallery} onKeyDown={(event) => {
-    if (photos.length < 2) return;
-    if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); move(event.key === "ArrowRight" ? 1 : -1); }
-  }}>
-    <div className={styles.dialogImage}><RugImage key={photo?.url ?? "none"} src={photo?.url ?? ""} alt={photo?.alt || product.name} eager fit={product.imageFit} /></div>
-    {photos.length > 1 && <><div className={styles.galleryControls}><button aria-label="Previous product image" onClick={() => move(-1)}><ChevronLeft size={20} /></button><span aria-live="polite">{index + 1} / {photos.length}</span><button aria-label="Next product image" onClick={() => move(1)}><ChevronRight size={20} /></button></div><div className={styles.galleryThumbnails}>{photos.map((image, position) => <button key={image.id} aria-label={`Show product image ${position + 1}`} aria-pressed={index === position} onClick={() => setIndex(position)}><RugImage src={image.url} alt={image.alt || `${product.name}, image ${position + 1}`} /></button>)}</div></>}
-  </div>;
-}
 
 const colorHex: Record<string, string> = { Ivory: "#f0eade", Beige: "#cbbb9b", Brown: "#785943", Blue: "#768c99", Green: "#7d8668", Red: "#9d5448", Grey: "#a19e97", Multicolor: "linear-gradient(135deg,#a05843,#d6bf8a,#7d8d93)" };
 const filterLabels = { size: "Size", color: "Color", material: "Material", price: "Price", weave: "Weave type" };
@@ -63,6 +46,7 @@ export default function ShopCatalogue() {
   useEffect(() => {
     if (!selected) return;
     dialog.current?.showModal();
+    trackStoreEvent("product_view", selected.sku);
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = previous; };
@@ -109,7 +93,7 @@ export default function ShopCatalogue() {
           </button>
           <div className={styles.productInfo}>
             <p className={styles.productCollection}>{collections.find((c) => c.slug === product.categorySlug)?.title ?? "ZARI"}</p>
-            <h3><button onClick={() => setSelected(product)}>{product.name.replace(/ — /g, " · ")}</button></h3>
+            <h3><Link href={productPath(product.sku)}>{product.name.replace(/ — /g, " · ")}</Link></h3>
             <p className={styles.productPrice}>{formatPrice(product.pricePaise)}</p>
             <button className={styles.productPlus} onClick={() => setSelected(product)} aria-label={`Details: ${product.name}`}><Plus size={19} strokeWidth={1} /></button>
           </div>
@@ -136,7 +120,7 @@ export default function ShopCatalogue() {
         </div>
       </dialog>
       <dialog ref={dialog} className={styles.dialog} onCancel={closeDialog} onClose={() => setSelected(null)} onClick={(e) => { if (e.target === e.currentTarget) closeDialog(); }} aria-labelledby="quick-view-title">
-        {selected && <div className={styles.dialogContent}><button autoFocus className={styles.closeDialog} onClick={closeDialog} aria-label="Close quick view"><X size={22} /></button><ProductGallery key={selected.sku} product={selected} /><div className={styles.dialogInfo}><p className={styles.eyebrow}>{selected.categorySlug} COLLECTION</p><h2 id="quick-view-title">{selected.name}</h2><p>{selected.description}</p><strong>{formatPrice(selected.pricePaise)}</strong><dl><div><dt>Size</dt><dd>{selected.sizes?.join(", ") || "Ask our atelier"}</dd></div><div><dt>Material</dt><dd>{selected.materials?.join(", ") || "Ask our atelier"}</dd></div><div><dt>Weave</dt><dd>{selected.weave || "Ask our atelier"}</dd></div><div><dt>Reference</dt><dd>{selected.sku}</dd></div></dl><a className={styles.enquire} href={`mailto:${site.email}?subject=${encodeURIComponent(`Enquiry: ${selected.name} (${selected.sku})`)}`}>Enquire about this piece <ArrowUpRight size={18} /></a><button className={styles.collectionLink} onClick={() => { setCategory(selected.categorySlug); closeDialog(); }}>More from {collections.find((c) => c.slug === selected.categorySlug)?.title ?? "this collection"} <ArrowRight size={15} /></button><small>Our consultants can help with sizing, pricing and availability.</small></div></div>}
+        {selected && <div className={styles.dialogContent}><button autoFocus className={styles.closeDialog} onClick={closeDialog} aria-label="Close quick view"><X size={22} /></button><ProductGallery key={selected.sku} product={selected} /><div className={styles.dialogInfo}><p className={styles.eyebrow}>{selected.categorySlug} COLLECTION</p><h2 id="quick-view-title">{selected.name}</h2><p>{selected.description}</p><strong>{formatPrice(selected.pricePaise)}</strong><dl><div><dt>Size</dt><dd>{selected.sizes?.join(", ") || "Ask our atelier"}</dd></div><div><dt>Material</dt><dd>{selected.materials?.join(", ") || "Ask our atelier"}</dd></div><div><dt>Weave</dt><dd>{selected.weave || "Ask our atelier"}</dd></div><div><dt>Reference</dt><dd>{selected.sku}</dd></div></dl><Link className={styles.enquire} href={productPath(selected.sku)}>View this rug <ArrowUpRight size={18} /></Link><ProductActions sku={selected.sku} name={selected.name} stock={selected.stock} /><button className={styles.collectionLink} onClick={() => { setCategory(selected.categorySlug); closeDialog(); }}>More from {collections.find((c) => c.slug === selected.categorySlug)?.title ?? "this collection"} <ArrowRight size={15} /></button><small>Our consultants can help with sizing, pricing and availability.</small></div></div>}
       </dialog>
     </div>
   );
