@@ -1,3 +1,6 @@
+"use client";
+import { useEffect, useState } from "react";
+import { previewMedia } from "@/lib/store/media";
 import styles from "./HeroBackground.module.css";
 import type { SiteMedia } from "@/lib/server/site-media";
 
@@ -10,6 +13,13 @@ const defaultHero: Pick<SiteMedia, "imageUrl" | "backgroundColor" | "mediaKind" 
 const heroPoster = "/api/media/media-default-hero";
 
 export default function HeroBackground({ media = defaultHero }: { media?: SiteMedia | typeof defaultHero }) {
+  const [motionAllowed, setMotionAllowed] = useState(false);
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setMotionAllowed(!preference.matches && !(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+    update(); preference.addEventListener("change", update);
+    return () => preference.removeEventListener("change", update);
+  }, []);
   const imageWidths = [640, 750, 828, 1080, 1200, 1920];
   const uploadedImageSrcSet = media.mediaKind === "image" && media.imageUrl && media.sourceType === "upload"
     ? imageWidths.map((width) => `${media.imageUrl}?w=${width} ${width}w`).join(", ")
@@ -20,20 +30,21 @@ export default function HeroBackground({ media = defaultHero }: { media?: SiteMe
       <div className={styles.media} style={{ backgroundColor: media.backgroundColor ?? "#171717" }} aria-hidden="true">
         {media.mediaKind === "video" && media.imageUrl ? (
           <>
-            <div className={styles.image} style={{ backgroundImage: `url(${heroPoster})` }} />
-            <video
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className={styles.image} src={previewMedia(`${heroPoster}?w=1920`)} srcSet={imageWidths.map((width) => `${previewMedia(heroPoster)}?w=${width} ${width}w`).join(", ")} sizes="100vw" alt="" fetchPriority="high" />
+            {motionAllowed && <video
               key={media.imageUrl}
               className={styles.video}
               autoPlay
               loop
               muted
               playsInline
-              poster={heroPoster}
+              poster={previewMedia(heroPoster)}
               preload="metadata"
               tabIndex={-1}
             >
-              <source src={media.imageUrl} type="video/mp4" />
-            </video>
+              <source src={previewMedia(media.imageUrl)} type="video/mp4" />
+            </video>}
           </>
         ) : media.imageUrl ? (
           // Admin-managed images use the native element so external URLs remain supported.

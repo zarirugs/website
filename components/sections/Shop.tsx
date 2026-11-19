@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 
 import Container from "@/components/layout/Container";
 import Section from "@/components/layout/Section";
@@ -11,6 +11,7 @@ import { type Collection } from "@/lib/data/collections";
 import styles from "./Shop.module.css";
 import ShopCatalogue from "@/components/store/ShopCatalogue";
 import { useCatalog } from "@/lib/store/use-catalog";
+import { mediaWidth, mediaSrcSet, previewMedia } from "@/lib/store/media";
 
 type ShopProps = {
   headingAs?: "h1" | "h2";
@@ -24,27 +25,8 @@ type VisualAsset = Pick<Collection, "image" | "backgroundColor" | "imageFit" | "
 };
 
 function CollectionVisual({ collection, className }: { collection: VisualAsset; className: string }) {
-  const [imageReady, setImageReady] = useState(false);
-
-  useEffect(() => {
-    if (!collection.image) {
-      return;
-    }
-
-    let active = true;
-    const image = new Image();
-    image.onload = () => {
-      if (active) setImageReady(true);
-    };
-    image.onerror = () => {
-      if (active) setImageReady(false);
-    };
-    image.src = collection.image;
-
-    return () => {
-      active = false;
-    };
-  }, [collection.image]);
+  const [failed, setFailed] = useState(false);
+  const imageReady = Boolean(collection.image) && !failed;
 
   return (
     <div
@@ -62,10 +44,11 @@ function CollectionVisual({ collection, className }: { collection: VisualAsset; 
         // eslint-disable-next-line @next/next/no-img-element
         <img
           alt=""
-          src={collection.image}
+          src={previewMedia(mediaWidth(collection.image, 1200))}
+          srcSet={mediaSrcSet(collection.image)?.split(", ").map((entry) => previewMedia(entry)).join(", ")} sizes="(max-width: 640px) 100vw, 50vw" loading="lazy" decoding="async"
           className={styles.collectionVisualImage}
           data-fit={collection.imageFit ?? "contain"}
-          onError={() => setImageReady(false)}
+          onError={() => setFailed(true)}
         />
       ) : null}
     </div>
@@ -73,7 +56,7 @@ function CollectionVisual({ collection, className }: { collection: VisualAsset; 
 }
 
 function ShopCard({ collection }: { collection: Collection }) {
-  const destination = collection.slug ? `/shop?category=${encodeURIComponent(collection.slug)}` : "#order";
+  const destination = collection.slug ? `/collections/${encodeURIComponent(collection.slug)}` : "#order";
 
   return (
     <article className={styles.card} data-shop-card>

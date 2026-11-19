@@ -131,3 +131,40 @@ Apply `db/migrations/0009_product_filter_attributes.sql` with the other D1 migra
 Unknown attributes are excluded from attribute-specific matches. Unpriced pieces display “Price on request” and sort after priced pieces in both price directions. Popularity counts quantities on confirmed/in-progress/ready/fulfilled orders, excluding new and cancelled orders; new arrivals use catalog creation dates. Existing sample entries have no verified size/color/material data or published prices, so those filters may return no results until catalog details are supplied. No sample prices or specifications are invented.
 
 Development previews load the existing public ZARI default photographs from `zarirugs.com` because local R2 does not contain these assets. Production continues to use the configured media URLs. Run `npm run dev` and open `/shop` for the preview.
+
+## Storefront improvements
+
+Public catalogue data now drives the initial shop HTML, collection pages, permanent
+`/rugs/[sku]` pages, metadata and sitemap. Empty categories are hidden from public
+navigation without removing admin data. Publish verified specifications, photographs
+and prices in the admin catalogue; absent details remain explicit enquiries. The
+buying guide explains what to confirm and does not invent shipping, return or bespoke
+terms. Editable launch descriptions are in `lib/data/catalogue-copy.ts`; custom admin
+descriptions take precedence. Exact fibre composition, dimensions, lead times,
+commercial policies and customer/project evidence should be supplied or confirmed
+by the business rather than inferred from a photograph.
+
+Guests can keep a bag on their device and submit a request without registration.
+Signing in merges guest selections using the larger quantity per SKU, so a retried
+merge does not duplicate pieces. Unavailable quantities stay editable and must be
+reviewed before an enquiry. Sign-in return destinations are restricted to local URLs.
+
+Apply migrations `0016_order_stock_transitions.sql` and
+`0017_storefront_engagement.sql` before deploying this release (the production
+workflow does this automatically). Stock confirmation, cancellation and their
+movements are conditional on the same successful status transition in an atomic D1
+batch. Concurrent or stale transitions return 409 without partial reservations.
+
+Newsletter interest is stored in D1 through `POST /api/newsletter`; it does not send
+campaigns or verification messages. Operators can read the list through protected
+`GET /api/newsletter`. `GET /api/store-events` returns protected daily activity counts
+for the last 30 days. Public event requests cannot create confirmation events;
+confirmation counts are recorded by the successful stock transition. Counts are
+activity totals, not unique visitors or verified conversion rates. Optional browser
+reporting respects Do Not Track and Global Privacy Control. No customer identifiers
+or contact details are stored in event rows. Public forms use one-minute request
+limits with expiring hashed network keys, supplementing deployment WAF rules.
+
+Run `npm run test:store` for catalogue, enquiry, account privacy, stock concurrency,
+guest bag, newsletter, telemetry and SEO regressions. CI validation and deployment
+both use Node 24.

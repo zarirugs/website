@@ -60,7 +60,7 @@ export default function Navbar({ surface = "overlay" }: NavbarProps) {
               <UserRound size={16} strokeWidth={1.5} />
               <span>{user ? user.fullName.split(" ")[0] : "Sign in"}</span>
             </Link>
-            <Link href="/cart" className="relative inline-flex items-center gap-2 transition-opacity hover:opacity-60">
+            <Link href="/cart" aria-label={`Shopping bag${cart.itemCount ? `, ${cart.itemCount} ${cart.itemCount === 1 ? "piece" : "pieces"}` : ""}`} className="relative inline-flex items-center gap-2 transition-opacity hover:opacity-60">
               <ShoppingBag size={17} strokeWidth={1.5} />
               <span className="hidden sm:inline">Bag</span>
               {ready && cart.itemCount > 0 && <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-[#b89b5e] px-1 text-[9px] text-white">{cart.itemCount}</span>}

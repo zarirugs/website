@@ -27,7 +27,7 @@ function resolveRange(header: string, totalSize: number) {
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const requestedRange = request.headers.get("range");
-    const cache = requestedRange ? null : await caches.open("zari-media-v2");
+    const cache = requestedRange || typeof caches === "undefined" ? null : await caches.open("zari-media-v2");
     const cached = cache ? await cache.match(request.url) : null;
     if (cached) return cached;
 
@@ -92,7 +92,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     }
     return response;
   } catch (error) {
-    console.error("Media delivery failed.", error);
+    console.error("Media delivery failed.", error instanceof Error ? error.name : "Unknown error");
     return NextResponse.json({ error: "Media is unavailable." }, { status: 503 });
   }
 }

@@ -7,6 +7,7 @@ import type { CartItem } from "@/lib/store/types";
 const { useStore, useCatalog } = vi.hoisted(() => ({ useStore: vi.fn(), useCatalog: vi.fn() }));
 vi.mock("@/components/store/StoreProvider", () => ({ useStore }));
 vi.mock("@/lib/store/use-catalog", () => ({ useCatalog }));
+vi.mock("@/lib/store/analytics", () => ({ trackStoreEvent: vi.fn() }));
 
 const pieces: CartItem[] = [
   { sku: "ZAR-CON-001", name: "Contemporary rug", collection: "Contemporary", quantity: 2, availableStock: 12 },
@@ -73,7 +74,6 @@ describe("bag order requests", () => {
 
   it.each([
     ["loading", { ready: false }, /Loading your selection/],
-    ["signed out", { user: null }, /Sign in to review/],
     ["empty", { cart: { items: [], itemCount: 0 } }, /Your bag is empty/],
   ])("does not submit a fallback rug when the bag is %s", (_name, overrides, message) => {
     storeWith(pieces, overrides);
@@ -81,6 +81,16 @@ describe("bag order requests", () => {
     expect(screen.getByRole("status").textContent).toMatch(message);
     expect(screen.queryByRole("button", { name: "Send order request" })).toBeNull();
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("submits a guest bag with the guest's own contact details", async () => {
+    storeWith(pieces, { user: null });
+    render(<OrderEnquiry source="bag" />);
+    fireEvent.change(screen.getByLabelText("Full name *"), { target: { value: "Guest Customer" } });
+    fireEvent.change(screen.getByLabelText("Email *"), { target: { value: "guest@example.com" } });
+    submit();
+    await screen.findByText(/Reference: ZARI-TEST-001/);
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ customerName: "Guest Customer", customerEmail: "guest@example.com", items: [{ sku: "ZAR-CON-001", quantity: 2 }, { sku: "ZAR-BES-001", quantity: 3 }] });
   });
 
   it("blocks quantities that exceed currently available stock", () => {
