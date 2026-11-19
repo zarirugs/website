@@ -296,6 +296,26 @@
         "text": "good to post this",
         "recordedAt": "2026-11-19T05:17:38.547Z"
       }
+    },
+    {
+      "id": "2026-11-19-no-shoes",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-19-no-shoes.mp4",
+      "caption": "“Joote saaf hain.”\nRug ko bharosa nahi hai. 👟\n\nSend this to the friend whose house has a strict shoes-off policy.\n\nOriginal 3D visual story. AI-created illustrative rug; not an actual product demonstration.\n\nShoe model: “Materials Variants Shoe”, © 2021 Shopify, via Khronos glTF Sample Assets. CC BY 4.0. Animated, scaled and adapted with small dirt details; no endorsement implied.\nSource: https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/MaterialsVariantsShoe\nLicense: https://creativecommons.org/licenses/by/4.0/\n\n#ZARIRugs #ShoesOff #DesiHomes #HomeHumour",
+      "contentCategory": "trend",
+      "source": {
+        "platform": "Original local Three.js 3D animation, original ImageGen decorative texture, licensed CC BY 4.0 Shopify sneaker",
+        "usage": "Illustrative fantastical 3D entertainment story, no actual SKU or product-performance demonstration. Exact delivered 7.2-second video and audio accepted by user, unchanged. Original synthesized score/foley, no third-party audio. Shopify model attribution, source/license and modifications retained in caption.",
+        "coverUrl": "https://zarirugs.com/marketing/instagram/2026-11-19-no-shoes-cover.jpg"
+      },
+      "mediaSha256": "cccc209f056668bd68249a6b6c0b09502813f14cfad3a87af4bbde35803adc92",
+      "status": "approved",
+      "publishAt": "2026-11-23T14:00:00.000Z",
+      "approval": {
+        "method": "chat",
+        "text": "good to post this",
+        "recordedAt": "2026-11-19T08:15:08.245Z"
+      }
     }
   ]
 }
