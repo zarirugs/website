@@ -351,6 +351,26 @@
         "text": "good to post",
         "recordedAt": "2026-11-24T17:58:25.596Z"
       }
+    },
+    {
+      "id": "2026-11-24-pazyryk-ice",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-24-pazyryk-ice.mp4",
+      "caption": "एक wool का rug करीब ढाई हज़ार साल तक कैसे बचा रहा? Pazyryk carpet की कहानी में एक frozen tomb और चोरों की छोड़ी opening—दोनों का हाथ है।\n\nRugs में ऐसी ही कई कहानियाँ बुनी होती हैं। अपने घर के लिए history से inspired designs देखने के लिए zarirugs.com पर हमारी collection देखिए।\n\nHistorical cutaways are illustrative reconstructions. Actual carpet photograph: Ninara, “Pazyryk carpet”, via Wikimedia Commons, https://commons.wikimedia.org/wiki/File:Pazyryk_carpet_(10169022503).jpg . CC BY 2.0: https://creativecommons.org/licenses/by/2.0/ . Cropped and animated.\n\nSources: Guinness World Records — https://www.guinnessworldrecords.com/world-records/652074-oldest-carpet ; University of Washington Pazyryk collection guide — https://depts.washington.edu/silkroad/museums/shm/shmpazyryk.html .\n\n#ZARIRugs #RugStories #Pazyryk #HandKnottedRugs #DesignHistory",
+      "contentCategory": "education",
+      "source": {
+        "platform": "Original local Three.js/GSAP animation; licensed Ninara museum photograph; user-supplied ElevenLabs narration; original local score",
+        "usage": "User approved delivered story, visuals, narration and CTA with good to post. Hosting copy re-encoded at unchanged resolution, frame rate, duration and copied audio; no creative changes. Historical cutaways are labelled illustrations; actual Pazyryk photograph by Ninara, Flickr 10169022503, CC BY 2.0. Attribution and license link retained in caption and on-film credit. No claimed ZARI product provenance. User creative acceptance resolves the prior listening-review checkpoint.",
+        "coverUrl": "https://zarirugs.com/marketing/instagram/2026-11-24-pazyryk-ice-cover.jpg"
+      },
+      "mediaSha256": "8802eeb93c2e4910fe178297a48c212ae71f76e8ce74c68fe4cce9a6ec1fdaa4",
+      "status": "approved",
+      "publishAt": "2026-11-30T14:00:00.000Z",
+      "approval": {
+        "method": "chat",
+        "text": "good to post",
+        "recordedAt": "2026-11-24T18:24:20.403Z"
+      }
     }
   ]
 }

@@ -1,0 +1,20 @@
+{
+  "id": "2026-11-24-pazyryk-ice",
+  "approval": "good to post",
+  "approvedMasterSha256": "e816c09c43bf072e5b26a95941c4a5dadd3e21694551090cd659d20f003de299",
+  "publishedMediaSha256": "8802eeb93c2e4910fe178297a48c212ae71f76e8ce74c68fe4cce9a6ec1fdaa4",
+  "publishedMediaBytes": 19714148,
+  "audioStreamHash": "SHA256=40e90856cd7950ac69ba6c6ee9e84cdef1a2b0c0f721e75397ea01cc73749199",
+  "encoding": "H.264 1080x1920/30fps, 3Mbps target; AAC stream copied unchanged",
+  "duration": 55.2,
+  "caption": "एक wool का rug करीब ढाई हज़ार साल तक कैसे बचा रहा? Pazyryk carpet की कहानी में एक frozen tomb और चोरों की छोड़ी opening—दोनों का हाथ है।\n\nRugs में ऐसी ही कई कहानियाँ बुनी होती हैं। अपने घर के लिए history से inspired designs देखने के लिए zarirugs.com पर हमारी collection देखिए।\n\nHistorical cutaways are illustrative reconstructions. Actual carpet photograph: Ninara, “Pazyryk carpet”, via Wikimedia Commons, https://commons.wikimedia.org/wiki/File:Pazyryk_carpet_(10169022503).jpg . CC BY 2.0: https://creativecommons.org/licenses/by/2.0/ . Cropped and animated.\n\nSources: Guinness World Records — https://www.guinnessworldrecords.com/world-records/652074-oldest-carpet ; University of Washington Pazyryk collection guide — https://depts.washington.edu/silkroad/museums/shm/shmpazyryk.html .\n\n#ZARIRugs #RugStories #Pazyryk #HandKnottedRugs #DesignHistory",
+  "sources": [
+    "https://www.guinnessworldrecords.com/world-records/652074-oldest-carpet",
+    "https://depts.washington.edu/silkroad/museums/shm/shmpazyryk.html",
+    "https://commons.wikimedia.org/wiki/File:Pazyryk_carpet_(10169022503).jpg"
+  ],
+  "photoLicense": "Ninara, CC BY 2.0; https://creativecommons.org/licenses/by/2.0/ ; source/credit/license retained in caption and film",
+  "reconstruction": "Original labelled Three.js/GSAP historical cutaways, not an exact archaeological reconstruction or ZARI product",
+  "audio": "Two user-supplied ElevenLabs recordings; original local score and effects",
+  "acceptance": "User approved delivered narration and visuals for publication; no new creative approval needed for hosting encoding."
+}
