@@ -331,6 +331,26 @@
         "text": "good to post",
         "recordedAt": "2026-11-24T17:06:43.386Z"
       }
+    },
+    {
+      "id": "2026-11-24-dusty-blue-room",
+      "mediaType": "REELS",
+      "mediaUrl": "https://zarirugs.com/marketing/instagram/2026-11-24-dusty-blue-room.mp4",
+      "caption": "चलो, ये room साथ design करते हैं.\n\nDusty blue, warm linen, a little green—and an ivory rug with blue vines and a rust border. A palette you could try at home.\n\nWould you keep the rust accents or choose a quieter combination?\n\nOriginal room styling concept by Zarirugs.\n\n#Zarirugs #LivingRoomDesign #RugStyling #IndianHomes #InteriorInspiration",
+      "contentCategory": "education",
+      "source": {
+        "platform": "Original built-in ImageGen room styling plates; local compositing and sound design; user-supplied ElevenLabs narration",
+        "usage": "Original fictional Indian-home styling concept, not an identified ZARI product or customer home. Exact approved elegant-wordmark export, unchanged video/audio. No outside footage or music. Bundled Cormorant Garamond under SIL OFL 1.1. Creative acceptance and publication authorization: user said good to post.",
+        "coverUrl": "https://zarirugs.com/marketing/instagram/2026-11-24-dusty-blue-room-cover.jpg"
+      },
+      "mediaSha256": "aa33a42412f83d4b0362b4d3c889d76d52f159b24c53bfcd2f7c49d06e86c19a",
+      "status": "approved",
+      "publishAt": "2026-11-27T14:00:00.000Z",
+      "approval": {
+        "method": "chat",
+        "text": "good to post",
+        "recordedAt": "2026-11-24T17:58:25.596Z"
+      }
     }
   ]
 }
