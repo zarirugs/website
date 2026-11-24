@@ -1,0 +1,1 @@
+Approved in chat: “good to post”. Final 34-second narrated version with softened transitions and original synthesized sound effects. Original generated room visuals; no reference-video imagery. Rug is illustrative, not a verified catalogue product. Narration supplied by user as ElevenLabs Geet M MP3. Only Zarirugs appears in frame.
